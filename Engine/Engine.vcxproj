@@ -139,14 +139,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Engine\Engine.h" />
+    <ClInclude Include="src\Render\DerferRenderer.h" />
+    <ClInclude Include="src\Render\Renderer.h" />
     <ClInclude Include="src\Resource\ImageLoader.h" />
     <ClInclude Include="src\Resource\ModelLoader.h" />
+    <ClInclude Include="src\RHI\Image.h" />
+    <ClInclude Include="src\RHI\RenderPass.h" />
     <ClInclude Include="src\Utility\RenderEnum.h" />
+    <ClInclude Include="src\Utility\SingleTon.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Engine\Engine.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Resource\ImageLoader.cpp" />
     <ClCompile Include="src\Resource\ModelLoader.cpp" />
+    <ClCompile Include="src\RHI\Image.cpp" />
+    <ClCompile Include="src\RHI\RenderPass.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
