@@ -13,7 +13,7 @@ namespace VulkanEngine
 		Singleton& operator=(const Singleton&) = delete;
 
 		template <typename... Args>
-		static T& getInstance(Args&&... args) {
+		static T& GetInstance(Args&&... args) {
 			std::call_once(initFlag, [&]() {
 				instance.reset(new T(std::forward<Args>(args)...));
 				});

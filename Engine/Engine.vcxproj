@@ -141,21 +141,32 @@
   <ItemGroup>
     <ClInclude Include="src\Engine\Engine.h" />
     <ClInclude Include="src\Render\DerferRenderer.h" />
+    <ClInclude Include="src\Render\RenderBackend.h" />
     <ClInclude Include="src\Render\Renderer.h" />
+    <ClInclude Include="src\Render\Window.h" />
     <ClInclude Include="src\Resource\ImageLoader.h" />
     <ClInclude Include="src\Resource\ModelLoader.h" />
+    <ClInclude Include="src\RHI\CommandBuffer.h" />
+    <ClInclude Include="src\RHI\Descriptor.h" />
     <ClInclude Include="src\RHI\Image.h" />
     <ClInclude Include="src\RHI\RenderPass.h" />
+    <ClInclude Include="src\RHI\VirtualFrame.h" />
+    <ClInclude Include="src\Utility\Config.h" />
     <ClInclude Include="src\Utility\RenderEnum.h" />
     <ClInclude Include="src\Utility\SingleTon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Engine.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Render\RenderBackend.cpp" />
+    <ClCompile Include="src\Render\Window.cpp" />
     <ClCompile Include="src\Resource\ImageLoader.cpp" />
     <ClCompile Include="src\Resource\ModelLoader.cpp" />
+    <ClCompile Include="src\RHI\CommandBuffer.cpp" />
+    <ClCompile Include="src\RHI\Descriptor.cpp" />
     <ClCompile Include="src\RHI\Image.cpp" />
     <ClCompile Include="src\RHI\RenderPass.cpp" />
+    <ClCompile Include="src\RHI\VirtualFrame.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

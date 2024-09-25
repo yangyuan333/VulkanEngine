@@ -53,6 +53,24 @@
     <ClInclude Include="src\Utility\SingleTon.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utility\Config.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Render\Window.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Render\RenderBackend.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RHI\VirtualFrame.h">
+      <Filter>RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RHI\CommandBuffer.h">
+      <Filter>RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RHI\Descriptor.h">
+      <Filter>RHI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Resource\ModelLoader.cpp">
@@ -72,6 +90,21 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Engine.cpp">
       <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render\Window.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render\RenderBackend.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RHI\VirtualFrame.cpp">
+      <Filter>RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RHI\CommandBuffer.cpp">
+      <Filter>RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RHI\Descriptor.cpp">
+      <Filter>RHI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

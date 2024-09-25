@@ -1,29 +1,29 @@
 #pragma once
 
 #include "../Utility/SingleTon.h"
+#include "../Render/Window.h"
+#include "../Render/Renderer.h"
 #include <iostream>
+#include <memory>
 
 namespace VulkanEngine
 {
+	/// <summary>
+	/// init Vulkan; init Config;
+	/// </summary>
 	class Engine : public Singleton<Engine>
 	{
 		friend class Singleton<Engine>;
-
 	public:
-		~Engine()
-		{
-			std::cout << "Engine Dout" << std::endl;
-		}
+		inline GLFWwindow* GetWindowHandle() { return window.GetWindowHandle(); }
+	public:
+		~Engine();
 
 	private:
-		Engine()
-		{
-			std::cout << "Engine Cout" << std::endl;
-		}
-		Engine(int i)
-		{
-			std::cout << "Engine Cout 1" << std::endl;
-		}
+		Engine();
 
+	private:
+		Window window;
+		std::unique_ptr<Renderer> m_Renderer; // now there is only one renderer---defered renderer
 	};
 }
