@@ -10,19 +10,20 @@
 #include <filesystem>
 
 #include "ImageLoader.h"
+#include "../Render/GameObject.h"
 
 namespace VulkanEngine
 {
     struct ModelData
     {
-        struct Vertex
-        {
-            glm::vec3 Position{ 0.0f, 0.0f, 0.0f };
-            glm::vec2 TexCoord{ 0.0f, 0.0f };
-            glm::vec3 Normal{ 0.0f, 0.0f, 0.0f };
-            glm::vec3 Tangent{ 0.0f, 0.0f, 0.0f };
-            glm::vec3 Bitangent{ 0.0f, 0.0f, 0.0f };
-        };
+        // struct Vertex
+        // {
+        //     glm::vec3 Position{ 0.0f, 0.0f, 0.0f };
+        //     glm::vec2 TexCoord{ 0.0f, 0.0f };
+        //     glm::vec3 Normal{ 0.0f, 0.0f, 0.0f };
+        //     glm::vec3 Tangent{ 0.0f, 0.0f, 0.0f };
+        //     glm::vec3 Bitangent{ 0.0f, 0.0f, 0.0f };
+        // };
 
         struct Material
         {

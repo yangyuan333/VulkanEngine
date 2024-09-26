@@ -6,6 +6,14 @@
 
 namespace VulkanEngine
 {
+	enum class RenderPassEnum
+	{
+		PbrDeferredPass, // v1.0
+		ShadowMapPass, // v1.1
+		TaaPass, // v2.0
+		BloomPass // v2.1
+	};
+
 	class Config : public Singleton<Config>
 	{
 	public:
