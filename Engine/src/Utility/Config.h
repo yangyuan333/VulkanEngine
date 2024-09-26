@@ -24,6 +24,7 @@ namespace VulkanEngine
 		// Render Config
 		static constexpr bool ENABLE_MSAA = false;
 		static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
+		static constexpr VkFormat SceneColorFormat = VK_FORMAT_R16G16B16A16_SFLOAT;
 #if _DEBUG
 		static constexpr bool EnableValidationLayers = true;
 #else
