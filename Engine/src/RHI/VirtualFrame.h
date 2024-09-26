@@ -20,10 +20,10 @@ namespace VulkanEngine
 		void StartFrame();
 		VirtualFrame& GetCurrentFrame();
 		VirtualFrame& GetNextFrame();
-		[[nodiscard]] const VirtualFrame& GetCurrentFrame() const;
-		[[nodiscard]] const VirtualFrame& GetNextFrame() const;
-		[[nodiscard]] uint32_t GetPresentImageIndex() const;
-		[[nodiscard]] size_t GetFrameCount() const;
+		const VirtualFrame& GetCurrentFrame() const;
+		const VirtualFrame& GetNextFrame() const;
+		uint32_t GetPresentImageIndex() const;
+		size_t GetFrameCount() const;
 		void EndFrame();
 
 	private:
