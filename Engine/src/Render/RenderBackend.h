@@ -29,6 +29,7 @@ namespace VulkanEngine
 
 	class RenderBackend : public Singleton<RenderBackend>
 	{
+		friend class Singleton<RenderBackend>;
 	public:
 		// 构造函数初始化需要；
 		void CreateInstance();
@@ -39,7 +40,8 @@ namespace VulkanEngine
 		void CreateCommandPool();
 		void CreateDescriptorCacheAndAllocator();
 		void CreateSwapChain();
-
+	public:
+		static void Init(); // 提供首次访问单例的通道
 	public:
 		// 放到 Init 里面，resize会使用；
 		void CreateVirtualFrame();
@@ -50,6 +52,10 @@ namespace VulkanEngine
 		QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 		SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
 		VkSampleCountFlagBits getMaxUsableSampleCount();
+		void cleanupSwapChain();
+	public:
+		inline VkCommandPool GetCommandPool() { return m_commandPool; }
+		inline VkDevice GetDevice() { return m_device; }
 	public:
 		~RenderBackend();
 	private:

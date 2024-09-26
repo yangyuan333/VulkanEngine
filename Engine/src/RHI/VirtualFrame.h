@@ -17,14 +17,14 @@ namespace VulkanEngine
 		void Init(size_t frameCount);
 		void Destroy();
 
-		void                              StartFrame();
+		void StartFrame();
 		VirtualFrame& GetCurrentFrame();
 		VirtualFrame& GetNextFrame();
 		[[nodiscard]] const VirtualFrame& GetCurrentFrame() const;
 		[[nodiscard]] const VirtualFrame& GetNextFrame() const;
-		[[nodiscard]] uint32_t            GetPresentImageIndex() const;
-		[[nodiscard]] size_t              GetFrameCount() const;
-		void                              EndFrame();
+		[[nodiscard]] uint32_t GetPresentImageIndex() const;
+		[[nodiscard]] size_t GetFrameCount() const;
+		void EndFrame();
 
 	private:
 		std::vector<VirtualFrame> m_virtualFrames;

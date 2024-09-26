@@ -22,11 +22,35 @@ namespace VulkanEngine
 		CreateCommandPool();
 		CreateDescriptorCacheAndAllocator();
 		CreateSwapChain();
+	}
 
+	void RenderBackend::Init()
+	{
+		RenderBackend::GetInstance().CreateVirtualFrame();
+	}
+
+	static void DestroyDebugUtilsMessengerEXT(
+		VkInstance instance,
+		VkDebugUtilsMessengerEXT callback,
+		const VkAllocationCallbacks* pAllocator)
+	{
+		auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
+			instance,
+			"vkDestroyDebugUtilsMessengerEXT");
+		if (func != nullptr) func(instance, callback, pAllocator);
 	}
 
 	RenderBackend::~RenderBackend()
 	{
+		m_virtualFrames.Destroy();
+		vkDestroyCommandPool(m_device, m_commandPool, nullptr);
+		cleanupSwapChain();
+		m_descriptorAllocator->CleanUp(); // 清理 pool
+		m_descriptorLayoutCache->CleanUp(); // 清理 layout
+		vkDestroyDevice(m_device, nullptr);
+		if (Config::EnableValidationLayers) DestroyDebugUtilsMessengerEXT(m_vkInstance, callback, nullptr);
+		vkDestroySurfaceKHR(m_vkInstance, m_surface, nullptr);
+		vkDestroyInstance(m_vkInstance, nullptr);
 	}
 
 	bool checkValidationLayerSupport()
@@ -379,7 +403,7 @@ namespace VulkanEngine
 	}
 	void RenderBackend::CreateVirtualFrame()
 	{
-		
+		m_virtualFrames.Init(Config::MAX_FRAMES_IN_FLIGHT);
 	}
 	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
 	{
@@ -463,7 +487,7 @@ namespace VulkanEngine
 		createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
 		createInfo.presentMode = presentMode;
 		createInfo.clipped = VK_TRUE; // 这个要小心，得查一下
-		createInfo.oldSwapchain = VK_NULL_HANDLE; // 这个涉及到变分辨率渲染
+		createInfo.oldSwapchain = m_swapChain; // 这个涉及到变分辨率渲染
 
 		if (vkCreateSwapchainKHR(m_device, &createInfo, nullptr, &m_swapChain) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create swap chain!");
@@ -475,5 +499,16 @@ namespace VulkanEngine
 		vkGetSwapchainImagesKHR(m_device, m_swapChain, &imageCount, m_swapChainImages.data());
 		m_swapChainImageFormat = surfaceFormat.format;
 		m_swapChainExtent = extent;
+	}
+
+	void RenderBackend::cleanupSwapChain()
+	{
+	// 这里得额外注意，封装了 Image 后，小心多次内存释放问题
+		for (int i = 0; i < m_swapChainImageViews.size(); ++i)
+		{
+			vkDestroyImageView(m_device, m_swapChainImageViews[i], nullptr);
+		}
+
+		vkDestroySwapchainKHR(m_device, m_swapChain, nullptr);
 	}
 }

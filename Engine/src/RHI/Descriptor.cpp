@@ -29,4 +29,15 @@ namespace VulkanEngine
 			m_device, Config::GetInstance().defaultPoolSize, 
 			Config::GetInstance().defaultMaxSets * Config::MAX_FRAMES_IN_FLIGHT);
 	}
+	void DescriptorAllocator::CleanUp()
+	{
+		vkDestroyDescriptorPool(m_device, m_currentPool, nullptr);
+	}
+	void DescriptorLayoutCache::CleanUp()
+	{
+		for (auto& layoutCache : m_layoutCache)
+		{
+			vkDestroyDescriptorSetLayout(m_device, layoutCache.second, nullptr);
+		}
+	}
 }
