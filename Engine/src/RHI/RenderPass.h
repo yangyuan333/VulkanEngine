@@ -1,6 +1,5 @@
 #pragma once
 #include "Pipeline.h"
-#include "../Render/RenderResource.h"
 #include <string>
 #include <vector>
 #include <unordered_map>

@@ -1,12 +1,20 @@
 #pragma once
-#include "../RHI/RenderPass.h"
 #include <string>
 #include <map>
-#include "../Utility/Config.h"
+
+#include "../RHI/RenderPass.h"
 #include "Scene.h"
 
 namespace VulkanEngine
 {
+	enum class RenderPassEnum
+	{
+		PbrDeferredPass, // v1.0
+		ShadowMapPass, // v1.1
+		TaaPass, // v2.0
+		BloomPass // v2.1
+	};
+
 	class Renderer
 	{
 	public:

@@ -3,6 +3,7 @@
 #include "../Utility/SingleTon.h"
 #include "../RHI/VirtualFrame.h"
 #include "../RHI/Descriptor.h"
+#include "../RHI/Image.h"
 #include <vulkan/vulkan.h>
 #include <vector>
 

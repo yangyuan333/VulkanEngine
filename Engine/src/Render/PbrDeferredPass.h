@@ -2,6 +2,7 @@
 
 #include "../RHI/RenderPass.h"
 #include "../Utility/Config.h"
+#include <string>
 
 namespace VulkanEngine
 {
@@ -39,5 +40,10 @@ namespace VulkanEngine
 				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 				VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT}} 
 			};
+
+		const std::string geometry_vert_spir_path = "D:\\GraphicsLearning\\Code\\VulkanEngine\\Engine\\src\\Shader\\BasePass.vert.spv"; // 这里赋值
+		const std::string geometry_frag_spir_path = "D:\\GraphicsLearning\\Code\\VulkanEngine\\Engine\\src\\Shader\\BasePass.frag.spv"; // 这里赋值
+		const std::string lighting_vert_spir_path = "D:\\GraphicsLearning\\Code\\VulkanEngine\\Engine\\src\\Shader\\FullScreen.vert.spv"; // 这里赋值
+		const std::string lighting_frag_spir_path = "D:\\GraphicsLearning\\Code\\VulkanEngine\\Engine\\src\\Shader\\LightingPass.frag.spv"; // 这里赋值
 	};
 }

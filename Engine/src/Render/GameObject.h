@@ -5,12 +5,16 @@
 #include <vector>
 #include <memory>
 
-#include "../RHI/Buffer.h"
-#include "Material.h"
-#include "Light.h"
+// #include "../RHI/Buffer.h" // 这个也可以干掉
+// #include "Material.h"
+// #include "Light.h"
 
 namespace VulkanEngine
 {
+	class Material;
+	class Buffer;
+	class LightCompoent;
+
 	enum class GameObjectKind
 	{
 		Opaque,
@@ -34,12 +38,12 @@ namespace VulkanEngine
 
 		static VkVertexInputBindingDescription GetInputBindingDescription() 
 		{
-			;
+			return VkVertexInputBindingDescription{};
 		};
 
 		static std::vector<VkVertexInputAttributeDescription> GetVertexInputAttributeDescriptions() 
 		{
-			;
+			return {};
 		}
 	};
 	class MeshComponent

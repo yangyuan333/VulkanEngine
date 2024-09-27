@@ -1,5 +1,7 @@
 #include "Resource/ModelLoader.h"
-#include "Engine/Engine.h"
+// #include "Engine/Engine.h"
+// #include "Render/PbrDeferredPass.h"
+#include <memory>
 
 void CheckModelLoader()
 {
@@ -9,7 +11,14 @@ void CheckModelLoader()
 	VulkanEngine::ModelData modelDataSponza = VulkanEngine::ModelLoader::Load(modelPathSponza);
 }
 
+void CheckPipelineShader()
+{
+	// VulkanEngine::Engine::GetInstance();
+	// std::shared_ptr<VulkanEngine::RenderPass> renderPass = std::make_shared<VulkanEngine::PbrDeferredPass>();
+	// renderPass->Build();
+}
+
 int main()
 {
-
+	CheckPipelineShader();
 }

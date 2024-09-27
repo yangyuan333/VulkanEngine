@@ -7,6 +7,7 @@
 #include <GLFW/glfw3.h>
 #include "../Render/RenderBackend.h"
 #include "../Engine/Engine.h"
+#include "../Utility/Config.h"
 
 namespace VulkanEngine
 {
@@ -48,6 +49,8 @@ namespace VulkanEngine
 
 	Pipeline::Pipeline(std::string const& vert_spir_path, std::string const& frag_spir_path, VkSampleCountFlagBits msaaSampleCout, PipelineConfig const& pipelineConfig, VkRenderPass renderPass, uint32_t subpssIndex)
 	{
+		m_descriptorSets.resize(Config::MAX_FRAMES_IN_FLIGHT);
+
 		CreateShader(vert_spir_path, frag_spir_path);
 
 		// Pipeline Config
@@ -67,10 +70,10 @@ namespace VulkanEngine
 		dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
 		dynamicState.dynamicStateCount = static_cast<uint32_t>(pipelineConfig.dynamicStates.size());
 		dynamicState.pDynamicStates = pipelineConfig.dynamicStates.data();
-
+		
+		VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
 		if (pipelineConfig.vertexAttributeDescriptions.size() == 0)
 		{
-			VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
 			vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 			vertexInputInfo.vertexBindingDescriptionCount = 0;
 			vertexInputInfo.pVertexBindingDescriptions = nullptr; // Optional
@@ -79,7 +82,6 @@ namespace VulkanEngine
 		}
 		else
 		{
-			VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
 			vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 			vertexInputInfo.vertexBindingDescriptionCount = 1;
 			vertexInputInfo.pVertexBindingDescriptions = &(pipelineConfig.vertexBindingDescription); // Optional
