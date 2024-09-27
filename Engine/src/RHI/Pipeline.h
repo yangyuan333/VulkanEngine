@@ -116,8 +116,8 @@ namespace VulkanEngine
 
 	private:
 		VkPipeline m_pipeline;
-		VkShaderModule m_vertexShader; // 好像没必要，创建后就销毁了
-		VkShaderModule m_fragShader; // 同上
+		VkShaderModule m_vertexShader;
+		VkShaderModule m_fragShader;
 		std::array<std::map<uint32_t, VkDescriptorSet>, Config::MAX_FRAMES_IN_FLIGHT> m_descriptorSets; // 目前先采用单一的set，每个物体对象共用一个set，渲染时实时对其进行update
 		std::vector<VkDescriptorSetLayout> m_descriptorSetLayouts;
 		VkPipelineLayout m_pipelineLayout;

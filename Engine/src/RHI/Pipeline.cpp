@@ -196,7 +196,14 @@ namespace VulkanEngine
 
 	Pipeline::~Pipeline()
 	{
-		
+		vkDestroyShaderModule(RenderBackend::GetInstance().GetDevice(), m_fragShader, nullptr);
+		vkDestroyShaderModule(RenderBackend::GetInstance().GetDevice(), m_vertexShader, nullptr);
+		vkDestroyPipeline(RenderBackend::GetInstance().GetDevice(), m_pipeline, nullptr);
+		vkDestroyPipelineLayout(RenderBackend::GetInstance().GetDevice(), m_pipelineLayout, nullptr);
+		for (auto& layout : m_descriptorSetLayouts)
+		{
+			vkDestroyDescriptorSetLayout(RenderBackend::GetInstance().GetDevice(), layout, nullptr);
+		}
 	}
 
 	void Pipeline::CreateShader(std::string const& vert_spir_path, std::string const& frag_spir_path)
