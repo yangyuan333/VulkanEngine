@@ -98,6 +98,9 @@
     <ClInclude Include="src\Render\RenderResource.h">
       <Filter>Render</Filter>
     </ClInclude>
+    <ClInclude Include="src\RHI\Sampler.h">
+      <Filter>RHI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Resource\ModelLoader.cpp">
@@ -154,13 +157,16 @@
     <ClCompile Include="src\Render\Camera.cpp">
       <Filter>Render</Filter>
     </ClCompile>
+    <ClCompile Include="src\Render\PbrDeferredPass.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RHI\Sampler.cpp">
+      <Filter>RHI</Filter>
+    </ClCompile>
     <ClCompile Include="src\Render\DerferRenderer.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="src\Render\Renderer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Render\PbrDeferredPass.cpp">
       <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>

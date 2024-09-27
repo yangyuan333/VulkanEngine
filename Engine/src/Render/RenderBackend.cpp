@@ -46,7 +46,6 @@ namespace VulkanEngine
 		vkDestroyCommandPool(m_device, m_commandPool, nullptr);
 		cleanupSwapChain();
 		m_descriptorAllocator->CleanUp(); // 清理 pool
-		m_descriptorLayoutCache->CleanUp(); // 清理 layout
 		vkDestroyDevice(m_device, nullptr);
 		if (Config::EnableValidationLayers) DestroyDebugUtilsMessengerEXT(m_vkInstance, callback, nullptr);
 		vkDestroySurfaceKHR(m_vkInstance, m_surface, nullptr);
@@ -395,9 +394,6 @@ namespace VulkanEngine
 	}
 	void RenderBackend::CreateDescriptorCacheAndAllocator()
 	{
-		m_descriptorLayoutCache = std::make_unique<DescriptorLayoutCache>();
-		m_descriptorLayoutCache->Init(m_device);
-
 		m_descriptorAllocator = std::make_unique<DescriptorAllocator>();
 		m_descriptorAllocator->Init(m_device);
 	}

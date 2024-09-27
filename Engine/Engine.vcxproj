@@ -117,7 +117,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;vulkan-1.lib;spirv-cross-glsld.lib;spirv-cross-cored.lib;spirv-cross-cppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -135,7 +135,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;vulkan-1.lib;spirv-cross-glsl.lib;spirv-cross-core.lib;spirv-cross-cpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -159,6 +159,7 @@
     <ClInclude Include="src\RHI\Image.h" />
     <ClInclude Include="src\RHI\Pipeline.h" />
     <ClInclude Include="src\RHI\RenderPass.h" />
+    <ClInclude Include="src\RHI\Sampler.h" />
     <ClInclude Include="src\RHI\VirtualFrame.h" />
     <ClInclude Include="src\Utility\Config.h" />
     <ClInclude Include="src\Utility\RenderEnum.h" />
@@ -185,6 +186,7 @@
     <ClCompile Include="src\RHI\Image.cpp" />
     <ClCompile Include="src\RHI\Pipeline.cpp" />
     <ClCompile Include="src\RHI\RenderPass.cpp" />
+    <ClCompile Include="src\RHI\Sampler.cpp" />
     <ClCompile Include="src\RHI\VirtualFrame.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

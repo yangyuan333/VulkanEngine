@@ -20,6 +20,8 @@ namespace VulkanEngine
 		virtual void Build() = 0;
 		virtual const std::unordered_map<std::string, TextureDesc>& GetPassTextureDescs() = 0;
 		virtual const void UpdatePassTextureDescsWidthHeight(uint32_t width, uint32_t height) = 0;
+		inline VkRenderPass GetRenderPassHandle() const { return m_RenderPass; }
+		inline VkRenderPass GetRenderPassHandle() { return m_RenderPass; }
 	protected:
 		void DeclareColorAttachment(
 			const std::string& name, const TextureDesc& textureDesc,
@@ -37,7 +39,7 @@ namespace VulkanEngine
 	protected:
 		std::string m_PassName;
 		VkRenderPass m_RenderPass;
-		std::vector<Pipeline> m_pipelines; // subpass
+		std::vector<Pipeline> m_pipelines; // subpass 目前只针对 opaque 物体进行渲染，创建一套即可
 		VkFramebuffer m_frameBuffer;
 		std::vector<VkAttachmentDescription> m_colorAttachmentDescriptions;
 		VkAttachmentDescription m_depthAttachmentDescription;

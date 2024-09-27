@@ -4,10 +4,9 @@
 
 namespace VulkanEngine
 {
-	class Buffer
+	class Sampler
 	{
 	private:
-		VkBuffer m_buffer;
-		VkDeviceMemory m_bufferMemory;
+		VkSampler m_smpler;
 	};
 }

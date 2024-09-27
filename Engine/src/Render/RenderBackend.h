@@ -56,6 +56,7 @@ namespace VulkanEngine
 	public:
 		inline VkCommandPool GetCommandPool() { return m_commandPool; }
 		inline VkDevice GetDevice() { return m_device; }
+		inline std::shared_ptr<DescriptorAllocator> GetDescriptorAllocator() { return m_descriptorAllocator; }
 	public:
 		~RenderBackend();
 	private:
@@ -85,8 +86,7 @@ namespace VulkanEngine
 
 		VirtualFrameProvider m_virtualFrames;
 
-		std::unique_ptr<DescriptorAllocator> m_descriptorAllocator;
-		std::unique_ptr<DescriptorLayoutCache> m_descriptorLayoutCache;
+		std::shared_ptr<DescriptorAllocator> m_descriptorAllocator;
 
 		VkSampleCountFlagBits msaaSamples = VK_SAMPLE_COUNT_1_BIT;
 	};

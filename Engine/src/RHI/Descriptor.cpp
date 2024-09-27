@@ -1,5 +1,6 @@
 #include "Descriptor.h"
 #include "../Utility/Config.h"
+#include "../Render/RenderBackend.h"
 
 namespace VulkanEngine
 { 
@@ -33,11 +34,35 @@ namespace VulkanEngine
 	{
 		vkDestroyDescriptorPool(m_device, m_currentPool, nullptr);
 	}
-	void DescriptorLayoutCache::CleanUp()
-	{
-		for (auto& layoutCache : m_layoutCache)
-		{
-			vkDestroyDescriptorSetLayout(m_device, layoutCache.second, nullptr);
+	std::vector<VkDescriptorSet >DescriptorAllocator::Allocate(std::vector<VkDescriptorSetLayout> const& descriptorSetLayouts)
+    {
+		VkDescriptorSetAllocateInfo allocInfo{};
+		allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+		allocInfo.descriptorPool = m_currentPool;
+		allocInfo.descriptorSetCount = descriptorSetLayouts.size();
+		allocInfo.pSetLayouts = descriptorSetLayouts.data();
+
+		std::vector<VkDescriptorSet> descriptorSets;
+		descriptorSets.resize(descriptorSetLayouts.size());
+		if (vkAllocateDescriptorSets(RenderBackend::GetInstance().GetDevice(), &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
+			throw std::runtime_error("failed to allocate descriptor sets!");
 		}
+		
+		return descriptorSets;
+    }
+	VkDescriptorSet DescriptorAllocator::Allocate(VkDescriptorSetLayout const& descriptorSetLayout)
+	{
+		VkDescriptorSetAllocateInfo allocInfo{};
+		allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+		allocInfo.descriptorPool = m_currentPool;
+		allocInfo.descriptorSetCount = 1;
+		allocInfo.pSetLayouts = &descriptorSetLayout;
+
+		VkDescriptorSet descriptorSet;
+		if (vkAllocateDescriptorSets(RenderBackend::GetInstance().GetDevice(), &allocInfo, &descriptorSet) != VK_SUCCESS) {
+			throw std::runtime_error("failed to allocate descriptor sets!");
+		}
+
+		return descriptorSet;
 	}
 }
