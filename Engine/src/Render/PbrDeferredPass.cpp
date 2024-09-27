@@ -98,7 +98,7 @@ namespace VulkanEngine
 		depthAttachmentRef.attachment = 5;
 		depthAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
-		std::array<VkSubpassDescription, 2> subpasses;
+		std::vector<VkSubpassDescription> subpasses; subpasses.resize(2);
 		subpasses[0].pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 		subpasses[0].colorAttachmentCount = 4;
 		subpasses[0].pColorAttachments = subpass1_colorAttachmentRefs.data();
@@ -110,7 +110,7 @@ namespace VulkanEngine
 		subpasses[1].inputAttachmentCount = 4;
 		subpasses[1].pInputAttachments = subpass1_colorAttachmentRefs.data();
 
-		std::array<VkSubpassDependency, 2> dependency; // 这里可能得检查一下
+		std::vector<VkSubpassDependency> dependency; dependency.resize(2);// 这里可能得检查一下
 		dependency[0].srcSubpass = VK_SUBPASS_EXTERNAL;
 		dependency[0].dstSubpass = 0;
 		dependency[0].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
@@ -125,6 +125,11 @@ namespace VulkanEngine
 		dependency[1].dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
 		dependency[1].dstAccessMask = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 
+		std::vector<VkAttachmentDescription> attachments{ m_colorAttachmentDescriptions };
+		attachments.push_back(m_depthAttachmentDescription);
 
+		CreateVkRenderPass(attachments, subpasses, dependency);
+
+		// Pipeline 也得 build;
 	}
 }

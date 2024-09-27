@@ -40,4 +40,18 @@ namespace VulkanEngine
 
 		m_depthAttachmentClearValue.depthStencil = { clearDepthStencil.depth, clearDepthStencil.stencil };
 	}
+	void RenderPass::CreateVkRenderPass(
+		const std::vector<VkAttachmentDescription>& attachments, 
+		const std::vector<VkSubpassDescription>& subpasses, 
+		const std::vector<VkSubpassDependency>& dependency)
+	{
+		VkRenderPassCreateInfo renderPassInfo = {};
+		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+		renderPassInfo.attachmentCount = attachments.size();
+		renderPassInfo.pAttachments = attachments.data();
+		renderPassInfo.subpassCount = subpasses.size();
+		renderPassInfo.pSubpasses = subpasses.data();
+		renderPassInfo.dependencyCount = dependency.size();
+		renderPassInfo.pDependencies = dependency.data();
+	}
 }

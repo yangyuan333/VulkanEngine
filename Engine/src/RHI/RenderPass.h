@@ -30,6 +30,10 @@ namespace VulkanEngine
 			const TextureOps& ops, VkImageLayout initialLayout,
 			VkImageLayout   finalLayout,
 			ClearDepthStencil clearDepthStencil = ClearDepthStencil{});
+		void CreateVkRenderPass(
+			const std::vector<VkAttachmentDescription>& attachments, 
+			const std::vector<VkSubpassDescription>& subpasses,
+			const std::vector<VkSubpassDependency>& dependency);
 	protected:
 		std::string m_PassName;
 		VkRenderPass m_RenderPass;
