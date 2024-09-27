@@ -20,6 +20,7 @@ namespace VulkanEngine
 		~Engine();
 	public:
 		void Run();
+		void Init();
 	private:
 		Engine();
 		void RenderTick();

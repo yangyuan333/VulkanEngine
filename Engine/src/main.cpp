@@ -1,6 +1,6 @@
 #include "Resource/ModelLoader.h"
-// #include "Engine/Engine.h"
-// #include "Render/PbrDeferredPass.h"
+#include "Engine/Engine.h"
+#include "Render/PbrDeferredPass.h"
 #include <memory>
 
 void CheckModelLoader()
@@ -13,9 +13,9 @@ void CheckModelLoader()
 
 void CheckPipelineShader()
 {
-	// VulkanEngine::Engine::GetInstance();
-	// std::shared_ptr<VulkanEngine::RenderPass> renderPass = std::make_shared<VulkanEngine::PbrDeferredPass>();
-	// renderPass->Build();
+	 VulkanEngine::Engine::GetInstance().Init();
+	 std::shared_ptr<VulkanEngine::RenderPass> renderPass = std::make_shared<VulkanEngine::PbrDeferredPass>();
+	 renderPass->Build();
 }
 
 int main()

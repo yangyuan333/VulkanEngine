@@ -13,7 +13,7 @@ namespace VulkanEngine
 		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 		allocInfo.commandBufferCount = frameCount;
 
-		std::vector<VkCommandBuffer> commandBuffers;
+		std::vector<VkCommandBuffer> commandBuffers; commandBuffers.resize(frameCount);
 		if (vkAllocateCommandBuffers(RenderBackend::GetInstance().GetDevice(), &allocInfo, commandBuffers.data()) != VK_SUCCESS) {
 			throw std::runtime_error("failed to allocate command buffers!");
 		}
