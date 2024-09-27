@@ -2,7 +2,7 @@
 
 #include "SingleTon.h"
 #include "../RHI/Descriptor.h"
-#include "../Render/RenderResource.h"
+#include "../RHI/Pipeline.h"
 #include "../Render/GameObject.h"
 #include <vector>
 
@@ -11,7 +11,7 @@ namespace VulkanEngine
 	class Config : public Singleton<Config>
 	{
 	public:
-		// Windwos Config
+		// Windows Config
 		static constexpr int WIDTH = 800;
 		static constexpr int HEIGHT = 600;
 		static constexpr bool WINDOW_RESIZEABLE = false;
@@ -42,7 +42,7 @@ namespace VulkanEngine
 		const uint32_t defaultMaxSets = 2;
 		
 		static constexpr ColorAttachmentBlendConfig opaqueColorAttachmentBlendConfig = {
-			VK_FALSE, VK_BLEND_OP_ADD, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ZERO, VK_BLEND_OP_ADD, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ZERO
+			VK_FALSE
 		};
 
 		const PipelineConfig opaqueScenePipelineConfig = {

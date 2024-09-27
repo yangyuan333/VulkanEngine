@@ -9,6 +9,72 @@
 
 namespace VulkanEngine
 {
+
+	struct ShaderImageDesc {
+		std::shared_ptr<Image> image;
+		VkImageUsageFlags usage;
+		std::shared_ptr<Sampler> sampler;
+	};
+
+	struct ShaderBufferDesc {
+		std::shared_ptr<Buffer> buffer;
+		size_t offset;
+		size_t range;
+	};
+
+	struct ShadowConfig
+	{
+		VkBool32 depthClampEnable;
+		VkBool32 depthBiasEnable;
+		float depthBiasConstantFactor;
+		float depthBiasClamp;
+		float depthBiasSlopeFactor;
+	};
+
+	struct CullConfig
+	{
+		VkCullModeFlags cullMode;
+		VkFrontFace frontFace;
+	};
+
+	struct DepthStencilConfig
+	{
+		VkBool32 depthTestEnable;
+		VkBool32 depthWriteEnable;
+		VkCompareOp depthCompareOp;
+		VkBool32 stencilTestEnable;
+		VkStencilOpState stencilFront;
+		VkStencilOpState stencilBack;
+	};
+
+	struct ColorAttachmentBlendConfig
+	{
+		VkBool32 blendEnable;
+		VkBlendOp colorBlendOp = VK_BLEND_OP_ADD;
+		VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+		VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+		VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD;
+		VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+		VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+	};
+
+	struct ColorBlendConfig
+	{
+		std::vector<ColorAttachmentBlendConfig> colorAttachmentConfig;
+	};
+
+	struct PipelineConfig
+	{
+		std::vector<VkDynamicState> dynamicStates;
+		VkVertexInputBindingDescription vertexBindingDescription;
+		std::vector<VkVertexInputAttributeDescription> vertexAttributeDescriptions;
+		VkPrimitiveTopology primitiveTopology;
+		CullConfig cullConfig;
+		ShadowConfig shadowConfig;
+		DepthStencilConfig depthStencilConifg;
+		ColorBlendConfig colorBlendConfig;
+	};
+
 	class Pipeline
 	{
 	public:
