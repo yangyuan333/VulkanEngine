@@ -324,7 +324,7 @@ namespace VulkanEngine
 		if (candidates.begin()->first > 0) m_physicalDevice = candidates.begin()->second;
 		if (m_physicalDevice == VK_NULL_HANDLE) throw std::runtime_error("failed to find a suitable GPU!");
 		if (Config::ENABLE_MSAA)
-			msaaSamples = getMaxUsableSampleCount();
+			m_msaaSamples = getMaxUsableSampleCount();
 		vkGetPhysicalDeviceProperties(m_physicalDevice, &m_physicalDeviceProperties);
 	}
 	void RenderBackend::CreateLogicalDevice()

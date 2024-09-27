@@ -52,12 +52,12 @@ namespace VulkanEngine
 	struct ColorAttachmentBlendConfig
 	{
 		VkBool32 blendEnable;
-		VkBlendOp colorBlendOp;
-		VkBlendFactor srcColorBlendFactor;
-		VkBlendFactor dstColorBlendFactor;
-		VkBlendOp alphaBlendOp;
-		VkBlendFactor srcAlphaBlendFactor;
-		VkBlendFactor dstAlphaBlendFactor;
+		VkBlendOp colorBlendOp = VK_BLEND_OP_ADD;
+		VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+		VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+		VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD;
+		VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+		VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
 	};
 
 	struct ColorBlendConfig
@@ -67,8 +67,6 @@ namespace VulkanEngine
 
 	struct PipelineConfig
 	{
-		std::string vert_spir_path;
-		std::string frag_spir_path;
 		std::vector<VkDynamicState> dynamicStates;
 		// 这个后续得注意一下---全屏后处理这种怎么做
 		VkVertexInputBindingDescription vertexBindingDescription; // 这里先处理成只能有一个 VAO 的情况，大多数情况都能用
@@ -76,7 +74,6 @@ namespace VulkanEngine
 		VkPrimitiveTopology primitiveTopology;
 		CullConfig cullConfig;
 		ShadowConfig shadowConfig;
-		VkSampleCountFlagBits msaaSampleCout;
 		DepthStencilConfig depthStencilConifg;
 		ColorBlendConfig colorBlendConfig;
 	};
@@ -96,7 +93,7 @@ namespace VulkanEngine
 		};
 
 	public:
-		Pipeline(PipelineConfig const& pipelineConfig, VkRenderPass renderPass, uint32_t subpssIndex);
+		Pipeline(std::string const& vert_spir_path, std::string const& frag_spir_path, VkSampleCountFlagBits msaaSampleCout, PipelineConfig const& pipelineConfig, VkRenderPass renderPass, uint32_t subpssIndex);
 		~Pipeline();
 		
 		// 非及时更新，收集好了后，调用一次 update，节省cpu gpu

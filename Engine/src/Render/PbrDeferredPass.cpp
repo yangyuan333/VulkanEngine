@@ -131,5 +131,6 @@ namespace VulkanEngine
 		CreateVkRenderPass(attachments, subpasses, dependency);
 
 		// Pipeline Ò²µÃ build;
+		m_pipelines.push_back(Pipeline{});
 	}
 }

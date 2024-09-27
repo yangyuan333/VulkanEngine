@@ -57,6 +57,8 @@ namespace VulkanEngine
 		inline VkCommandPool GetCommandPool() { return m_commandPool; }
 		inline VkDevice GetDevice() { return m_device; }
 		inline std::shared_ptr<DescriptorAllocator> GetDescriptorAllocator() { return m_descriptorAllocator; }
+		inline VkSampleCountFlagBits GetMsaaSampleBit() const { return m_msaaSamples; }
+		inline VkSampleCountFlagBits GetMsaaSampleBit() { return m_msaaSamples; }
 	public:
 		~RenderBackend();
 	private:
@@ -88,6 +90,6 @@ namespace VulkanEngine
 
 		std::shared_ptr<DescriptorAllocator> m_descriptorAllocator;
 
-		VkSampleCountFlagBits msaaSamples = VK_SAMPLE_COUNT_1_BIT;
+		VkSampleCountFlagBits m_msaaSamples = VK_SAMPLE_COUNT_1_BIT;
 	};
 }

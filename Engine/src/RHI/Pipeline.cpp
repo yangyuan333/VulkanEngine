@@ -46,9 +46,9 @@ namespace VulkanEngine
 		return {width, height};
 	}
 
-	Pipeline::Pipeline(PipelineConfig const& pipelineConfig, VkRenderPass renderPass, uint32_t subpssIndex)
+	Pipeline::Pipeline(std::string const& vert_spir_path, std::string const& frag_spir_path, VkSampleCountFlagBits msaaSampleCout, PipelineConfig const& pipelineConfig, VkRenderPass renderPass, uint32_t subpssIndex)
 	{
-		CreateShader(pipelineConfig.vert_spir_path, pipelineConfig.frag_spir_path);
+		CreateShader(vert_spir_path, frag_spir_path);
 
 		// Pipeline Config
 		VkPipelineShaderStageCreateInfo vertShaderStageInfo = {};
@@ -68,13 +68,24 @@ namespace VulkanEngine
 		dynamicState.dynamicStateCount = static_cast<uint32_t>(pipelineConfig.dynamicStates.size());
 		dynamicState.pDynamicStates = pipelineConfig.dynamicStates.data();
 
-		VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
-		vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-		vertexInputInfo.vertexBindingDescriptionCount = 1;
-		vertexInputInfo.pVertexBindingDescriptions = &(pipelineConfig.vertexBindingDescription); // Optional
-		vertexInputInfo.vertexAttributeDescriptionCount = pipelineConfig.vertexAttributeDescriptions.size();
-		vertexInputInfo.pVertexAttributeDescriptions = pipelineConfig.vertexAttributeDescriptions.data(); // Optional
-
+		if (pipelineConfig.vertexAttributeDescriptions.size() == 0)
+		{
+			VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
+			vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+			vertexInputInfo.vertexBindingDescriptionCount = 0;
+			vertexInputInfo.pVertexBindingDescriptions = nullptr; // Optional
+			vertexInputInfo.vertexAttributeDescriptionCount = 0;
+			vertexInputInfo.pVertexAttributeDescriptions = nullptr; // Optional
+		}
+		else
+		{
+			VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
+			vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+			vertexInputInfo.vertexBindingDescriptionCount = 1;
+			vertexInputInfo.pVertexBindingDescriptions = &(pipelineConfig.vertexBindingDescription); // Optional
+			vertexInputInfo.vertexAttributeDescriptionCount = pipelineConfig.vertexAttributeDescriptions.size();
+			vertexInputInfo.pVertexAttributeDescriptions = pipelineConfig.vertexAttributeDescriptions.data(); // Optional
+		}
 		VkPipelineInputAssemblyStateCreateInfo inputAssembly = {};
 		inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 		inputAssembly.topology = pipelineConfig.primitiveTopology;
@@ -115,7 +126,7 @@ namespace VulkanEngine
 		VkPipelineMultisampleStateCreateInfo multisampling = {};
 		multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
 		multisampling.sampleShadingEnable = VK_FALSE;
-		multisampling.rasterizationSamples = pipelineConfig.msaaSampleCout;
+		multisampling.rasterizationSamples = msaaSampleCout;
 		multisampling.minSampleShading = 1.0f; // Optional
 		multisampling.pSampleMask = nullptr; // Optional
 		multisampling.alphaToCoverageEnable = VK_FALSE; // Optional
