@@ -180,5 +180,11 @@
     <None Include="src\Shader\pbrBasePassFrag.glsl">
       <Filter>Shader</Filter>
     </None>
+    <None Include="src\Shader\fullScreenVert.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="src\Shader\pbrLightingFrag.glsl">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

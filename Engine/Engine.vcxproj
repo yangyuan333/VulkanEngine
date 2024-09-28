@@ -190,8 +190,10 @@
     <ClCompile Include="src\RHI\VirtualFrame.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\Shader\fullScreenVert.glsl" />
     <None Include="src\Shader\pbrBasePassFrag.glsl" />
     <None Include="src\Shader\pbrBasePassVert.glsl" />
+    <None Include="src\Shader\pbrLightingFrag.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

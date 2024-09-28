@@ -41,9 +41,9 @@ namespace VulkanEngine
 				VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT}} 
 			};
 
-		const std::string geometry_vert_spir_path = "D:\\GraphicsLearning\\Code\\VulkanEngine\\Engine\\src\\Shader\\BasePass.vert.spv"; // 这里赋值
-		const std::string geometry_frag_spir_path = "D:\\GraphicsLearning\\Code\\VulkanEngine\\Engine\\src\\Shader\\BasePass.frag.spv"; // 这里赋值
-		const std::string lighting_vert_spir_path = "D:\\GraphicsLearning\\Code\\VulkanEngine\\Engine\\src\\Shader\\FullScreen.vert.spv"; // 这里赋值
-		const std::string lighting_frag_spir_path = "D:\\GraphicsLearning\\Code\\VulkanEngine\\Engine\\src\\Shader\\LightingPass.frag.spv"; // 这里赋值
+		const std::string geometry_vert_spir_path = "D:\\GraphicsLearning\\Code\\VulkanEngine\\Engine\\src\\Shader\\pbrBasePassVert.glsl.spv"; // 这里赋值
+		const std::string geometry_frag_spir_path = "D:\\GraphicsLearning\\Code\\VulkanEngine\\Engine\\src\\Shader\\pbrBasePassFrag.glsl.spv"; // 这里赋值
+		const std::string lighting_vert_spir_path = "D:\\GraphicsLearning\\Code\\VulkanEngine\\Engine\\src\\Shader\\fullScreenVert.glsl.spv"; // 这里赋值
+		const std::string lighting_frag_spir_path = "D:\\GraphicsLearning\\Code\\VulkanEngine\\Engine\\src\\Shader\\pbrLightingFrag.glsl.spv"; // 这里赋值
 	};
 }

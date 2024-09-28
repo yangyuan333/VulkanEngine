@@ -312,5 +312,9 @@ namespace VulkanEngine
 		for (auto& resource : resources.separate_images) {
 			collectResource(resource, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE);
 		}
+
+		for (auto& resource : resources.subpass_inputs) {
+			collectResource(resource, VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT);
+		}
 	}
 }

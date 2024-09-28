@@ -133,14 +133,14 @@ namespace VulkanEngine
 		// Pipeline 也得 build; 最好是得有名字
 		m_pipelines.push_back(
 			Pipeline(
-				geometry_vert_spir_path, geometry_frag_spir_path, 
-				RenderBackend::GetInstance().GetMsaaSampleBit(), Config::GetInstance().opaqueScenePipelineConfig, 
-				m_RenderPass, 0));
-		m_pipelines.push_back(
-			Pipeline(
 				lighting_vert_spir_path, lighting_frag_spir_path,
 				RenderBackend::GetInstance().GetMsaaSampleBit(), Config::GetInstance().fullScreenPipelineConfig,
 				m_RenderPass, 1));
+		m_pipelines.push_back(
+			Pipeline(
+				geometry_vert_spir_path, geometry_frag_spir_path, 
+				RenderBackend::GetInstance().GetMsaaSampleBit(), Config::GetInstance().opaqueScenePipelineConfig, 
+				m_RenderPass, 0));
 
 	}
 }
