@@ -12,6 +12,8 @@ namespace VulkanEngine
 		~Buffer();
 		Buffer(const Buffer&) = delete;
 		Buffer& operator=(const Buffer&) = delete;
+		Buffer(Buffer&& other);
+		Buffer& operator=(Buffer&& other);
 		
 		Buffer(size_t byteSize, VkBufferUsageFlagBits usage, VkMemoryPropertyFlagBits memoryUsage);
 		void Init(size_t byteSize, VkBufferUsageFlagBits usage, VkMemoryPropertyFlagBits memoryUsage);
@@ -29,7 +31,9 @@ namespace VulkanEngine
 	private:
 		void FlushMemory();
 		void FlushMemory(size_t byteSize, size_t offset);
+		void Destroy();
 	private:
+
 		VkBuffer m_buffer;
 		VkDeviceMemory m_bufferMemory;
 

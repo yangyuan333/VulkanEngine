@@ -1,34 +1,41 @@
 #include "Buffer.h"
 #include "../Render/RenderBackend.h"
+#include "../Utility/UtilityFunc.h"
 
 namespace VulkanEngine
 {
-	uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
-	{
-		VkPhysicalDeviceMemoryProperties memProperties;
-		vkGetPhysicalDeviceMemoryProperties(RenderBackend::GetInstance().GetPhyDevice(), &memProperties);
 
-		for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++)
-		{
-			if (typeFilter & (1 << i) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties)
-			{
-				return i;
-			}
-		}
+	Buffer::Buffer(Buffer&& other) {
+		m_buffer = other.m_buffer;
+		m_byteSize = other.m_byteSize;
+		m_bufferMemory = other.m_bufferMemory;
+		m_mappedMemory = other.m_mappedMemory;
 
-		throw std::runtime_error("failed to find suitable memory type!");
+		other.m_buffer = VK_NULL_HANDLE;
+		other.m_byteSize = 0;
+		other.m_bufferMemory = VK_NULL_HANDLE;
+		other.m_mappedMemory = nullptr;
+	}
+
+	Buffer& Buffer::operator=(Buffer&& other) {
+		Destroy();
+
+		m_buffer = other.m_buffer;
+		m_byteSize = other.m_byteSize;
+		m_bufferMemory = other.m_bufferMemory;
+		m_mappedMemory = other.m_mappedMemory;
+
+		other.m_buffer = VK_NULL_HANDLE;
+		other.m_byteSize = 0;
+		other.m_bufferMemory = VK_NULL_HANDLE;
+		other.m_mappedMemory = nullptr;
+
+		return *this;
 	}
 
 	Buffer::~Buffer()
 	{
-		if (m_buffer != VK_NULL_HANDLE) {
-			if (IsMemoryMapped()) UnmapMemory();
-			
-			vkDestroyBuffer(RenderBackend::GetInstance().GetDevice(), m_buffer, nullptr);
-			vkFreeMemory(RenderBackend::GetInstance().GetDevice(), m_bufferMemory, nullptr);
-			m_buffer = VK_NULL_HANDLE;
-			m_bufferMemory = VK_NULL_HANDLE;
-		}
+		Destroy();
 	}
 
 	Buffer::Buffer(size_t byteSize, VkBufferUsageFlagBits usage, VkMemoryPropertyFlagBits memoryUsage)
@@ -118,5 +125,18 @@ namespace VulkanEngine
 	{
 		WriteData(data, byteSize, offset);
 		if (IsMemoryMapped()) FlushMemory(byteSize, offset);
+	}
+
+
+	void Buffer::Destroy()
+	{
+		if (m_buffer != VK_NULL_HANDLE) {
+			if (IsMemoryMapped()) UnmapMemory();
+
+			vkDestroyBuffer(RenderBackend::GetInstance().GetDevice(), m_buffer, nullptr);
+			vkFreeMemory(RenderBackend::GetInstance().GetDevice(), m_bufferMemory, nullptr);
+			m_buffer = VK_NULL_HANDLE;
+			m_bufferMemory = VK_NULL_HANDLE;
+		}
 	}
 }
