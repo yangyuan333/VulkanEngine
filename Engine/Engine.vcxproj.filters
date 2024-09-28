@@ -24,6 +24,9 @@
     <Filter Include="Engine">
       <UniqueIdentifier>{8a7ecd79-9f11-4004-9b3a-b9199e070429}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{6994382b-e596-433b-bd20-d36f0f02b1ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Resource\ModelLoader.h">
@@ -169,5 +172,13 @@
     <ClCompile Include="src\Render\Renderer.cpp">
       <Filter>Render</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Shader\pbrBasePassVert.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="src\Shader\pbrBasePassFrag.glsl">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

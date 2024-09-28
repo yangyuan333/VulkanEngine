@@ -296,7 +296,7 @@ namespace VulkanEngine
 				m_bindDatas[resource.name].shaderStageFlag |= shaderFlags;
 			}
 			};
-
+		
 		for (auto& resource : resources.uniform_buffers) {
 			collectResource(resource, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER);
 		}

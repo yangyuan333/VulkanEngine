@@ -65,5 +65,6 @@ namespace VulkanEngine
 		std::vector<std::shared_ptr<Material>> m_materials; // 多个材质，每个材质对应一个RenderPass---ShadowMap、PBR、TAA，每个renderpass所需的资源也在里面
 		std::shared_ptr<LightCompoent> m_light;
 		GameObjectKind objectKind;
+		// 这里有各自的 descriptor set，renderpass pipeline 对应；
 	};
 }
