@@ -62,4 +62,12 @@ namespace VulkanEngine
 		float minDepth = 0.0f;
 		float maxDepth = 1.0f;
 	};
+
+	struct StageMask
+	{
+		VkAccessFlags srcMask;
+		VkAccessFlags desMask;
+		VkPipelineStageFlags srcStage;
+		VkPipelineStageFlags desStage;
+	};
 }

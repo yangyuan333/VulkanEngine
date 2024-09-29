@@ -892,7 +892,7 @@ private:
 			height,
 			1
 		};
-
+		
 		vkCmdCopyBufferToImage(
 			commandBuffer,
 			buffer,

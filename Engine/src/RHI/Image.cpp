@@ -15,25 +15,6 @@ namespace VulkanEngine
 		else return 1;
 	}
 
-	VkImageAspectFlags ImageFormatToImageAspect(VkFormat format) {
-		switch (format) {
-		case VkFormat::VK_FORMAT_D16_UNORM:
-			return VkImageAspectFlagBits::VK_IMAGE_ASPECT_DEPTH_BIT;
-		case VkFormat::VK_FORMAT_X8_D24_UNORM_PACK32:
-			return VkImageAspectFlagBits::VK_IMAGE_ASPECT_DEPTH_BIT;
-		case VkFormat::VK_FORMAT_D32_SFLOAT:
-			return VkImageAspectFlagBits::VK_IMAGE_ASPECT_DEPTH_BIT;
-		case VkFormat::VK_FORMAT_D16_UNORM_S8_UINT:
-			return VkImageAspectFlagBits::VK_IMAGE_ASPECT_DEPTH_BIT | VkImageAspectFlagBits::VK_IMAGE_ASPECT_STENCIL_BIT;
-		case VkFormat::VK_FORMAT_D24_UNORM_S8_UINT:
-			return VkImageAspectFlagBits::VK_IMAGE_ASPECT_DEPTH_BIT | VkImageAspectFlagBits::VK_IMAGE_ASPECT_STENCIL_BIT;
-		case VkFormat::VK_FORMAT_D32_SFLOAT_S8_UINT:
-			return VkImageAspectFlagBits::VK_IMAGE_ASPECT_DEPTH_BIT | VkImageAspectFlagBits::VK_IMAGE_ASPECT_STENCIL_BIT;
-		default:
-			return VkImageAspectFlagBits::VK_IMAGE_ASPECT_COLOR_BIT;
-		}
-	}
-
 	VkImageSubresourceRange GetDefaultImageSubresourceRange(const Image& image) {
 		return VkImageSubresourceRange{ ImageFormatToImageAspect(image.GetFormat()),
 										 0, // base mip level
@@ -60,6 +41,7 @@ namespace VulkanEngine
 		m_usage = other.m_usage;
 		m_memoryUsage = other.m_memoryUsage;
 		m_options = other.m_options;
+		m_currentMipLayout = other.m_currentMipLayout;
 
 		other.m_image = VK_NULL_HANDLE;
 		other.m_imageView = VK_NULL_HANDLE;
@@ -81,6 +63,7 @@ namespace VulkanEngine
 		m_usage = other.m_usage;
 		m_memoryUsage = other.m_memoryUsage;
 		m_options = other.m_options;
+		m_currentMipLayout = other.m_currentMipLayout;
 
 		other.m_image = VK_NULL_HANDLE;
 		other.m_imageView = VK_NULL_HANDLE;
@@ -139,6 +122,8 @@ namespace VulkanEngine
 		vkBindImageMemory(RenderBackend::GetInstance().GetDevice(), m_image, m_imageMemory, 0);
 
 		InitViews(m_image, format);
+
+		m_currentMipLayout.resize(m_mipLevelCount, VK_IMAGE_LAYOUT_UNDEFINED);
 	}
 	
 	VkImageView Image::GetImageView() const

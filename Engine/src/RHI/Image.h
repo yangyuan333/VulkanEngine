@@ -2,6 +2,7 @@
 
 #include <vulkan/vulkan.h>
 #include <string>
+#include <vector>
 
 namespace VulkanEngine
 {
@@ -35,7 +36,7 @@ namespace VulkanEngine
 		uint32_t GetMipLevelWidth(uint32_t mipLevel) const;
 		uint32_t GetMipLevelHeight(uint32_t mipLevel) const;
 
-		auto GetNativeHandle() const { return m_image; }
+		auto GetImageHandle() const { return m_image; }
 		auto GetFormat() const { return m_format; }
 		auto GetWidth() const { return m_extent.width; }
 		auto GetHeight() const { return m_extent.height; }
@@ -43,6 +44,8 @@ namespace VulkanEngine
 		auto GetLayerCount() const { return m_layerCount; }
 		auto GetImageUsage() const { return m_usage; }
 		auto GetImagememoryUsage() const { return m_memoryUsage; }
+		auto GetImageMipLayout(uint32_t mipLevel) const { return m_currentMipLayout[mipLevel]; }
+		void SetImageMipLayout(VkImageLayout layout, uint32_t mipLevel = 0) const { m_currentMipLayout[mipLevel] = layout; }
 	private:
 		void Destroy();
 		void InitViews(const VkImage& image, VkFormat format);
@@ -59,5 +62,7 @@ namespace VulkanEngine
 		VkImageUsageFlagBits m_usage;
 		VkMemoryPropertyFlagBits m_memoryUsage;
 		ImageOptions::Value m_options;
+		
+		mutable std::vector<VkImageLayout> m_currentMipLayout;
 	};
 }
