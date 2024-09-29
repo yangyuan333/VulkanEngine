@@ -6,7 +6,18 @@ namespace VulkanEngine
 {
 	class Sampler
 	{
+	public:
+		Sampler() = default;
+		~Sampler();
+		Sampler(Sampler&& other);
+		Sampler& operator=(Sampler&& other);
+		Sampler(VkFilter minFilter, VkFilter magFilter, VkSamplerAddressMode uvwAddress, VkSamplerMipmapMode mipFilter);
+		void Init(VkFilter minFilter, VkFilter magFilter, VkSamplerAddressMode uvwAddress, VkSamplerMipmapMode mipFilter);
+
+		const VkSampler& GetSamplerHandle() const;
 	private:
-		VkSampler m_smpler;
+		void Destroy();
+	private:
+		VkSampler m_sampler;
 	};
 }
