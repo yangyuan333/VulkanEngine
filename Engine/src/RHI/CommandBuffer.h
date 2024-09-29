@@ -32,7 +32,7 @@ namespace VulkanEngine
 
 		void Dispatch(uint32_t x, uint32_t y, uint32_t z);
 
-		void BeginRenderPass(RenderPass renderPass, FrameBuffer frameBuffer);
+		void BeginRenderPass(RenderPass const& renderPass, FrameBuffer const& frameBuffer);
 		void EndRenderPass();
 
 		void BindDescriptorSet(VkPipelineBindPoint bindPoint, VkPipelineLayout layout,

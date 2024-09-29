@@ -1,8 +1,19 @@
 #include "RenderPass.h"
 #include "../Render/RenderBackend.h"
+#include "FrameBuffer.h"
 
 namespace VulkanEngine
 {
+	uint32_t RenderPass::GetAttachmentId(std::string attachmenName) const
+	{
+		auto it = m_name2Id.find(attachmenName);
+		if (it != m_name2Id.end()) return it->second;
+		throw std::runtime_error("failed to find the attachment name!");
+	}
+	void RenderPass::BindFrameBuffer(std::shared_ptr<FrameBuffer> frameBuffer)
+	{
+		m_frameBuffer = frameBuffer;
+	}
 	void RenderPass::DeclareColorAttachment(const std::string& name, const TextureDesc& textureDesc, const TextureOps& ops, VkImageLayout initialLayout, VkImageLayout finalLayout, ClearColor clearColor)
 	{
 		VkAttachmentDescription colorAttachment = {};
@@ -22,6 +33,7 @@ namespace VulkanEngine
 		
 		m_AttachmentDescriptions.push_back(colorAttachment);
 		m_name2AttachmentDescription[name] = colorAttachment;
+		m_name2Id[name] = m_AttachmentDescriptions.size() - 1;
 
 		VkClearValue temp;
 		temp.color = { {clearColor.r, clearColor.g, clearColor.b, clearColor.a} };
@@ -45,6 +57,7 @@ namespace VulkanEngine
 
 		m_AttachmentDescriptions.push_back(Attachment);
 		m_name2AttachmentDescription[name] = Attachment;
+		m_name2Id[name] = m_AttachmentDescriptions.size() - 1;
 
 		VkClearValue temp;
 		temp.depthStencil = { clearDepthStencil.depth, clearDepthStencil.stencil };
@@ -81,6 +94,7 @@ namespace VulkanEngine
 		m_AttachmentDescriptions = other.m_AttachmentDescriptions;
 		m_AttachmentClearValue = other.m_AttachmentClearValue;
 		m_name2AttachmentDescription = other.m_name2AttachmentDescription;
+		m_name2Id = other.m_name2Id;
 
 		// m_colorAttachmentDescriptions = other.m_colorAttachmentDescriptions;
 		// m_depthAttachmentDescription = other.m_depthAttachmentDescription;
@@ -105,6 +119,7 @@ namespace VulkanEngine
 		m_AttachmentDescriptions = other.m_AttachmentDescriptions;
 		m_AttachmentClearValue = other.m_AttachmentClearValue;
 		m_name2AttachmentDescription = other.m_name2AttachmentDescription;
+		m_name2Id = other.m_name2Id;
 
 		// m_colorAttachmentDescriptions = other.m_colorAttachmentDescriptions;
 		// m_depthAttachmentDescription = other.m_depthAttachmentDescription;
@@ -130,6 +145,7 @@ namespace VulkanEngine
 			m_AttachmentDescriptions.clear();
 			m_AttachmentClearValue.clear();
 			m_name2AttachmentDescription.clear();
+			m_name2Id.clear();
 		}
 	}
 }

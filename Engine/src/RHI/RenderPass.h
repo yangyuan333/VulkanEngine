@@ -1,6 +1,5 @@
 #pragma once
 #include "Pipeline.h"
-#include "FrameBuffer.h"
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -8,6 +7,8 @@
 
 namespace VulkanEngine
 {
+	class FrameBuffer;
+
 	struct TextureOps {
 		VkAttachmentLoadOp  load = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
 		VkAttachmentStoreOp store = VK_ATTACHMENT_STORE_OP_DONT_CARE;
@@ -27,9 +28,11 @@ namespace VulkanEngine
 	public:
 		virtual void Build() = 0;
 		virtual const std::unordered_map<std::string, TextureDesc>& GetPassTextureDescs() = 0;
-		virtual const void UpdatePassTextureDescsWidthHeight(uint32_t width, uint32_t height) = 0;
+		virtual void UpdatePassTextureDescsWidthHeight(uint32_t width, uint32_t height) const = 0;
 		inline VkRenderPass GetRenderPassHandle() const { return m_RenderPass; }
-		inline VkRenderPass GetRenderPassHandle() { return m_RenderPass; }
+		inline std::vector<VkAttachmentDescription> GetAttachmentList() const { return m_AttachmentDescriptions; }
+		inline std::map<std::string, VkAttachmentDescription> GetAttachmentMap() const { return m_name2AttachmentDescription; }
+		uint32_t GetAttachmentId(std::string attachmenName) const;
 		void BindFrameBuffer(std::shared_ptr<FrameBuffer> frameBuffer);
 		void UnBindFrameBuffer() { m_frameBuffer  = nullptr; }
 	protected:
@@ -57,6 +60,7 @@ namespace VulkanEngine
 		std::vector<VkAttachmentDescription> m_AttachmentDescriptions;
 		std::vector<VkClearValue> m_AttachmentClearValue;
 		std::map<std::string, VkAttachmentDescription> m_name2AttachmentDescription;
+		std::map<std::string, uint32_t> m_name2Id;
 		// std::vector<VkAttachmentDescription> m_colorAttachmentDescriptions;
 		// VkAttachmentDescription m_depthAttachmentDescription;
 		// std::vector<VkClearValue> m_colorAttachmentClearValue;

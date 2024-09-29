@@ -10,11 +10,11 @@ namespace VulkanEngine
 	{
 	public:
 		virtual const std::unordered_map<std::string, TextureDesc>& GetPassTextureDescs();
-		virtual const void UpdatePassTextureDescsWidthHeight(uint32_t width, uint32_t height);
+		virtual void UpdatePassTextureDescsWidthHeight(uint32_t width, uint32_t height) const;
 		virtual void Build() override;
 
 	protected:
-		std::unordered_map<std::string, TextureDesc> m_pbrDeferredPassTextureDescs = {
+		mutable std::unordered_map<std::string, TextureDesc> m_pbrDeferredPassTextureDescs = {
 			{"SceneColor", TextureDesc{
 				Config::SceneColorFormat,
 				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,

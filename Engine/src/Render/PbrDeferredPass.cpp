@@ -9,7 +9,7 @@ namespace VulkanEngine
 	{
 		return m_pbrDeferredPassTextureDescs;
 	}
-	const void PbrDeferredPass::UpdatePassTextureDescsWidthHeight(uint32_t width, uint32_t height)
+	void PbrDeferredPass::UpdatePassTextureDescsWidthHeight(uint32_t width, uint32_t height) const
 	{
 		for (auto& mapIt : m_pbrDeferredPassTextureDescs)
 		{
