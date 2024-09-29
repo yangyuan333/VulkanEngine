@@ -40,6 +40,26 @@ namespace VulkanEngine
 		return shaderModule;
 	}
 
+	void Pipeline::Destroy()
+	{
+		if (m_pipeline != VK_NULL_HANDLE)
+		{
+			vkDestroyShaderModule(RenderBackend::GetInstance().GetDevice(), m_fragShader, nullptr);
+			vkDestroyShaderModule(RenderBackend::GetInstance().GetDevice(), m_vertexShader, nullptr);
+			vkDestroyPipeline(RenderBackend::GetInstance().GetDevice(), m_pipeline, nullptr);
+			vkDestroyPipelineLayout(RenderBackend::GetInstance().GetDevice(), m_pipelineLayout, nullptr);
+			for (auto& layout : m_descriptorSetLayouts)
+			{
+				vkDestroyDescriptorSetLayout(RenderBackend::GetInstance().GetDevice(), layout, nullptr);
+				layout = VK_NULL_HANDLE;
+			}
+			m_pipeline = VK_NULL_HANDLE;
+			m_pipelineLayout = VK_NULL_HANDLE;
+			m_fragShader = VK_NULL_HANDLE;
+			m_vertexShader = VK_NULL_HANDLE;
+		}
+	}
+
 	std::array<int,2> GetCurrentWindowSize()
 	{
 		int width = 0, height = 0;
@@ -209,14 +229,54 @@ namespace VulkanEngine
 
 	Pipeline::~Pipeline()
 	{
-		vkDestroyShaderModule(RenderBackend::GetInstance().GetDevice(), m_fragShader, nullptr);
-		vkDestroyShaderModule(RenderBackend::GetInstance().GetDevice(), m_vertexShader, nullptr);
-		vkDestroyPipeline(RenderBackend::GetInstance().GetDevice(), m_pipeline, nullptr);
-		vkDestroyPipelineLayout(RenderBackend::GetInstance().GetDevice(), m_pipelineLayout, nullptr);
-		for (auto& layout : m_descriptorSetLayouts)
-		{
-			vkDestroyDescriptorSetLayout(RenderBackend::GetInstance().GetDevice(), layout, nullptr);
-		}
+		Destroy();
+	}
+
+	Pipeline::Pipeline(Pipeline&& other)
+	{
+		m_pipeline = other.m_pipeline;
+		m_vertexShader = other.m_vertexShader;
+		m_fragShader = other.m_fragShader;
+		m_descriptorSets = other.m_descriptorSets;
+		m_descriptorSetLayouts = other.m_descriptorSetLayouts;
+		m_pipelineLayout = other.m_pipelineLayout;
+		m_bindDatas = other.m_bindDatas;
+		m_currentWriteSets = other.m_currentWriteSets;
+
+		other.m_pipeline = VK_NULL_HANDLE;
+		other.m_vertexShader = VK_NULL_HANDLE;
+		other.m_fragShader = VK_NULL_HANDLE;
+		other.m_descriptorSets.clear();
+		other.m_descriptorSetLayouts.clear();
+		other.m_pipelineLayout = VK_NULL_HANDLE;
+		other.m_bindDatas.clear();
+		other.m_currentWriteSets.clear();
+	}
+
+	Pipeline& Pipeline::operator=(Pipeline&& other)
+	{
+		// TODO: 在此处插入 return 语句
+		Destroy();
+
+		m_pipeline = other.m_pipeline;
+		m_vertexShader = other.m_vertexShader;
+		m_fragShader = other.m_fragShader;
+		m_descriptorSets = other.m_descriptorSets;
+		m_descriptorSetLayouts = other.m_descriptorSetLayouts;
+		m_pipelineLayout = other.m_pipelineLayout;
+		m_bindDatas = other.m_bindDatas;
+		m_currentWriteSets = other.m_currentWriteSets;
+
+		other.m_pipeline = VK_NULL_HANDLE;
+		other.m_vertexShader = VK_NULL_HANDLE;
+		other.m_fragShader = VK_NULL_HANDLE;
+		other.m_descriptorSets.clear();
+		other.m_descriptorSetLayouts.clear();
+		other.m_pipelineLayout = VK_NULL_HANDLE;
+		other.m_bindDatas.clear();
+		other.m_currentWriteSets.clear();
+
+		return *this;
 	}
 
 	void Pipeline::CreateShader(std::string const& vert_spir_path, std::string const& frag_spir_path)

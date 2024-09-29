@@ -107,6 +107,9 @@
     <ClInclude Include="src\Utility\UtilityFunc.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="src\RHI\FrameBuffer.h">
+      <Filter>RHI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Resource\ModelLoader.cpp">
@@ -177,6 +180,9 @@
     </ClCompile>
     <ClCompile Include="src\Utility\UtilityFuc.cpp">
       <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RHI\FrameBuffer.cpp">
+      <Filter>RHI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

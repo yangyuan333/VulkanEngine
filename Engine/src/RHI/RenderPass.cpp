@@ -1,4 +1,5 @@
 #include "RenderPass.h"
+#include "../Render/RenderBackend.h"
 
 namespace VulkanEngine
 {
@@ -40,6 +41,7 @@ namespace VulkanEngine
 
 		m_depthAttachmentClearValue.depthStencil = { clearDepthStencil.depth, clearDepthStencil.stencil };
 	}
+
 	void RenderPass::CreateVkRenderPass(
 		const std::vector<VkAttachmentDescription>& attachments, 
 		const std::vector<VkSubpassDescription>& subpasses, 
@@ -53,5 +55,62 @@ namespace VulkanEngine
 		renderPassInfo.pSubpasses = subpasses.data();
 		renderPassInfo.dependencyCount = dependency.size();
 		renderPassInfo.pDependencies = dependency.data();
+	}
+
+    RenderPass::~RenderPass()
+    {
+		Destroy();
+    }
+
+    RenderPass::RenderPass(RenderPass&& other)
+    {
+		m_PassName = other.m_PassName;
+		m_RenderPass = other.m_RenderPass;
+		m_pipelines = other.m_pipelines;
+		m_frameBuffer = other.m_frameBuffer;
+		m_colorAttachmentDescriptions = other.m_colorAttachmentDescriptions;
+		m_depthAttachmentDescription = other.m_depthAttachmentDescription;
+		m_colorAttachmentClearValue = other.m_colorAttachmentClearValue;
+		m_depthAttachmentClearValue = other.m_depthAttachmentClearValue;
+
+		other.m_RenderPass = VK_NULL_HANDLE;
+		other.m_pipelines.clear();
+		other.m_frameBuffer = nullptr;
+    }
+
+    RenderPass& RenderPass::operator=(RenderPass&& other)
+    {
+        // TODO: 在此处插入 return 语句
+		Destroy();
+
+		m_PassName = other.m_PassName;
+		m_RenderPass = other.m_RenderPass;
+		m_pipelines = other.m_pipelines;
+		m_frameBuffer = other.m_frameBuffer;
+		m_colorAttachmentDescriptions = other.m_colorAttachmentDescriptions;
+		m_depthAttachmentDescription = other.m_depthAttachmentDescription;
+		m_colorAttachmentClearValue = other.m_colorAttachmentClearValue;
+		m_depthAttachmentClearValue = other.m_depthAttachmentClearValue;
+
+		other.m_RenderPass = VK_NULL_HANDLE;
+		other.m_pipelines.clear();
+		other.m_frameBuffer = nullptr;
+
+		return *this;
+    }
+
+	void RenderPass::Destroy()
+	{
+		if (m_RenderPass != VK_NULL_HANDLE)
+		{
+			// for (auto& pipeline : m_pipelines)
+			// {
+			// 	pipeline.Destroy();
+			// }
+			m_pipelines.clear();
+			vkDestroyRenderPass(RenderBackend::GetInstance().GetDevice(), m_RenderPass, nullptr);
+			m_frameBuffer = nullptr;
+			m_RenderPass = VK_NULL_HANDLE;
+		}
 	}
 }

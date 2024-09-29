@@ -77,6 +77,7 @@ namespace VulkanEngine
 
 	class Pipeline
 	{
+		friend class RenderPass;
 	public:
 		struct BindMetaData {
 			uint32_t set;
@@ -89,7 +90,11 @@ namespace VulkanEngine
 	public:
 		Pipeline(std::string const& vert_spir_path, std::string const& frag_spir_path, VkSampleCountFlagBits msaaSampleCout, PipelineConfig const& pipelineConfig, VkRenderPass renderPass, uint32_t subpssIndex);
 		~Pipeline();
-		
+		Pipeline(Pipeline const& other) = delete;
+		Pipeline& operator=(Pipeline const& other) = delete;
+		Pipeline(Pipeline&& other);
+		Pipeline& operator=(Pipeline&& other);
+
 		void ClearBinds();
 		void Bind(const std::string& resourceName, const ShaderBufferDesc& bufferDesc);
 		void Bind(const std::string& resourceName, const ShaderImageDesc& imageDesc);
@@ -102,7 +107,7 @@ namespace VulkanEngine
 		void GeneratePushConstantData();
 		void CollectSpirvMetaData(std::vector<char> spivrBinary, VkShaderStageFlags shaderFlags);
 		VkShaderModule CreateShaderModule(const std::vector<char>& code);
-
+		void Destroy();
 	private:
 		VkPipeline m_pipeline;
 		VkShaderModule m_vertexShader;

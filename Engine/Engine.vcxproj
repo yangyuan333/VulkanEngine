@@ -156,6 +156,7 @@
     <ClInclude Include="src\RHI\Buffer.h" />
     <ClInclude Include="src\RHI\CommandBuffer.h" />
     <ClInclude Include="src\RHI\Descriptor.h" />
+    <ClInclude Include="src\RHI\FrameBuffer.h" />
     <ClInclude Include="src\RHI\Image.h" />
     <ClInclude Include="src\RHI\Pipeline.h" />
     <ClInclude Include="src\RHI\RenderPass.h" />
@@ -184,6 +185,7 @@
     <ClCompile Include="src\RHI\Buffer.cpp" />
     <ClCompile Include="src\RHI\CommandBuffer.cpp" />
     <ClCompile Include="src\RHI\Descriptor.cpp" />
+    <ClCompile Include="src\RHI\FrameBuffer.cpp" />
     <ClCompile Include="src\RHI\Image.cpp" />
     <ClCompile Include="src\RHI\Pipeline.cpp" />
     <ClCompile Include="src\RHI\RenderPass.cpp" />
