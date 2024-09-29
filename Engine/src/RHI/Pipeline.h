@@ -101,6 +101,9 @@ namespace VulkanEngine
 		void Bind(const std::string& resourceName, const std::vector<Image>& textureArray);
 		void Bind(const std::string& resourceName, std::shared_ptr<Sampler> sampler);
 		void UpdateBinds();
+
+	public:
+		VkPipeline GetPipelineHandle() const { return m_pipeline; }
 	private:
 		void CreateShader(std::string const& vert_spir_path, std::string const& frag_spir_path);
 		void GenerateVulkanDescriptorSetLayout();

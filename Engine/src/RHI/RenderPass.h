@@ -33,6 +33,8 @@ namespace VulkanEngine
 		inline std::vector<VkAttachmentDescription> GetAttachmentList() const { return m_AttachmentDescriptions; }
 		inline std::map<std::string, VkAttachmentDescription> GetAttachmentMap() const { return m_name2AttachmentDescription; }
 		uint32_t GetAttachmentId(std::string attachmenName) const;
+		std::shared_ptr<FrameBuffer> GetFameBuffer() const { return m_frameBuffer; }
+		std::vector<VkClearValue> GetClearColor() const { return m_AttachmentClearValue; }
 		void BindFrameBuffer(std::shared_ptr<FrameBuffer> frameBuffer);
 		void UnBindFrameBuffer() { m_frameBuffer  = nullptr; }
 	protected:

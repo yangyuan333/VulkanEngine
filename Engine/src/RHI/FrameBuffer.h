@@ -25,6 +25,9 @@ namespace VulkanEngine
 		void BindAttachment(uint32_t attachmentId, const Image& image);
 		void Build();
 		void UnBuild();
+
+		uint32_t GetWidth() const { return m_width; }
+		uint32_t GetHeight() const { return m_height; }
 	public:
 		inline VkFramebuffer GetFrameBufferHandle() const { return m_frameBuffer; }
 	private:
