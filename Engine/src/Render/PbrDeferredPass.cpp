@@ -95,8 +95,8 @@ namespace VulkanEngine
 		depthAttachmentRef.attachment = 4;
 		depthAttachmentRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 		VkAttachmentReference subpass2_colorAttachmentRef;
-		depthAttachmentRef.attachment = 5;
-		depthAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+		subpass2_colorAttachmentRef.attachment = 5;
+		subpass2_colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
 		std::vector<VkSubpassDescription> subpasses; subpasses.resize(2);
 		subpasses[0].pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
@@ -125,10 +125,10 @@ namespace VulkanEngine
 		dependency[1].dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
 		dependency[1].dstAccessMask = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 
-		std::vector<VkAttachmentDescription> attachments{ m_colorAttachmentDescriptions };
-		attachments.push_back(m_depthAttachmentDescription);
+		// std::vector<VkAttachmentDescription> attachments{ m_colorAttachmentDescriptions };
+		// attachments.push_back(m_depthAttachmentDescription);
 
-		CreateVkRenderPass(attachments, subpasses, dependency);
+		CreateVkRenderPass(m_AttachmentDescriptions, subpasses, dependency);
 
 		// Pipeline 也得 build; 最好是得有名字
 		m_pipelines.push_back(

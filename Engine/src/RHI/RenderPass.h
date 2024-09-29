@@ -54,9 +54,14 @@ namespace VulkanEngine
 		std::vector<std::shared_ptr<Pipeline>> m_pipelines; // subpass 目前只针对 opaque 物体进行渲染，创建一套即可
 		std::shared_ptr<FrameBuffer> m_frameBuffer;
 
-		std::vector<VkAttachmentDescription> m_colorAttachmentDescriptions;
-		VkAttachmentDescription m_depthAttachmentDescription;
-		std::vector<VkClearValue> m_colorAttachmentClearValue;
-		VkClearValue m_depthAttachmentClearValue;
+		std::vector<VkAttachmentDescription> m_AttachmentDescriptions;
+		std::vector<VkClearValue> m_AttachmentClearValue;
+		std::map<std::string, VkAttachmentDescription> m_name2AttachmentDescription;
+		// std::vector<VkAttachmentDescription> m_colorAttachmentDescriptions;
+		// VkAttachmentDescription m_depthAttachmentDescription;
+		// std::vector<VkClearValue> m_colorAttachmentClearValue;
+		// VkClearValue m_depthAttachmentClearValue;
+
+		
 	};
 }
