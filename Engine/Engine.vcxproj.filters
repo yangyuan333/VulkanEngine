@@ -110,6 +110,12 @@
     <ClInclude Include="src\RHI\FrameBuffer.h">
       <Filter>RHI</Filter>
     </ClInclude>
+    <ClInclude Include="src\Render\InputManager.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Render\KeyCodes.h">
+      <Filter>Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Resource\ModelLoader.cpp">
@@ -183,6 +189,9 @@
     </ClCompile>
     <ClCompile Include="src\RHI\FrameBuffer.cpp">
       <Filter>RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render\InputManager.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

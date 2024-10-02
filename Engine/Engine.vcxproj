@@ -143,6 +143,8 @@
     <ClInclude Include="src\Render\Camera.h" />
     <ClInclude Include="src\Render\DerferRenderer.h" />
     <ClInclude Include="src\Render\GameObject.h" />
+    <ClInclude Include="src\Render\InputManager.h" />
+    <ClInclude Include="src\Render\KeyCodes.h" />
     <ClInclude Include="src\Render\Light.h" />
     <ClInclude Include="src\Render\Material.h" />
     <ClInclude Include="src\Render\PbrDeferredPass.h" />
@@ -173,6 +175,7 @@
     <ClCompile Include="src\Render\Camera.cpp" />
     <ClCompile Include="src\Render\DerferRenderer.cpp" />
     <ClCompile Include="src\Render\GameObject.cpp" />
+    <ClCompile Include="src\Render\InputManager.cpp" />
     <ClCompile Include="src\Render\Light.cpp" />
     <ClCompile Include="src\Render\Material.cpp" />
     <ClCompile Include="src\Render\PbrDeferredPass.cpp" />
