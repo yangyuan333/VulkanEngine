@@ -23,6 +23,7 @@ namespace VulkanEngine
 		Image() = default;
 		Image(uint32_t width, uint32_t height, VkFormat format, VkImageUsageFlagBits usage,
 			VkMemoryPropertyFlagBits memoryUsage, ImageOptions::Value options);
+		Image(VkImage image, uint32_t width, uint32_t height, VkFormat format);
 		Image(Image&& other);
 		Image& operator=(Image&& other);
 		Image(Image const& other) = delete;

@@ -8,8 +8,8 @@ namespace VulkanEngine
 	struct VirtualFrame {
 		CommandBuffer Commands{ VkCommandBuffer{} };
 		VkFence CommandQueueFence;
-		VkSemaphore imageAvailableSemaphores;
-		VkSemaphore renderFinishedSemaphores;
+		VkSemaphore imageAvailableSemaphore;
+		VkSemaphore renderFinishedSemaphore;
 	};
 
 	class VirtualFrameProvider {

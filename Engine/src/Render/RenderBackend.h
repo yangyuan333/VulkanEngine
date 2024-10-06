@@ -6,6 +6,7 @@
 #include "../RHI/Image.h"
 #include <vulkan/vulkan.h>
 #include <vector>
+#include <memory>
 
 namespace VulkanEngine
 {
@@ -55,12 +56,15 @@ namespace VulkanEngine
 		VkSampleCountFlagBits getMaxUsableSampleCount();
 		void cleanupSwapChain();
 	public:
-		inline VkCommandPool GetCommandPool() { return m_commandPool; }
-		inline VkDevice GetDevice() { return m_device; }
-		inline VkPhysicalDevice GetPhyDevice() { return m_physicalDevice; }
+		inline VkCommandPool& GetCommandPool() { return m_commandPool; }
+		inline VkDevice& GetDevice() { return m_device; }
+		inline VkPhysicalDevice& GetPhyDevice() { return m_physicalDevice; }
 		inline std::shared_ptr<DescriptorAllocator> GetDescriptorAllocator() { return m_descriptorAllocator; }
 		inline VkSampleCountFlagBits GetMsaaSampleBit() const { return m_msaaSamples; }
 		inline VkSampleCountFlagBits GetMsaaSampleBit() { return m_msaaSamples; }
+		inline VkSwapchainKHR& GetSwapChain() { return m_swapChain; }
+		inline VkQueue& GetPresentQueue() { return m_presentQueue; }
+		inline VkQueue& GetGraphicsQueue() { return m_graphicsQueue; }
 	public:
 		~RenderBackend();
 	private:
@@ -85,8 +89,9 @@ namespace VulkanEngine
 		VkSwapchainKHR m_swapChain;
 		VkFormat m_swapChainImageFormat;
 		VkExtent2D m_swapChainExtent;
-		std::vector<VkImage> m_swapChainImages; // VkImage 得干掉，RHI 封装的 Image
-		std::vector<VkImageView> m_swapChainImageViews; // VkImage 得干掉，RHI 封装的 Image
+		// std::vector<VkImage> m_swapChainImages; // VkImage 得干掉，RHI 封装的 Image
+		// std::vector<VkImageView> m_swapChainImageViews; // VkImage 得干掉，RHI 封装的 Image
+		std::vector<std::shared_ptr<Image>> m_swapChainImages;
 
 		VirtualFrameProvider m_virtualFrames;
 

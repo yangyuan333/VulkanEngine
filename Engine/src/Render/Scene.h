@@ -12,7 +12,7 @@ namespace VulkanEngine
 		std::shared_ptr<Camera> m_camera;
 		std::vector<GameObject> m_gameObjects;
 		std::vector<GameObject> m_pointLights;
-		GameObject m_directionalLights; // 强制为1吧，只能有一个 sun
+		GameObject m_directionalLight; // 强制为1吧，只能有一个 sun
 
 	};
 }

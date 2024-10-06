@@ -29,6 +29,16 @@ namespace VulkanEngine
 		Init(width,height,format,usage,memoryUsage,options);
 	}
 
+    Image::Image(VkImage image, uint32_t width, uint32_t height, VkFormat format)
+    {
+		m_image = image;
+		m_extent = { width , height};
+		m_format = format;
+
+		InitViews(m_image, format);
+		m_currentMipLayout.resize(m_mipLevelCount, VK_IMAGE_LAYOUT_UNDEFINED);
+    }
+
 	Image::Image(Image&& other)
 	{
 		m_image = other.m_image;

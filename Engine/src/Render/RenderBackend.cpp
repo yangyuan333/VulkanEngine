@@ -401,6 +401,26 @@ namespace VulkanEngine
 	{
 		m_virtualFrames.Init(Config::MAX_FRAMES_IN_FLIGHT);
 	}
+    void RenderBackend::RecreateSwapChain()
+    {
+		int width = 0, height = 0;
+		glfwGetFramebufferSize(Engine::GetInstance().GetWindowHandle(), &width, &height);
+		while (width == 0 || height == 0)
+		{
+			glfwGetFramebufferSize(Engine::GetInstance().GetWindowHandle(), &width, &height);
+			glfwWaitEvents();
+		}
+
+		vkDeviceWaitIdle(m_device);
+
+		cleanupSwapChain();
+
+		CreateSwapChain(); // FrameBuffer想想该放到哪里
+		// createImageViews();
+		// createColorResources();
+		// createDepthResources();
+		// createFramebuffers();
+    }
 	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
 	{
 		for (const auto& availableFormat : availableFormats) {
@@ -490,21 +510,32 @@ namespace VulkanEngine
 		}
 
 		// 这里需要重新架构 Image 重写这里
+		std::vector<VkImage> swapChainImages;
 		vkGetSwapchainImagesKHR(m_device, m_swapChain, &imageCount, nullptr);
-		m_swapChainImages.resize(imageCount);
-		vkGetSwapchainImagesKHR(m_device, m_swapChain, &imageCount, m_swapChainImages.data());
+		swapChainImages.resize(imageCount);
+		vkGetSwapchainImagesKHR(m_device, m_swapChain, &imageCount, swapChainImages.data());
 		m_swapChainImageFormat = surfaceFormat.format;
 		m_swapChainExtent = extent;
+
+		m_swapChainImages.clear();
+		m_swapChainImages.reserve(imageCount);
+
+		for (uint32_t i = 0; i < imageCount; ++i) {
+			std::shared_ptr<Image> image = std::make_shared<Image>(
+				swapChainImages[i], extent.width, extent.height, surfaceFormat.format);
+			m_swapChainImages.push_back(image);
+		}
 	}
 
 	void RenderBackend::cleanupSwapChain()
 	{
-	// 这里得额外注意，封装了 Image 后，小心多次内存释放问题
-		for (int i = 0; i < m_swapChainImageViews.size(); ++i)
-		{
-			vkDestroyImageView(m_device, m_swapChainImageViews[i], nullptr);
-		}
-
-		vkDestroySwapchainKHR(m_device, m_swapChain, nullptr);
+		m_swapChainImages.clear();
+		// 这里得额外注意，封装了 Image 后，小心多次内存释放问题
+		// for (int i = 0; i < m_swapChainImageViews.size(); ++i)
+		// {
+		// 	vkDestroyImageView(m_device, m_swapChainImageViews[i], nullptr);
+		// }
+		// 
+		// vkDestroySwapchainKHR(m_device, m_swapChain, nullptr);
 	}
 }
