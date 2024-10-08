@@ -199,6 +199,9 @@
     <ClCompile Include="src\Render\StagingBuffer.cpp">
       <Filter>Render</Filter>
     </ClCompile>
+    <ClCompile Include="src\Render\RenderResource.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Shader\pbrBasePassVert.glsl">
