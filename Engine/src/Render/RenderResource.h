@@ -2,6 +2,9 @@
 #include <cstdint>
 #include <vulkan/vulkan.h>
 #include <memory>
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/glm.hpp>
 #include "../RHI/Image.h"
 #include "../RHI/Sampler.h"
 #include "../RHI/Buffer.h"
@@ -69,5 +72,25 @@ namespace VulkanEngine
 		VkAccessFlags desMask;
 		VkPipelineStageFlags srcStage;
 		VkPipelineStageFlags desStage;
+	};
+
+	struct Vertex
+	{
+		glm::vec3 Position{ 0.0f, 0.0f, 0.0f };
+		glm::vec3 Normal{ 0.0f, 0.0f, 0.0f };
+		glm::vec3 Tangent{ 0.0f, 0.0f, 0.0f };
+		glm::vec3 Bitangent{ 0.0f, 0.0f, 0.0f };
+		glm::vec2 TexCoord{ 0.0f, 0.0f };
+
+		static VkVertexInputBindingDescription GetInputBindingDescription()
+		{
+
+			return VkVertexInputBindingDescription{};
+		};
+
+		static std::vector<VkVertexInputAttributeDescription> GetVertexInputAttributeDescriptions()
+		{
+			return {};
+		}
 	};
 }

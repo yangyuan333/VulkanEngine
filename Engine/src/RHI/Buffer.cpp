@@ -38,13 +38,13 @@ namespace VulkanEngine
 		Destroy();
 	}
 
-	Buffer::Buffer(size_t byteSize, VkBufferUsageFlagBits usage, VkMemoryPropertyFlagBits memoryUsage)
+	Buffer::Buffer(size_t byteSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryUsage)
 		: m_byteSize(byteSize), m_usage(usage), m_memoryUsage(memoryUsage)
 	{
 		Init(byteSize, usage, memoryUsage);
 	}
 
-	void Buffer::Init(size_t byteSize, VkBufferUsageFlagBits usage, VkMemoryPropertyFlagBits memoryUsage)
+	void Buffer::Init(size_t byteSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryUsage)
 	{
 		VkBufferCreateInfo bufferInfo{};
 		bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -87,6 +87,7 @@ namespace VulkanEngine
 			vkMapMemory(RenderBackend::GetInstance().GetDevice(), m_bufferMemory, 0, m_byteSize, 0, &m_mappedMemory);
 			return m_mappedMemory;
 		}
+		throw std::runtime_error("Buffer Memory Current Must be VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT to Map!");
 	}
 
 	void Buffer::UnmapMemory()
@@ -118,6 +119,7 @@ namespace VulkanEngine
 			std::memcpy((void*)((uint8_t*)m_mappedMemory + offset), (const void*)data, byteSize);
 			FlushMemory();
 			UnmapMemory();
+			return;
 		}
 		std::memcpy((void*)((uint8_t*)m_mappedMemory + offset), (const void*)data, byteSize);
 	}

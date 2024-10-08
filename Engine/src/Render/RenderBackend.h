@@ -50,6 +50,9 @@ namespace VulkanEngine
 	public:
 		void RecreateSwapChain();
 	public:
+		CommandBuffer BeginSingleTimeCommand();
+		void SubmitSingleTimeCommand(VkCommandBuffer cmdBuffer);
+	public:
 		bool isDeviceSuitable(VkPhysicalDevice device);
 		QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 		SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
@@ -65,6 +68,7 @@ namespace VulkanEngine
 		inline VkSwapchainKHR& GetSwapChain() { return m_swapChain; }
 		inline VkQueue& GetPresentQueue() { return m_presentQueue; }
 		inline VkQueue& GetGraphicsQueue() { return m_graphicsQueue; }
+		inline auto& GetStagingBuffer() { return m_virtualFrames.GetCurrentFrame().stagingBuffer; }
 	public:
 		~RenderBackend();
 	private:

@@ -57,33 +57,28 @@ namespace VulkanEngine
 		// 改成两种模式：1. 立即模式；2. Record模式
 		// 目前都先用立即模式处理，
 		void CopyImage(
-			VkQueue queue,
 			const Image& source, uint32_t src_mipLevel, uint32_t src_layer,
 			const Image& destination, uint32_t des_mipLevel, uint32_t des_layer);
 		void CopyBufferToImage(
-			VkQueue queue,
 			const Buffer& source, uint32_t offset,
 			const Image& destination, uint32_t des_mipLevel = 0, uint32_t des_layer = 0);
 		void CopyImageToBuffer(
-			VkQueue queue,
 			const Image& source, uint32_t src_mipLevel, uint32_t src_layer,
 			const Buffer& destination, uint32_t offset);
 		void CopyBuffer(
-			VkQueue queue,
 			const Buffer& source, uint32_t src_offset,
 			const Buffer& destination, uint32_t des_offset,
 			size_t byteSize);
 
 		void BlitImage(
-			VkQueue queue,
 			const Image& source,
 			const Image& destination,
 			VkFilter filter = VK_FILTER_LINEAR,
 			uint32_t src_mipLevel = 0, uint32_t src_firstArray = 0, uint32_t src_arrayCount = 1,
 			uint32_t des_mipLevel = 0, uint32_t des_firstArray = 0, uint32_t des_arrayCount = 1);
-		void GenerateImageMipmap(VkQueue queue, const Image& image, VkImageUsageFlags initialUsage, VkFilter filter);
+		void GenerateImageMipmap(const Image& image, VkImageUsageFlags initialUsage, VkFilter filter);
 		
-		void TransferLayout(VkQueue queue, const Image& image, VkImageLayout oldLayout, VkImageLayout newLayout, uint32_t firstMip = 0, uint32_t mipLevels = 1, uint32_t firstArray = 0, uint32_t arrayCount = 1);
+		void TransferLayout(const Image& image, VkImageLayout oldLayout, VkImageLayout newLayout, uint32_t firstMip = 0, uint32_t mipLevels = 1, uint32_t firstArray = 0, uint32_t arrayCount = 1);
 		
 		void BindPipeline(const Pipeline& pipeline, VkPipelineBindPoint bindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS);
 

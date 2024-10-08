@@ -15,8 +15,8 @@ namespace VulkanEngine
 		Buffer(Buffer&& other);
 		Buffer& operator=(Buffer&& other);
 		
-		Buffer(size_t byteSize, VkBufferUsageFlagBits usage, VkMemoryPropertyFlagBits memoryUsage);
-		void Init(size_t byteSize, VkBufferUsageFlagBits usage, VkMemoryPropertyFlagBits memoryUsage);
+		Buffer(size_t byteSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryUsage);
+		void Init(size_t byteSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryUsage);
 
 		auto GetBufferHandle() const { return m_buffer; }
 		auto GetByteSize() const { return m_byteSize; }
@@ -28,7 +28,7 @@ namespace VulkanEngine
 		void WriteData(const uint8_t* data, size_t byteSize, size_t offset = 0);
 		void WriteDataWithFlush(const uint8_t* data, size_t byteSize, size_t offset = 0);
 
-	private:
+	public:
 		void FlushMemory();
 		void FlushMemory(size_t byteSize, size_t offset);
 		void Destroy();
@@ -37,8 +37,8 @@ namespace VulkanEngine
 		VkBuffer m_buffer;
 		VkDeviceMemory m_bufferMemory;
 
-		VkBufferUsageFlagBits m_usage;
-		VkMemoryPropertyFlagBits m_memoryUsage;
+		VkBufferUsageFlags m_usage;
+		VkMemoryPropertyFlags m_memoryUsage;
 
 		void* m_mappedMemory{ nullptr };
 		size_t m_byteSize{ 0 };

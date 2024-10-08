@@ -389,8 +389,7 @@ namespace VulkanEngine
 		allocInfo.commandPool = m_commandPool;
 		allocInfo.commandBufferCount = 1;
 
-		VkCommandBuffer commandBuffer;
-		vkAllocateCommandBuffers(m_device, &allocInfo, &commandBuffer);
+		vkAllocateCommandBuffers(m_device, &allocInfo, &m_immediateCmdBuffer);
 	}
 	void RenderBackend::CreateDescriptorCacheAndAllocator()
 	{
@@ -399,7 +398,7 @@ namespace VulkanEngine
 	}
 	void RenderBackend::CreateVirtualFrame()
 	{
-		m_virtualFrames.Init(Config::MAX_FRAMES_IN_FLIGHT);
+		m_virtualFrames.Init(Config::MAX_FRAMES_IN_FLIGHT, Config::MAX_STAGINGBUFFER_SIZE);
 	}
     void RenderBackend::RecreateSwapChain()
     {
@@ -421,6 +420,25 @@ namespace VulkanEngine
 		// createDepthResources();
 		// createFramebuffers();
     }
+	CommandBuffer RenderBackend::BeginSingleTimeCommand()
+	{
+		vkResetCommandBuffer(m_immediateCmdBuffer, 0);
+		CommandBuffer commandBuffer(m_immediateCmdBuffer);
+		commandBuffer.Begin(CommandBeginFlag::OneTime);
+		return commandBuffer;
+	}
+	void RenderBackend::SubmitSingleTimeCommand(VkCommandBuffer cmdBuffer)
+	{
+		vkEndCommandBuffer(cmdBuffer);
+
+		VkSubmitInfo submitInfo{};
+		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+		submitInfo.commandBufferCount = 1;
+		submitInfo.pCommandBuffers = &cmdBuffer;
+
+		vkQueueSubmit(m_graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+		vkQueueWaitIdle(m_graphicsQueue);
+	}
 	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
 	{
 		for (const auto& availableFormat : availableFormats) {

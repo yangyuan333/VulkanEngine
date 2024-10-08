@@ -116,6 +116,9 @@
     <ClInclude Include="src\Render\KeyCodes.h">
       <Filter>Render</Filter>
     </ClInclude>
+    <ClInclude Include="src\Render\StagingBuffer.h">
+      <Filter>Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Resource\ModelLoader.cpp">
@@ -191,6 +194,9 @@
       <Filter>RHI</Filter>
     </ClCompile>
     <ClCompile Include="src\Render\InputManager.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render\StagingBuffer.cpp">
       <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>

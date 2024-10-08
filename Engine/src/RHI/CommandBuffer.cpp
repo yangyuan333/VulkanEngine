@@ -165,10 +165,10 @@ namespace VulkanEngine
 		vkscissor.extent = { scissor.width, scissor.height };
 		vkCmdSetScissor(m_commandBuffer, 0, 1, &vkscissor);
 	}
-	void CommandBuffer::CopyImage(VkQueue queue, const Image& source, uint32_t src_mipLevel, uint32_t src_layer, const Image& destination, uint32_t des_mipLevel, uint32_t des_layer)
+	void CommandBuffer::CopyImage(const Image& source, uint32_t src_mipLevel, uint32_t src_layer, const Image& destination, uint32_t des_mipLevel, uint32_t des_layer)
 	{
-		TransferLayout(queue, source, source.GetImageMipLayout(src_mipLevel), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, src_mipLevel, 1, src_layer, 1);
-		TransferLayout(queue, destination, destination.GetImageMipLayout(des_mipLevel), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, des_mipLevel, 1, des_layer, 1);
+		TransferLayout(source, source.GetImageMipLayout(src_mipLevel), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, src_mipLevel, 1, src_layer, 1);
+		TransferLayout(destination, destination.GetImageMipLayout(des_mipLevel), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, des_mipLevel, 1, des_layer, 1);
 
 		VkImageCopy copyRegion;
 		copyRegion.srcOffset = {0, 0, 0};
@@ -185,9 +185,9 @@ namespace VulkanEngine
 			destination.GetImageMipLayout(des_mipLevel),
 			1, &copyRegion);
 	}
-	void CommandBuffer::CopyBufferToImage(VkQueue queue, const Buffer& source, uint32_t offset, const Image& destination, uint32_t des_mipLevel, uint32_t des_layer)
+	void CommandBuffer::CopyBufferToImage(const Buffer& source, uint32_t offset, const Image& destination, uint32_t des_mipLevel, uint32_t des_layer)
 	{
-		TransferLayout(queue, destination, destination.GetImageMipLayout(des_mipLevel), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, des_mipLevel, 1, des_layer, 1);
+		TransferLayout(destination, destination.GetImageMipLayout(des_mipLevel), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, des_mipLevel, 1, des_layer, 1);
 
 		VkBufferImageCopy region;
 		region.bufferOffset = offset;
@@ -207,9 +207,9 @@ namespace VulkanEngine
 			destination.GetImageMipLayout(des_mipLevel),
 			1, &region);
 	}
-	void CommandBuffer::CopyImageToBuffer(VkQueue queue, const Image& source, uint32_t src_mipLevel, uint32_t src_layer, const Buffer& destination, uint32_t offset)
+	void CommandBuffer::CopyImageToBuffer(const Image& source, uint32_t src_mipLevel, uint32_t src_layer, const Buffer& destination, uint32_t offset)
 	{
-		TransferLayout(queue, source, source.GetImageMipLayout(src_mipLevel), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, src_mipLevel, 1, src_layer, 1);
+		TransferLayout( source, source.GetImageMipLayout(src_mipLevel), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, src_mipLevel, 1, src_layer, 1);
 
 		VkBufferImageCopy region;
 		region.bufferOffset = offset;
@@ -248,7 +248,7 @@ namespace VulkanEngine
 		// 	1, &barrier,
 		// 	0, nullptr);
 	}
-	void CommandBuffer::CopyBuffer(VkQueue queue, const Buffer& source, uint32_t src_offset, const Buffer& destination, uint32_t des_offset, size_t byteSize)
+	void CommandBuffer::CopyBuffer(const Buffer& source, uint32_t src_offset, const Buffer& destination, uint32_t des_offset, size_t byteSize)
 	{
 		VkBufferCopy region;
 		region.srcOffset = src_offset;
@@ -279,13 +279,13 @@ namespace VulkanEngine
 		// 	0, nullptr);
 	}
 	void CommandBuffer::BlitImage(
-		VkQueue queue, const Image& source, const Image& destination, VkFilter filter,
+		const Image& source, const Image& destination, VkFilter filter,
 		uint32_t src_mipLevel, uint32_t src_firstArray, uint32_t src_arrayCount,
 		uint32_t des_mipLevel, uint32_t des_firstArray, uint32_t des_arrayCount)
 	{
 		
-		TransferLayout(queue, source, source.GetImageMipLayout(src_mipLevel), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, src_mipLevel, 1, src_firstArray, src_arrayCount);
-		TransferLayout(queue, destination, destination.GetImageMipLayout(des_mipLevel), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, des_mipLevel, 1, des_firstArray, des_arrayCount);
+		TransferLayout(source, source.GetImageMipLayout(src_mipLevel), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, src_mipLevel, 1, src_firstArray, src_arrayCount);
+		TransferLayout(destination, destination.GetImageMipLayout(des_mipLevel), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, des_mipLevel, 1, des_firstArray, des_arrayCount);
 
 		VkImageBlit blit{};
 		blit.srcOffsets[0] = { 0, 0, 0 };
@@ -308,7 +308,7 @@ namespace VulkanEngine
 			1, &blit,
 			filter);
 	}
-	void CommandBuffer::GenerateImageMipmap(VkQueue queue, const Image& image, VkImageUsageFlags initialUsage, VkFilter filter)
+	void CommandBuffer::GenerateImageMipmap(const Image& image, VkImageUsageFlags initialUsage, VkFilter filter)
 	{
 		VkFormatProperties formatProperties;
 		vkGetPhysicalDeviceFormatProperties(RenderBackend::GetInstance().GetPhyDevice(), image.GetFormat(), &formatProperties);
@@ -317,19 +317,19 @@ namespace VulkanEngine
 			throw std::runtime_error("texture image format does not support linear blitting!");
 		}
 
-		TransferLayout(queue, image, image.GetImageMipLayout(0), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0, image.GetMipLevelCount(), 0, 1);
+		TransferLayout(image, image.GetImageMipLayout(0), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0, image.GetMipLevelCount(), 0, 1);
 
 		int32_t mipWidth = image.GetWidth();
 		int32_t mipHeight = image.GetHeight();
 		for (uint32_t i = 1; i < image.GetMipLevelCount(); ++i)
 		{
 			BlitImage(
-				queue, image, image, VK_FILTER_LINEAR,
+				image, image, VK_FILTER_LINEAR,
 				i - 1, 0, 1,
 				i, 0, 1);
 		}
 	}
-	void CommandBuffer::TransferLayout(VkQueue queue, const Image& image, VkImageLayout oldLayout, VkImageLayout newLayout, uint32_t firstMip, uint32_t mipLevels, uint32_t firstArray, uint32_t arrayCount)
+	void CommandBuffer::TransferLayout(const Image& image, VkImageLayout oldLayout, VkImageLayout newLayout, uint32_t firstMip, uint32_t mipLevels, uint32_t firstArray, uint32_t arrayCount)
 	{
 		if (mipLevels > 1)
 			for (int i = 0; i < mipLevels; ++i)

@@ -6,7 +6,7 @@
 
 namespace VulkanEngine
 { 
-	void VirtualFrameProvider::Init(size_t frameCount)
+	void VirtualFrameProvider::Init(size_t frameCount, size_t stagingBufferSize)
 	{
 		m_virtualFrames.reserve(frameCount);
 		VkCommandBufferAllocateInfo allocInfo = {};
@@ -37,8 +37,8 @@ namespace VulkanEngine
 			{
 				throw std::runtime_error("failed to create semaphores!");
 			}
-			
-			m_virtualFrames.push_back(VirtualFrame{ commandBuffers[i],fence,imageSemaphore,renderSemaphore });
+
+			m_virtualFrames.push_back(VirtualFrame{ commandBuffers[i],fence,imageSemaphore,renderSemaphore,StagingBuffer{stagingBufferSize} });
 		}
 	}
 

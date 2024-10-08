@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CommandBuffer.h"
+#include "../Render/StagingBuffer.h"
 #include <vector>
 
 namespace VulkanEngine
@@ -10,11 +11,12 @@ namespace VulkanEngine
 		VkFence CommandQueueFence;
 		VkSemaphore imageAvailableSemaphore;
 		VkSemaphore renderFinishedSemaphore;
+		StagingBuffer stagingBuffer;
 	};
 
 	class VirtualFrameProvider {
 	public:
-		void Init(size_t frameCount);
+		void Init(size_t frameCount, size_t stagingBufferSize);
 		void Destroy();
 
 		void StartFrame();
