@@ -3,6 +3,7 @@
 #include <vulkan/vulkan.h>
 #include <string>
 #include <vector>
+#include "../Resource/ImageLoader.h"
 
 namespace VulkanEngine
 {
@@ -21,17 +22,18 @@ namespace VulkanEngine
 	{
 	public:
 		Image() = default;
-		Image(uint32_t width, uint32_t height, VkFormat format, VkImageUsageFlagBits usage,
-			VkMemoryPropertyFlagBits memoryUsage, ImageOptions::Value options);
+		Image(uint32_t width, uint32_t height, VkFormat format, VkImageUsageFlags usage,
+			VkMemoryPropertyFlags memoryUsage, ImageOptions::Value options);
 		Image(VkImage image, uint32_t width, uint32_t height, VkFormat format);
 		Image(Image&& other);
+
 		Image& operator=(Image&& other);
 		Image(Image const& other) = delete;
 		Image& operator=(Image const& other) = delete;
 		~Image();
 
-		void Init(uint32_t width, uint32_t height, VkFormat format, VkImageUsageFlagBits usage,
-			VkMemoryPropertyFlagBits memoryUsage, ImageOptions::Value options);
+		void Init(uint32_t width, uint32_t height, VkFormat format, VkImageUsageFlags usage,
+			VkMemoryPropertyFlags memoryUsage, ImageOptions::Value options);
 
 		VkImageView GetImageView() const;
 		uint32_t GetMipLevelWidth(uint32_t mipLevel) const;
@@ -47,6 +49,7 @@ namespace VulkanEngine
 		auto GetImagememoryUsage() const { return m_memoryUsage; }
 		auto GetImageMipLayout(uint32_t mipLevel) const { return m_currentMipLayout[mipLevel]; }
 		void SetImageMipLayout(VkImageLayout layout, uint32_t mipLevel = 0) const { m_currentMipLayout[mipLevel] = layout; }
+	
 	private:
 		void Destroy();
 		void InitViews(const VkImage& image, VkFormat format);
@@ -60,8 +63,8 @@ namespace VulkanEngine
 		uint32_t m_mipLevelCount{ 1 };
 		uint32_t m_layerCount{ 1 };
 		VkFormat m_format{ VkFormat::VK_FORMAT_UNDEFINED };
-		VkImageUsageFlagBits m_usage;
-		VkMemoryPropertyFlagBits m_memoryUsage;
+		VkImageUsageFlags m_usage;
+		VkMemoryPropertyFlags m_memoryUsage;
 		ImageOptions::Value m_options;
 		
 		mutable std::vector<VkImageLayout> m_currentMipLayout;

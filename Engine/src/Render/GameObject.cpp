@@ -1,6 +1,7 @@
 #include "GameObject.h"
 #include "../RHI/CommandBuffer.h"
 #include "RenderBackend.h"
+#include "../Utility/UtilityFunc.h"
 
 namespace VulkanEngine
 {
@@ -13,6 +14,25 @@ namespace VulkanEngine
 	GameObject::~GameObject()
 	{
 		// TODO
+	}
+
+	void MeshComponent::CreateMaterialTexture(std::shared_ptr<ModelData::Material> material)
+	{
+		// Albedo
+		if (material->AlbedoTexture.Width == 1 && material->AlbedoTexture.Height == 1)
+		{
+			
+		}
+		// Normal
+		if (material->AlbedoTexture.Width == 1 && material->AlbedoTexture.Height == 1)
+		{
+
+		}
+		// MetallicRoughness
+		if (material->AlbedoTexture.Width == 1 && material->AlbedoTexture.Height == 1)
+		{
+			
+		}
 	}
 
 	MeshComponent::MeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::shared_ptr<ModelData::Material> material)
@@ -41,5 +61,7 @@ namespace VulkanEngine
 		RenderBackend::GetInstance().SubmitSingleTimeCommand(cmdBuffer.GetCommandBufferHandle());
 		stagingBuffer.Reset();
 
+		// ImageTexture
+		CreateMaterialTexture(material);
 	}
 }

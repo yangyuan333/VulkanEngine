@@ -308,7 +308,7 @@ namespace VulkanEngine
 			1, &blit,
 			filter);
 	}
-	void CommandBuffer::GenerateImageMipmap(const Image& image, VkImageUsageFlags initialUsage, VkFilter filter)
+	void CommandBuffer::GenerateImageMipmap(const Image& image, VkFilter filter)
 	{
 		VkFormatProperties formatProperties;
 		vkGetPhysicalDeviceFormatProperties(RenderBackend::GetInstance().GetPhyDevice(), image.GetFormat(), &formatProperties);
@@ -327,7 +327,10 @@ namespace VulkanEngine
 				image, image, VK_FILTER_LINEAR,
 				i - 1, 0, 1,
 				i, 0, 1);
+
+			TransferLayout(image, image.GetImageMipLayout(i-1), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, i - 1, 1, 0, 1);
 		}
+		TransferLayout(image, image.GetImageMipLayout(image.GetMipLevelCount()-1), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, image.GetMipLevelCount() - 1, 1, 0, 1);
 	}
 	void CommandBuffer::TransferLayout(const Image& image, VkImageLayout oldLayout, VkImageLayout newLayout, uint32_t firstMip, uint32_t mipLevels, uint32_t firstArray, uint32_t arrayCount)
 	{

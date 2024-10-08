@@ -76,7 +76,7 @@ namespace VulkanEngine
 			VkFilter filter = VK_FILTER_LINEAR,
 			uint32_t src_mipLevel = 0, uint32_t src_firstArray = 0, uint32_t src_arrayCount = 1,
 			uint32_t des_mipLevel = 0, uint32_t des_firstArray = 0, uint32_t des_arrayCount = 1);
-		void GenerateImageMipmap(const Image& image, VkImageUsageFlags initialUsage, VkFilter filter);
+		void GenerateImageMipmap(const Image& image, VkFilter filter);
 		
 		void TransferLayout(const Image& image, VkImageLayout oldLayout, VkImageLayout newLayout, uint32_t firstMip = 0, uint32_t mipLevels = 1, uint32_t firstArray = 0, uint32_t arrayCount = 1);
 		

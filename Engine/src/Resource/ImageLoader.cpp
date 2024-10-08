@@ -373,7 +373,13 @@ namespace VulkanEngine
 
     }
 
-	ImageData VulkanEngine::ImageLoader::LoadImageFromFile(const std::string& filepath)
+    // void ImageLoader::FillImage(CommandBuffer& commandBuffer, Image& image, const ImageData& imageData, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryUsage, ImageOptions::Value options)
+    // {
+	// 	image.Init(
+	// 		imageData.Width, imageData.Height, usage, memoryUsage, options);
+    // }
+
+    ImageData VulkanEngine::ImageLoader::LoadImageFromFile(const std::string& filepath)
 	{
 		if (IsDDSImage(filepath))
 			return LoadImageUsingDDSLoader(filepath);

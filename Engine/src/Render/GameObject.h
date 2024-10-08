@@ -36,6 +36,8 @@ namespace VulkanEngine
 	public:
 		MeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::shared_ptr<ModelData::Material> material);
 	private:
+		void CreateMaterialTexture(std::shared_ptr<ModelData::Material> material);
+	private:
 		std::shared_ptr<Buffer> m_vertexBuffer{nullptr};
 		std::shared_ptr<Buffer> m_indexBuffer{nullptr};
 		uint32_t m_vertexCnt;

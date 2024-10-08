@@ -23,7 +23,7 @@ namespace VulkanEngine
 										 image.GetLayerCount() };
 	}
 
-	Image::Image(uint32_t width, uint32_t height, VkFormat format, VkImageUsageFlagBits usage, VkMemoryPropertyFlagBits memoryUsage, ImageOptions::Value options)
+	Image::Image(uint32_t width, uint32_t height, VkFormat format, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryUsage, ImageOptions::Value options)
 		: m_extent{width, height}, m_format(format), m_usage(usage), m_memoryUsage(memoryUsage), m_options(options)
 	{
 		Init(width,height,format,usage,memoryUsage,options);
@@ -87,7 +87,7 @@ namespace VulkanEngine
 		Destroy();
 	}
 
-	void Image::Init(uint32_t width, uint32_t height, VkFormat format, VkImageUsageFlagBits usage, VkMemoryPropertyFlagBits memoryUsage, ImageOptions::Value options)
+	void Image::Init(uint32_t width, uint32_t height, VkFormat format, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryUsage, ImageOptions::Value options)
 	{
 		m_mipLevelCount = 1;
 		if (options & ImageOptions::MIPMAPS)
