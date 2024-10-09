@@ -16,6 +16,48 @@ namespace VulkanEngine
 		// TODO
 	}
 
+	void GameObject::SetupMeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::shared_ptr<ModelData::Material> material)
+	{
+		if (m_objectKind == GameObjectKind::Opaque || m_objectKind == GameObjectKind::Transparent)
+			m_mesh = std::make_shared<MeshComponent>(vertices, indices, material);
+		else
+			throw std::runtime_error("Only Opaque or Transparent Object could Set Mesh!");
+	}
+
+	void GameObject::SetupMeshComponent(std::shared_ptr<MeshComponent> meshComponent)
+	{
+		if (m_objectKind == GameObjectKind::Opaque || m_objectKind == GameObjectKind::Transparent)
+			m_mesh = meshComponent;
+		else
+			throw std::runtime_error("Only Opaque or Transparent Object could Set MeshComponent!");
+	}
+
+    void GameObject::UpdateTransform(TransformComponent const& transform)
+    {
+		m_transform = transform;
+    }
+
+	void GameObject::SetupPointLight(PointLightComponent const& pointLight)
+	{
+		if (m_objectKind == GameObjectKind::PointLight)
+			m_pointLight = pointLight;
+		else
+			throw std::runtime_error("Only PointLight Object could Set PointLightComponent!");
+	}
+
+	void GameObject::SetupDirectionalLight(DirectionalLightComponent const& directioanlLight)
+	{
+		if (m_objectKind == GameObjectKind::DirectionLight)
+			m_directionalLight = directioanlLight;
+		else
+			throw std::runtime_error("Only DirectionLight Object could Set DirectionalLightComponent!");
+	}
+
+	void GameObject::SetMaterial(std::shared_ptr<Material> material)
+	{
+		m_materials.push_back(material);
+	}
+
 	void MeshComponent::CreateMaterialTexture(std::shared_ptr<ModelData::Material> material)
 	{
 		// Albedo
@@ -39,7 +81,6 @@ namespace VulkanEngine
 			VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, ImageOptions::MIPMAPS);
 		m_MaterialResource["metallicRoughness"] = metallicRoughnessTexture;
-
 	}
 
 	MeshComponent::MeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::shared_ptr<ModelData::Material> material)

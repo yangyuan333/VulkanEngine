@@ -31,10 +31,27 @@ namespace VulkanEngine
 		alignas(16) glm::vec3 scale;
 	};
 
+	// 这两不应该有 transform 信息，后面再修改，方位信息应该用 transformcomponent
+	struct PointLightComponent {
+		alignas(16)  glm::vec3 position;
+		alignas(16)  glm::vec3 intensity;
+		alignas(16)  glm::vec3 lightColor;
+	};
+
+	struct DirectionalLightComponent {
+		alignas(16) glm::vec3 lightPos{};
+		alignas(16) glm::vec3 direction{};
+		alignas(16) glm::vec3 radiance{ 1.0f };
+		alignas(16) glm::vec3 ligthColor{ 1.0f };
+	};
+
 	class MeshComponent
 	{
 	public:
 		MeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::shared_ptr<ModelData::Material> material);
+		MeshComponent(MeshComponent const& other) = delete;
+		MeshComponent& operator=(MeshComponent const& other) = delete;
+		~MeshComponent() = default;
 	private:
 		void CreateMaterialTexture(std::shared_ptr<ModelData::Material> material);
 	private:
@@ -52,11 +69,19 @@ namespace VulkanEngine
 		~GameObject();
 		GameObject(GameObject const& other) = delete;
 		GameObject& operator=(GameObject const& other) = delete;
+	public:
+		void SetupMeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::shared_ptr<ModelData::Material> material);
+		void SetupMeshComponent(std::shared_ptr<MeshComponent> meshComponent);
+		void UpdateTransform(TransformComponent const& transform); // 这里先这样，后续如果涉及到动态物体再说；
+		void SetupPointLight(PointLightComponent const& pointLight);
+		void SetupDirectionalLight(DirectionalLightComponent const& directioanlLight);
+		void SetMaterial(std::shared_ptr<Material> material);
 	private:
 		TransformComponent m_transform;
 		std::shared_ptr<MeshComponent> m_mesh;
 		std::vector<std::shared_ptr<Material>> m_materials; // 多个材质，每个材质对应一个RenderPass---ShadowMap、PBR、TAA，每个renderpass所需的资源也在里面
-		std::shared_ptr<LightCompoent> m_light;
+		PointLightComponent m_pointLight;
+		DirectionalLightComponent m_directionalLight;
 		GameObjectKind m_objectKind;
 		// 这里有各自的 descriptor set，renderpass pipeline 对应；
 	};
