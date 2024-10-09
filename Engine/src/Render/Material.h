@@ -4,15 +4,22 @@
 #include <vector>
 
 #include "../RHI/Pipeline.h"
+#include "../RHI/RenderPass.h"
 
 namespace VulkanEngine
 {
 	class Material
 	{
 	public:
-		virtual void bindDescriptorSet() = 0;
-		void SetPipeline(std::vector<Pipeline> const& pipelines) { m_pipelines = pipelines; }
+		Material(MaterialType m_type, std::shared_ptr<RenderPass> renderpass);
+		~Material();
+		Material(Material const& material) = delete;
+		Material& operator=(Material const& material) = delete;
+	public:
+		MaterialType GetMaterialType() const { return m_type; }
+		MaterialType GetMaterialType() { return m_type; }
 	private:
-		std::vector<Pipeline> m_pipelines; // subpass
+		std::shared_ptr<RenderPass> m_RenderPass;
+		MaterialType m_type;
 	};
 }

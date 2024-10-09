@@ -62,6 +62,7 @@ namespace VulkanEngine
 		std::map<std::string, std::shared_ptr<Image>> m_MaterialResource;
 	};
 
+	// 应该也得把渲染资源封装在这个里面---DescriptorSet---每个Material分别对应
 	class GameObject
 	{
 	public:
@@ -79,10 +80,12 @@ namespace VulkanEngine
 	private:
 		TransformComponent m_transform;
 		std::shared_ptr<MeshComponent> m_mesh;
-		std::vector<std::shared_ptr<Material>> m_materials; // 多个材质，每个材质对应一个RenderPass---ShadowMap、PBR、TAA，每个renderpass所需的资源也在里面
+		std::map<MaterialType, std::shared_ptr<Material>> m_materials; // 多个材质，每个材质对应一个RenderPass---ShadowMap、PBR、TAA，每个renderpass所需的资源也在里面
 		PointLightComponent m_pointLight;
 		DirectionalLightComponent m_directionalLight;
 		GameObjectKind m_objectKind;
 		// 这里有各自的 descriptor set，renderpass pipeline 对应；
+	private:
+		std::map<MaterialType, std::vector<VkDescriptorSet>> m_descriptorSets;
 	};
 }

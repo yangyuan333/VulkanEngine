@@ -2,6 +2,7 @@
 #include "../RHI/CommandBuffer.h"
 #include "RenderBackend.h"
 #include "../Utility/UtilityFunc.h"
+#include "Material.h"
 
 namespace VulkanEngine
 {
@@ -55,7 +56,8 @@ namespace VulkanEngine
 
 	void GameObject::SetMaterial(std::shared_ptr<Material> material)
 	{
-		m_materials.push_back(material);
+		// 这里要根据material的类型---获取descritorsetlayout，并生成descriptorset，并绑定数据
+		m_materials[material->GetMaterialType()] = material;
 	}
 
 	void MeshComponent::CreateMaterialTexture(std::shared_ptr<ModelData::Material> material)

@@ -86,4 +86,12 @@ namespace VulkanEngine
 
 		static std::vector<VkVertexInputAttributeDescription> GetVertexInputAttributeDescriptions();
 	};
+
+	enum class MaterialType
+	{
+		DeferredPassMaterial = 0,
+		ShadowMapMaterial,
+		TAAMaterial,
+		BloomMaterial
+	};
 }
