@@ -4,11 +4,25 @@
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
+#include <vector>
+#include <vulkan/vulkan.h>
+#include <memory>
 
 namespace VulkanEngine
 {
+	class Buffer;
+	struct CameraComponent
+	{
+		alignas(16) glm::mat4 view;
+		alignas(16) glm::mat4 proj;
+		alignas(16) glm::mat4 viewproj;
+		alignas(16) glm::vec3 viewPos;
+	};
+
 	class Camera
 	{
+	public:
+		Camera();
 	public:
 		const glm::mat4& GetProjection() { return projection; }
 		const glm::mat4& GetView() { return view; }
@@ -33,6 +47,9 @@ namespace VulkanEngine
 		float farClip;
 
 		uint32_t viewportWidth = 0, viewportHeight = 0;
+
+		std::vector<std::shared_ptr<Buffer>> m_cameraBuffers;
+		std::vector<VkDescriptorSet> m_cameraDescriptorSet;
 	};
 
 	class EditorCamera : public Camera

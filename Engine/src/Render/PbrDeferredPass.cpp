@@ -149,16 +149,10 @@ namespace VulkanEngine
 		std::vector<std::map<int, VkDescriptorSet>> descriptorSet;
 		if (object->GetGameObjectKind() == GameObjectKind::Opaque || object->GetGameObjectKind() == GameObjectKind::Transparent)
 		{
-			return;
-		}
+			// 先手动绑吧，自动绑有点麻烦
+			// subpass-1: set0 ModelBuffer, albedoTextureSampler, normalTextureSampler, metallicRoughnessTextureSampler
+			// subpass-2: no
 
-		if (object->GetGameObjectKind() == GameObjectKind::PointLight)
-		{
-			return;
-		}
-
-		if (object->GetGameObjectKind() == GameObjectKind::DirectionLight)
-		{
 			return;
 		}
 	}

@@ -10,8 +10,7 @@ namespace VulkanEngine
 	GameObject::GameObject(GameObjectKind objectKind)
 		: m_objectKind(objectKind)
 	{
-		size_t bufferSize = std::max(sizeof(glm::mat4), sizeof(PointLightComponent));
-		bufferSize = std::max(bufferSize, sizeof(DirectionalLightComponent));
+		size_t bufferSize = sizeof(glm::mat4);
 		m_buffers.reserve(Config::MAX_FRAMES_IN_FLIGHT);
 		for (int frameIdx = 0; frameIdx < Config::MAX_FRAMES_IN_FLIGHT; ++frameIdx)
 		{
@@ -52,7 +51,7 @@ namespace VulkanEngine
 			m_buffers[frameIdx]->WriteDataWithFlush((uint8_t*)&m_modelMatrix, sizeof(m_modelMatrix));
 		}
     }
-
+	/*
 	void GameObject::SetupPointLight(PointLightComponent const& pointLight)
 	{
 		if (m_objectKind == GameObjectKind::PointLight)
@@ -65,7 +64,8 @@ namespace VulkanEngine
 			m_buffers[frameIdx]->WriteDataWithFlush((uint8_t*)&m_pointLight, sizeof(m_pointLight));
 		}
 	}
-
+	*/
+	/*
 	void GameObject::SetupDirectionalLight(DirectionalLightComponent const& directioanlLight)
 	{
 		if (m_objectKind == GameObjectKind::DirectionLight)
@@ -77,7 +77,7 @@ namespace VulkanEngine
 			m_buffers[frameIdx]->WriteDataWithFlush((uint8_t*)&m_directionalLight, sizeof(m_directionalLight));
 		}
 	}
-
+	*/
 	void GameObject::SetMaterial(std::shared_ptr<Material> material)
 	{
 		// 这里要根据material的类型---获取descritorsetlayout，并生成descriptorset，并绑定数据
@@ -99,19 +99,20 @@ namespace VulkanEngine
 		ComputeModelMatrix();
 		m_buffers[RenderBackend::GetInstance().GetCurrentFrameIndex()]->WriteDataWithFlush((uint8_t*)&m_modelMatrix, sizeof(m_modelMatrix));
 	}
-
+	/*
 	void GameObject::UpdatePointLight(PointLightComponent const& pointLight)
 	{
 		m_pointLight = pointLight;
 		m_buffers[RenderBackend::GetInstance().GetCurrentFrameIndex()]->WriteDataWithFlush((uint8_t*)&m_pointLight, sizeof(m_pointLight));
 	}
-
+	*/
+	/*
 	void GameObject::UpdateDirectionalLight(DirectionalLightComponent const& directioanlLight)
 	{
 		m_directionalLight = directioanlLight;
 		m_buffers[RenderBackend::GetInstance().GetCurrentFrameIndex()]->WriteDataWithFlush((uint8_t*)&m_directionalLight, sizeof(m_directionalLight));
 	}
-
+	*/
 	void GameObject::BindPipeline()
 	{
 		

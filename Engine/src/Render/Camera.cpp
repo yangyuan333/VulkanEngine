@@ -1,5 +1,7 @@
 #include "Camera.h"
 #include "InputManager.h"
+#include "../Utility/Config.h"
+#include "RenderBackend.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -8,7 +10,58 @@
 
 namespace VulkanEngine
 {
+	Camera::Camera()
+	{
+		m_cameraBuffers.resize(Config::MAX_FRAMES_IN_FLIGHT);
+		size_t bufferSize = sizeof(CameraComponent);
+		for (int frameIdx = 0; frameIdx < Config::MAX_FRAMES_IN_FLIGHT; ++frameIdx)
+		{
+			m_cameraBuffers.push_back(std::make_shared<Buffer>(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
+			m_cameraBuffers[frameIdx]->MapMemory();
+		}
+		VkDescriptorSetLayout cameraLayout;
+		VkDescriptorSetLayoutBinding uboCameraLayoutBinding{};
+		uboCameraLayoutBinding.binding = 0;
+		uboCameraLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+		uboCameraLayoutBinding.descriptorCount = 1; // UBO Array
+		uboCameraLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_VERTEX_BIT;
+		uboCameraLayoutBinding.pImmutableSamplers = nullptr; // Optional
+
+		VkDescriptorSetLayoutCreateInfo cameralayoutInfo{};
+		cameralayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+		cameralayoutInfo.bindingCount = 1;
+		cameralayoutInfo.pBindings = &uboCameraLayoutBinding;
+		if (vkCreateDescriptorSetLayout(RenderBackend::GetInstance().GetDevice(), &cameralayoutInfo, nullptr, &cameraLayout) != VK_SUCCESS) {
+			throw std::runtime_error("failed to create descriptor set layout!");
+		}
+
+		m_cameraDescriptorSet.resize(Config::MAX_FRAMES_IN_FLIGHT);
+		for (auto frameIdex = 0; frameIdex < Config::MAX_FRAMES_IN_FLIGHT; ++frameIdex)
+		{
+			m_cameraDescriptorSet[frameIdex] = (RenderBackend::GetInstance().GetDescriptorAllocator()->Allocate(cameraLayout));
+
+			VkDescriptorBufferInfo camerabufferInfo{};
+			camerabufferInfo.buffer = m_cameraBuffers[frameIdex]->GetBufferHandle();
+			camerabufferInfo.offset = 0;
+			camerabufferInfo.range = sizeof(CameraComponent);
+
+			std::array<VkWriteDescriptorSet, 1> descriptorWrites{};
+			descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+			descriptorWrites[0].dstSet = m_cameraDescriptorSet[frameIdex];
+			descriptorWrites[0].dstBinding = 0;
+			descriptorWrites[0].dstArrayElement = 0;
+			descriptorWrites[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+			descriptorWrites[0].descriptorCount = 1;
+			descriptorWrites[0].pBufferInfo = &camerabufferInfo;
+			descriptorWrites[0].pImageInfo = nullptr; // Optional
+			descriptorWrites[0].pTexelBufferView = nullptr; // Optional
+
+			vkUpdateDescriptorSets(RenderBackend::GetInstance().GetDevice(), descriptorWrites.size(), descriptorWrites.data(), 0, nullptr);
+		}
+	}
+
 	EditorCamera::EditorCamera(float verticalFOV, float nearClip, float farClip)
+		:Camera()
 	{
 		nearClip = nearClip;
 		farClip = farClip;
@@ -79,6 +132,14 @@ namespace VulkanEngine
 		}
 
 		if (moved) RecalculateView();
+
+		CameraComponent cameraData;
+		cameraData.view = GetView();
+		cameraData.proj = GetProjection();
+		cameraData.viewproj = cameraData.proj * cameraData.view;
+		cameraData.viewPos = GetPosition();
+
+		m_cameraBuffers[RenderBackend::GetInstance().GetCurrentFrameIndex()]->WriteDataWithFlush((uint8_t*)&cameraData, sizeof(cameraData), 0);
 
 		return moved;
 	}
