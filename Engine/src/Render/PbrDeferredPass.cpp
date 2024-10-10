@@ -152,7 +152,74 @@ namespace VulkanEngine
 			// 先手动绑吧，自动绑有点麻烦
 			// subpass-1: set0 ModelBuffer, albedoTextureSampler, normalTextureSampler, metallicRoughnessTextureSampler
 			// subpass-2: no
+			for (auto frameIdex = 0; frameIdex < Config::MAX_FRAMES_IN_FLIGHT; ++frameIdex)
+			{
+				auto& descriptorLayouts = m_pipelines[0]->GetDescriptorSetLayout();
+				descriptorSet[frameIdex][0] = (RenderBackend::GetInstance().GetDescriptorAllocator()->Allocate(descriptorLayouts[0]));
 
+				VkDescriptorBufferInfo bufferInfo{};
+				bufferInfo.buffer = object->GetModelBuffers()[frameIdex]->GetBufferHandle();
+				bufferInfo.offset = 0;
+				bufferInfo.range = sizeof(ModelComponent);
+
+				VkDescriptorImageInfo albedoimageInfo{};
+				albedoimageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+				albedoimageInfo.imageView = object->GetMeshTexture("albedo")->GetImageView();
+				albedoimageInfo.sampler = object->GetSampler()->GetSamplerHandle();
+
+				VkDescriptorImageInfo normalimageInfo{};
+				normalimageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+				normalimageInfo.imageView = object->GetMeshTexture("normal")->GetImageView();
+				normalimageInfo.sampler = object->GetSampler()->GetSamplerHandle();
+
+				VkDescriptorImageInfo roughnessMetallicimageInfo{};
+				roughnessMetallicimageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+				roughnessMetallicimageInfo.imageView = object->GetMeshTexture("metallicRoughness")->GetImageView();
+				roughnessMetallicimageInfo.sampler = object->GetSampler()->GetSamplerHandle();
+
+				std::array<VkWriteDescriptorSet, 4> descriptorWrites{};
+				descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+				descriptorWrites[0].dstSet = descriptorSet[frameIdex][0];
+				descriptorWrites[0].dstBinding = 0;
+				descriptorWrites[0].dstArrayElement = 0;
+				descriptorWrites[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+				descriptorWrites[0].descriptorCount = 1;
+				descriptorWrites[0].pBufferInfo = &bufferInfo;
+				descriptorWrites[0].pImageInfo = nullptr; // Optional
+				descriptorWrites[0].pTexelBufferView = nullptr; // Optional
+
+				descriptorWrites[1].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+				descriptorWrites[1].dstSet = descriptorSet[frameIdex][0];
+				descriptorWrites[1].dstBinding = 1;
+				descriptorWrites[1].dstArrayElement = 0;
+				descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+				descriptorWrites[1].descriptorCount = 1;
+				descriptorWrites[1].pBufferInfo = nullptr;
+				descriptorWrites[1].pImageInfo = &albedoimageInfo; // Optional
+				descriptorWrites[1].pTexelBufferView = nullptr; // Optional
+
+				descriptorWrites[2].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+				descriptorWrites[2].dstSet = descriptorSet[frameIdex][0];
+				descriptorWrites[2].dstBinding = 1;
+				descriptorWrites[2].dstArrayElement = 0;
+				descriptorWrites[2].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+				descriptorWrites[2].descriptorCount = 1;
+				descriptorWrites[2].pBufferInfo = nullptr;
+				descriptorWrites[2].pImageInfo = &normalimageInfo; // Optional
+				descriptorWrites[2].pTexelBufferView = nullptr; // Optional
+
+				descriptorWrites[3].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+				descriptorWrites[3].dstSet = descriptorSet[frameIdex][0];
+				descriptorWrites[3].dstBinding = 1;
+				descriptorWrites[3].dstArrayElement = 0;
+				descriptorWrites[3].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+				descriptorWrites[3].descriptorCount = 1;
+				descriptorWrites[3].pBufferInfo = nullptr;
+				descriptorWrites[3].pImageInfo = &roughnessMetallicimageInfo; // Optional
+				descriptorWrites[3].pTexelBufferView = nullptr; // Optional
+
+				vkUpdateDescriptorSets(RenderBackend::GetInstance().GetDevice(), descriptorWrites.size(), descriptorWrites.data(), 0, nullptr);
+			}
 			return;
 		}
 	}

@@ -10,7 +10,7 @@ namespace VulkanEngine
 	GameObject::GameObject(GameObjectKind objectKind)
 		: m_objectKind(objectKind)
 	{
-		size_t bufferSize = sizeof(glm::mat4);
+		size_t bufferSize = sizeof(ModelComponent);
 		m_buffers.reserve(Config::MAX_FRAMES_IN_FLIGHT);
 		for (int frameIdx = 0; frameIdx < Config::MAX_FRAMES_IN_FLIGHT; ++frameIdx)
 		{
@@ -19,6 +19,7 @@ namespace VulkanEngine
 			);
 			m_buffers[frameIdx]->MapMemory();
 		}
+
 	}
 
 	GameObject::~GameObject()
@@ -97,7 +98,10 @@ namespace VulkanEngine
 	{
 		m_transform = transform;
 		ComputeModelMatrix();
-		m_buffers[RenderBackend::GetInstance().GetCurrentFrameIndex()]->WriteDataWithFlush((uint8_t*)&m_modelMatrix, sizeof(m_modelMatrix));
+		ModelComponent modelComponent;
+		modelComponent.modelMatrix = m_modelMatrix;
+		modelComponent.modelMatrix_it = glm::inverse(m_modelMatrix);
+		m_buffers[RenderBackend::GetInstance().GetCurrentFrameIndex()]->WriteDataWithFlush((uint8_t*)&modelComponent, sizeof(modelComponent));
 	}
 	/*
 	void GameObject::UpdatePointLight(PointLightComponent const& pointLight)
@@ -182,5 +186,6 @@ namespace VulkanEngine
 
 		// ImageTexture
 		CreateMaterialTexture(material);
+		m_sampler = std::make_shared<Sampler>(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_REPEAT, VK_SAMPLER_MIPMAP_MODE_LINEAR);
 	}
 }

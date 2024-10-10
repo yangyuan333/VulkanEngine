@@ -25,6 +25,12 @@ namespace VulkanEngine
 		// DirectionLight
 	};
 
+	struct ModelComponent
+	{
+		alignas(16) glm::mat4 modelMatrix;
+		alignas(16) glm::mat3 modelMatrix_it;
+	};
+
 	struct TransformComponent {
 		alignas(16) glm::vec3 location;
 		alignas(16) glm::vec3 rotation;
@@ -38,6 +44,9 @@ namespace VulkanEngine
 		MeshComponent(MeshComponent const& other) = delete;
 		MeshComponent& operator=(MeshComponent const& other) = delete;
 		~MeshComponent() = default;
+	public:
+		std::shared_ptr<Image> GetTetxure(std::string textureName) { return m_MaterialResource[textureName]; }
+		std::shared_ptr<Sampler> GetSampler() { return m_sampler; }
 	private:
 		void CreateMaterialTexture(std::shared_ptr<ModelData::Material> material);
 	private:
@@ -46,6 +55,7 @@ namespace VulkanEngine
 		uint32_t m_vertexCnt;
 		uint32_t m_indexCnt;
 		std::map<std::string, std::shared_ptr<Image>> m_MaterialResource;
+		std::shared_ptr<Sampler> m_sampler;
 	};
 
 	// 应该也得把渲染资源封装在这个里面---DescriptorSet---每个Material分别对应
@@ -68,6 +78,9 @@ namespace VulkanEngine
 		// void UpdateDirectionalLight(DirectionalLightComponent const& directioanlLight);
 		auto& GetDescriptorSets() { return m_descriptorSets; }
 		void BindPipeline();
+		auto& GetModelBuffers() { return m_buffers; }
+		auto GetMeshTexture(std::string textureName) { return m_mesh->GetTetxure(textureName); }
+		std::shared_ptr<Sampler> GetSampler() { return m_mesh->GetSampler(); }
 	public:
 		GameObjectKind GetGameObjectKind() const { return m_objectKind; }
 		glm::mat4 GetMofelMatrix() const { return m_modelMatrix; }
@@ -77,6 +90,7 @@ namespace VulkanEngine
 	private:
 		TransformComponent m_transform;
 		glm::mat4 m_modelMatrix;
+
 		std::shared_ptr<MeshComponent> m_mesh;
 		std::map<MaterialType, std::shared_ptr<Material>> m_materials; // 多个材质，每个材质对应一个RenderPass---ShadowMap、PBR、TAA，每个renderpass所需的资源也在里面
 		// PointLightComponent m_pointLight;
