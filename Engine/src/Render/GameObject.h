@@ -73,12 +73,24 @@ namespace VulkanEngine
 	public:
 		void SetupMeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::shared_ptr<ModelData::Material> material);
 		void SetupMeshComponent(std::shared_ptr<MeshComponent> meshComponent);
-		void UpdateTransform(TransformComponent const& transform); // 这里先这样，后续如果涉及到动态物体再说；
+		void SetupTransform(TransformComponent const& transform); // 这里先这样，后续如果涉及到动态物体再说；
 		void SetupPointLight(PointLightComponent const& pointLight);
 		void SetupDirectionalLight(DirectionalLightComponent const& directioanlLight);
 		void SetMaterial(std::shared_ptr<Material> material);
+		void UpdateTransform(TransformComponent const& transform); // 这里先这样，后续如果涉及到动态物体再说；
+		void UpdatePointLight(PointLightComponent const& pointLight);
+		void UpdateDirectionalLight(DirectionalLightComponent const& directioanlLight);
+		auto& GetDescriptorSets() { return m_descriptorSets; }
+		void BindPipeline();
+	public:
+		GameObjectKind GetGameObjectKind() const { return m_objectKind; }
+		glm::mat4 GetMofelMatrix() const { return m_modelMatrix; }
+		glm::mat4 GetMofelMatrix() { return m_modelMatrix; }
+	private:
+		glm::mat4 ComputeModelMatrix();
 	private:
 		TransformComponent m_transform;
+		glm::mat4 m_modelMatrix;
 		std::shared_ptr<MeshComponent> m_mesh;
 		std::map<MaterialType, std::shared_ptr<Material>> m_materials; // 多个材质，每个材质对应一个RenderPass---ShadowMap、PBR、TAA，每个renderpass所需的资源也在里面
 		PointLightComponent m_pointLight;
@@ -86,6 +98,7 @@ namespace VulkanEngine
 		GameObjectKind m_objectKind;
 		// 这里有各自的 descriptor set，renderpass pipeline 对应；
 	private:
-		std::map<MaterialType, std::vector<VkDescriptorSet>> m_descriptorSets;
+		std::map<MaterialType, std::vector<std::map<int, VkDescriptorSet>>> m_descriptorSets;
+		std::vector<std::shared_ptr<Buffer>> m_buffers; // 先这样做，后面改成 push_constant
 	};
 }

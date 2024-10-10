@@ -8,6 +8,7 @@
 namespace VulkanEngine
 {
 	class FrameBuffer;
+	class GameObject;
 
 	struct TextureOps {
 		VkAttachmentLoadOp  load = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -29,6 +30,7 @@ namespace VulkanEngine
 		virtual void Build() = 0;
 		virtual const std::unordered_map<std::string, TextureDesc>& GetPassTextureDescs() = 0;
 		virtual void UpdatePassTextureDescsWidthHeight(uint32_t width, uint32_t height) const = 0;
+		virtual void BindGameObject(std::shared_ptr<GameObject> object) = 0;
 		inline VkRenderPass GetRenderPassHandle() const { return m_RenderPass; }
 		inline std::vector<VkAttachmentDescription> GetAttachmentList() const { return m_AttachmentDescriptions; }
 		inline std::map<std::string, VkAttachmentDescription> GetAttachmentMap() const { return m_name2AttachmentDescription; }
@@ -37,6 +39,7 @@ namespace VulkanEngine
 		std::vector<VkClearValue> GetClearColor() const { return m_AttachmentClearValue; }
 		void BindFrameBuffer(std::shared_ptr<FrameBuffer> frameBuffer);
 		void UnBindFrameBuffer() { m_frameBuffer  = nullptr; }
+		std::vector<std::shared_ptr<Pipeline>>& GetPipelines() { return m_pipelines; }
 	protected:
 		void DeclareColorAttachment(
 			const std::string& name, const TextureDesc& textureDesc,

@@ -3,13 +3,23 @@
 #include "RenderBackend.h"
 #include "../Utility/UtilityFunc.h"
 #include "Material.h"
+#include "../Utility/Config.h"
 
 namespace VulkanEngine
 {
 	GameObject::GameObject(GameObjectKind objectKind)
 		: m_objectKind(objectKind)
 	{
-		
+		size_t bufferSize = std::max(sizeof(glm::mat4), sizeof(PointLightComponent));
+		bufferSize = std::max(bufferSize, sizeof(DirectionalLightComponent));
+		m_buffers.reserve(Config::MAX_FRAMES_IN_FLIGHT);
+		for (int frameIdx = 0; frameIdx < Config::MAX_FRAMES_IN_FLIGHT; ++frameIdx)
+		{
+			m_buffers.push_back(
+				std::make_shared<Buffer>(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
+			);
+			m_buffers[frameIdx]->MapMemory();
+		}
 	}
 
 	GameObject::~GameObject()
@@ -33,9 +43,14 @@ namespace VulkanEngine
 			throw std::runtime_error("Only Opaque or Transparent Object could Set MeshComponent!");
 	}
 
-    void GameObject::UpdateTransform(TransformComponent const& transform)
+    void GameObject::SetupTransform(TransformComponent const& transform)
     {
 		m_transform = transform;
+		ComputeModelMatrix();
+		for (int frameIdx = 0; frameIdx < Config::MAX_FRAMES_IN_FLIGHT; ++frameIdx)
+		{
+			m_buffers[frameIdx]->WriteDataWithFlush((uint8_t*)&m_modelMatrix, sizeof(m_modelMatrix));
+		}
     }
 
 	void GameObject::SetupPointLight(PointLightComponent const& pointLight)
@@ -44,6 +59,11 @@ namespace VulkanEngine
 			m_pointLight = pointLight;
 		else
 			throw std::runtime_error("Only PointLight Object could Set PointLightComponent!");
+
+		for (int frameIdx = 0; frameIdx < Config::MAX_FRAMES_IN_FLIGHT; ++frameIdx)
+		{
+			m_buffers[frameIdx]->WriteDataWithFlush((uint8_t*)&m_pointLight, sizeof(m_pointLight));
+		}
 	}
 
 	void GameObject::SetupDirectionalLight(DirectionalLightComponent const& directioanlLight)
@@ -52,12 +72,60 @@ namespace VulkanEngine
 			m_directionalLight = directioanlLight;
 		else
 			throw std::runtime_error("Only DirectionLight Object could Set DirectionalLightComponent!");
+		for (int frameIdx = 0; frameIdx < Config::MAX_FRAMES_IN_FLIGHT; ++frameIdx)
+		{
+			m_buffers[frameIdx]->WriteDataWithFlush((uint8_t*)&m_directionalLight, sizeof(m_directionalLight));
+		}
 	}
 
 	void GameObject::SetMaterial(std::shared_ptr<Material> material)
 	{
 		// 这里要根据material的类型---获取descritorsetlayout，并生成descriptorset，并绑定数据
 		m_materials[material->GetMaterialType()] = material;
+		// 生成 descriptor set，并且 bind 渲染资源；关键是放到哪里做呢？ 放到 Pipeline 中做，加个 BindObject 方法；
+		// 这里只生成，不绑定，绑定还是放到 RenderPass 里面做；
+		auto& pipelines = material->GetPipelines();
+		std::vector<std::vector<VkDescriptorSet>> pipelinesDescriptorSets; pipelinesDescriptorSets.reserve(pipelines.size());
+		for (auto& pipeline : pipelines)
+		{
+			std::vector<VkDescriptorSet> pipelineDescriptorSets;
+			
+		}
+	}
+
+	void GameObject::UpdateTransform(TransformComponent const& transform)
+	{
+		m_transform = transform;
+		ComputeModelMatrix();
+		m_buffers[RenderBackend::GetInstance().GetCurrentFrameIndex()]->WriteDataWithFlush((uint8_t*)&m_modelMatrix, sizeof(m_modelMatrix));
+	}
+
+	void GameObject::UpdatePointLight(PointLightComponent const& pointLight)
+	{
+		m_pointLight = pointLight;
+		m_buffers[RenderBackend::GetInstance().GetCurrentFrameIndex()]->WriteDataWithFlush((uint8_t*)&m_pointLight, sizeof(m_pointLight));
+	}
+
+	void GameObject::UpdateDirectionalLight(DirectionalLightComponent const& directioanlLight)
+	{
+		m_directionalLight = directioanlLight;
+		m_buffers[RenderBackend::GetInstance().GetCurrentFrameIndex()]->WriteDataWithFlush((uint8_t*)&m_directionalLight, sizeof(m_directionalLight));
+	}
+
+	void GameObject::BindPipeline()
+	{
+		
+	}
+
+	glm::mat4 GameObject::ComputeModelMatrix()
+	{
+		glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), m_transform.location);
+		glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(m_transform.rotation.x), glm::vec3(1, 0, 0));
+		rotationMatrix = glm::rotate(rotationMatrix, glm::radians(m_transform.rotation.y), glm::vec3(0, 1, 0));
+		rotationMatrix = glm::rotate(rotationMatrix, glm::radians(m_transform.rotation.z), glm::vec3(0, 0, 1));
+		glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), m_transform.scale);
+		glm::mat4 modelMatrix = translationMatrix * rotationMatrix * scaleMatrix;
+		return modelMatrix;
 	}
 
 	void MeshComponent::CreateMaterialTexture(std::shared_ptr<ModelData::Material> material)

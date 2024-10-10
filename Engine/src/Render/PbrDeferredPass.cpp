@@ -142,4 +142,24 @@ namespace VulkanEngine
 				RenderBackend::GetInstance().GetMsaaSampleBit(), Config::GetInstance().opaqueScenePipelineConfig, 
 				m_RenderPass, 0));
 	}
+    void PbrDeferredPass::BindGameObject(std::shared_ptr<GameObject> object)
+    {
+		if (object->GetDescriptorSets().count(MaterialType::DeferredPassMaterial) > 0)
+			throw std::runtime_error("GameObject DescritorSet Create Already!");
+		std::vector<std::map<int, VkDescriptorSet>> descriptorSet;
+		if (object->GetGameObjectKind() == GameObjectKind::Opaque || object->GetGameObjectKind() == GameObjectKind::Transparent)
+		{
+			return;
+		}
+
+		if (object->GetGameObjectKind() == GameObjectKind::PointLight)
+		{
+			return;
+		}
+
+		if (object->GetGameObjectKind() == GameObjectKind::DirectionLight)
+		{
+			return;
+		}
+	}
 }

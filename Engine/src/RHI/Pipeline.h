@@ -95,12 +95,12 @@ namespace VulkanEngine
 		Pipeline(Pipeline&& other);
 		Pipeline& operator=(Pipeline&& other);
 
-		void ClearBinds();
-		void Bind(const std::string& resourceName, const ShaderBufferDesc& bufferDesc);
-		void Bind(const std::string& resourceName, const ShaderImageDesc& imageDesc);
-		void Bind(const std::string& resourceName, const std::vector<Image>& textureArray);
-		void Bind(const std::string& resourceName, std::shared_ptr<Sampler> sampler);
-		void UpdateBinds();
+		// void ClearBinds();
+		// void Bind(const std::string& resourceName, const ShaderBufferDesc& bufferDesc);
+		// void Bind(const std::string& resourceName, const ShaderImageDesc& imageDesc);
+		// void Bind(const std::string& resourceName, const std::vector<Image>& textureArray);
+		// void Bind(const std::string& resourceName, std::shared_ptr<Sampler> sampler);
+		// void UpdateBinds();
 
 	public:
 		VkPipeline GetPipelineHandle() const { return m_pipeline; }
@@ -115,7 +115,7 @@ namespace VulkanEngine
 		VkPipeline m_pipeline;
 		VkShaderModule m_vertexShader;
 		VkShaderModule m_fragShader;
-		std::vector<std::map<uint32_t, VkDescriptorSet>> m_descriptorSets;
+		// std::vector<std::map<uint32_t, VkDescriptorSet>> m_descriptorSets;
 		std::vector<VkDescriptorSetLayout> m_descriptorSetLayouts;
 		VkPipelineLayout m_pipelineLayout;
 

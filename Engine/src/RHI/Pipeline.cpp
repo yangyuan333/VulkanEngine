@@ -69,7 +69,7 @@ namespace VulkanEngine
 
 	Pipeline::Pipeline(std::string const& vert_spir_path, std::string const& frag_spir_path, VkSampleCountFlagBits msaaSampleCout, PipelineConfig const& pipelineConfig, VkRenderPass renderPass, uint32_t subpssIndex)
 	{
-		m_descriptorSets.resize(Config::MAX_FRAMES_IN_FLIGHT);
+		// m_descriptorSets.resize(Config::MAX_FRAMES_IN_FLIGHT);
 
 		CreateShader(vert_spir_path, frag_spir_path);
 
@@ -237,7 +237,7 @@ namespace VulkanEngine
 		m_pipeline = other.m_pipeline;
 		m_vertexShader = other.m_vertexShader;
 		m_fragShader = other.m_fragShader;
-		m_descriptorSets = other.m_descriptorSets;
+		// m_descriptorSets = other.m_descriptorSets;
 		m_descriptorSetLayouts = other.m_descriptorSetLayouts;
 		m_pipelineLayout = other.m_pipelineLayout;
 		m_bindDatas = other.m_bindDatas;
@@ -246,7 +246,7 @@ namespace VulkanEngine
 		other.m_pipeline = VK_NULL_HANDLE;
 		other.m_vertexShader = VK_NULL_HANDLE;
 		other.m_fragShader = VK_NULL_HANDLE;
-		other.m_descriptorSets.clear();
+		// other.m_descriptorSets.clear();
 		other.m_descriptorSetLayouts.clear();
 		other.m_pipelineLayout = VK_NULL_HANDLE;
 		other.m_bindDatas.clear();
@@ -261,7 +261,7 @@ namespace VulkanEngine
 		m_pipeline = other.m_pipeline;
 		m_vertexShader = other.m_vertexShader;
 		m_fragShader = other.m_fragShader;
-		m_descriptorSets = other.m_descriptorSets;
+		// m_descriptorSets = other.m_descriptorSets;
 		m_descriptorSetLayouts = other.m_descriptorSetLayouts;
 		m_pipelineLayout = other.m_pipelineLayout;
 		m_bindDatas = other.m_bindDatas;
@@ -270,7 +270,7 @@ namespace VulkanEngine
 		other.m_pipeline = VK_NULL_HANDLE;
 		other.m_vertexShader = VK_NULL_HANDLE;
 		other.m_fragShader = VK_NULL_HANDLE;
-		other.m_descriptorSets.clear();
+		// other.m_descriptorSets.clear();
 		other.m_descriptorSetLayouts.clear();
 		other.m_pipelineLayout = VK_NULL_HANDLE;
 		other.m_bindDatas.clear();
@@ -327,10 +327,10 @@ namespace VulkanEngine
 				throw std::runtime_error("failed to create descriptor set layout!");
 			}
 			m_descriptorSetLayouts.push_back(setLayout);
-			for (auto frameIdex = 0; frameIdex < Config::MAX_FRAMES_IN_FLIGHT; ++frameIdex)
-			{
-				m_descriptorSets[frameIdex][setIndex] = (RenderBackend::GetInstance().GetDescriptorAllocator()->Allocate(setLayout));
-			}
+			// for (auto frameIdex = 0; frameIdex < Config::MAX_FRAMES_IN_FLIGHT; ++frameIdex)
+			// {
+			// 	m_descriptorSets[frameIdex][setIndex] = (RenderBackend::GetInstance().GetDescriptorAllocator()->Allocate(setLayout));
+			// }
 		}
 	}
 
