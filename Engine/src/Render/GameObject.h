@@ -88,14 +88,15 @@ namespace VulkanEngine
 	private:
 		glm::mat4 ComputeModelMatrix();
 	private:
+		GameObjectKind m_objectKind;
 		TransformComponent m_transform;
-		glm::mat4 m_modelMatrix;
-
 		std::shared_ptr<MeshComponent> m_mesh;
 		std::map<MaterialType, std::shared_ptr<Material>> m_materials; // 多个材质，每个材质对应一个RenderPass---ShadowMap、PBR、TAA，每个renderpass所需的资源也在里面
+
+		glm::mat4 m_modelMatrix;
+
 		// PointLightComponent m_pointLight;
 		// DirectionalLightComponent m_directionalLight;
-		GameObjectKind m_objectKind;
 		// 这里有各自的 descriptor set，renderpass pipeline 对应；
 	private:
 		std::map<MaterialType, std::vector<std::map<int, VkDescriptorSet>>> m_descriptorSets;

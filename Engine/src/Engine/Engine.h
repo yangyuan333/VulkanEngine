@@ -33,6 +33,6 @@ namespace VulkanEngine
 
 	private:
 		Window window;
-		std::unique_ptr<Renderer> m_Renderer; // now there is only one renderer---defered renderer
+		std::shared_ptr<Renderer> m_Renderer; // now there is only one renderer---defered renderer
 	};
 }

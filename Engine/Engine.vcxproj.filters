@@ -47,7 +47,7 @@
     <ClInclude Include="src\Render\Renderer.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="src\Render\DerferRenderer.h">
+    <ClInclude Include="src\Render\DeferRenderer.h">
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Engine.h">
@@ -181,7 +181,7 @@
     <ClCompile Include="src\RHI\Sampler.cpp">
       <Filter>RHI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Render\DerferRenderer.cpp">
+    <ClCompile Include="src\Render\DeferRenderer.cpp">
       <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="src\Render\Renderer.cpp">

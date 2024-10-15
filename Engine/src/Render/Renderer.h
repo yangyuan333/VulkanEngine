@@ -7,6 +7,8 @@
 
 namespace VulkanEngine
 {
+	class FrameBuffer;
+
 	enum class RenderPassEnum
 	{
 		PbrDeferredPass, // v1.0
@@ -20,6 +22,8 @@ namespace VulkanEngine
 	public:
 		Renderer();
 		virtual ~Renderer();
+		Renderer(Renderer const& other) = delete;
+		Renderer& operator=(Renderer const& other) = delete;
 
 		virtual void Render(Scene& scene) = 0;
 
@@ -27,6 +31,7 @@ namespace VulkanEngine
 		virtual void Init() = 0; // 不同Renderer自定义，添加RenderPass，每一个RenderPass还得负责创建自己FrameBuffer需要用到的Texture
 		void AddRenderPass(RenderPassEnum renderPass);
 	protected:
-		std::vector<std::shared_ptr<RenderPass>> m_renderPasses;
+		std::map<RenderPassEnum, std::shared_ptr<RenderPass>> m_renderPasses;
+		std::map<RenderPassEnum, std::vector<std::shared_ptr<FrameBuffer>>> m_frameBuffers;
 	};
 }

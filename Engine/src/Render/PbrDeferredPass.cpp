@@ -5,7 +5,15 @@
 
 namespace VulkanEngine
 {
-	const std::unordered_map<std::string, TextureDesc>& PbrDeferredPass::GetPassTextureDescs() 
+	PbrDeferredPass::PbrDeferredPass()
+	{
+		Build();
+	}
+	PbrDeferredPass::~PbrDeferredPass()
+	{
+		;
+	}
+	const std::unordered_map<std::string, TextureDesc>& PbrDeferredPass::GetPassTextureDescs()
 	{
 		return m_pbrDeferredPassTextureDescs;
 	}
@@ -142,7 +150,7 @@ namespace VulkanEngine
 				RenderBackend::GetInstance().GetMsaaSampleBit(), Config::GetInstance().opaqueScenePipelineConfig, 
 				m_RenderPass, 0));
 	}
-    void PbrDeferredPass::BindGameObject(std::shared_ptr<GameObject> object)
+	std::vector<std::map<int, VkDescriptorSet>>& PbrDeferredPass::BindGameObject(std::shared_ptr<GameObject> object)
     {
 		if (object->GetDescriptorSets().count(MaterialType::DeferredPassMaterial) > 0)
 			throw std::runtime_error("GameObject DescritorSet Create Already!");
@@ -220,7 +228,7 @@ namespace VulkanEngine
 
 				vkUpdateDescriptorSets(RenderBackend::GetInstance().GetDevice(), descriptorWrites.size(), descriptorWrites.data(), 0, nullptr);
 			}
-			return;
+			return descriptorSet;
 		}
 	}
 }

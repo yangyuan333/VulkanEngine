@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "PbrDeferredPass.h"
 
 namespace VulkanEngine
 {
@@ -16,7 +17,7 @@ namespace VulkanEngine
 		{
 			case RenderPassEnum::PbrDeferredPass:
 			{
-				
+				m_renderPasses[renderPass] = std::make_shared<PbrDeferredPass>();
 				break;
 			}
 		}

@@ -1,6 +1,8 @@
 #include "Scene.h"
 #include "../Utility/Config.h"
 #include "RenderBackend.h"
+#include "Material.h"
+#include "PbrDeferredPass.h"
 
 namespace VulkanEngine
 {
@@ -136,6 +138,50 @@ namespace VulkanEngine
 			offset += sizeof(PointLightComponent);
 		}
 		m_LightsBuffers[frameIdx]->FlushMemory();
+	}
+	void Scene::LoadGLTFScene(std::string const& filePath)
+	{
+		// 从 filePath 导入场景
+		ModelData SceneData = ModelLoader::LoadFromGltf(filePath);
 
+		for (auto& object : SceneData.Shapes)
+		{
+			std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(GameObjectKind::Opaque);
+			gameObject->SetupMeshComponent(object.Vertices, object.Indices, std::shared_ptr<ModelData::Material>(&SceneData.Materials[object.MaterialIndex]));
+			gameObject->SetupTransform(TransformComponent{ {0,0,0},{0,0,0},{1,1,1} });
+			// 构建 Material，后续多个 renderpass，需要把对应的material都给加上
+			std::shared_ptr<Material> pbr_material = std::make_shared<Material>(MaterialType::DeferredPassMaterial, std::make_shared<PbrDeferredPass>());
+			gameObject->SetMaterial(pbr_material);
+			m_gameObjects.push_back(gameObject);
+			// TODO:这里其实还要统计descriptorset的数量，用来构建descriptorpool；
+		}
+	}
+	void Scene::InitScene()
+	{
+		// 灯光设置
+		DirectionalLightComponent sun;
+		sun.lightPos = 20.0f * glm::vec3(87.26932, 455.97552, -49.665558);
+		sun.direction = glm::normalize(-1.0f * sun.lightPos); // 这里要注意一下，和shader对应，别反了
+		sun.radiance = glm::vec3{ 1.0f, 1.0f, 1.0f };
+		sun.ligthColor = glm::vec3{ 1.0f, 1.0f, 1.0f };
+		AddDirectionalLight(sun);
+
+		glm::vec3 startPos = glm::vec3(200, 200, 200);
+		float offset = 200;
+		int iter = 5;
+		for (int i = -iter; i < iter; ++i) {
+			for (int j = -iter; j < iter; ++j) {
+				for (int k = -iter; k < iter; ++k) {
+					glm::vec3 lightPos = glm::vec3(startPos.x + i * offset, startPos.y + j * offset, startPos.z + k * offset);
+					glm::vec3 intensity{ 10.0f };
+					glm::vec3 lightColor = glm::vec3(1, 1, 1);
+					PointLightComponent light{ lightPos, intensity, lightColor };
+					AddPointLight(light);
+				}
+			}
+		}
+		UpdateLightBuffer(); // 这个可以放到后面的 Update 中去做；目前先放这里，当成静态光照环境；
+		// Camera设置
+		SetupCamera(std::make_shared<EditorCamera>(Config::VerticalFOV, Config::NearClip, Config::FarClip));
 	}
 }

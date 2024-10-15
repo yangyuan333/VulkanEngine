@@ -12,6 +12,7 @@ namespace VulkanEngine
 	class FrameBuffer
 	{
 	public:
+		FrameBuffer() = default;
 		FrameBuffer(RenderPass const& renderPass, std::vector<std::reference_wrapper<const Image>> const& images = {});
 		~FrameBuffer();
 

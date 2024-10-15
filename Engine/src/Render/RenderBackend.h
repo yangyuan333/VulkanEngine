@@ -70,6 +70,7 @@ namespace VulkanEngine
 		inline VkQueue& GetGraphicsQueue() { return m_graphicsQueue; }
 		inline auto& GetStagingBuffer() { return m_virtualFrames.GetCurrentFrame().stagingBuffer; }
 		inline auto GetCurrentFrameIndex() { return m_virtualFrames.GetCurrentFrameIndex(); }
+		inline auto& GetSwapChainImages() { return m_swapChainImages; }
 	public:
 		~RenderBackend();
 	private:

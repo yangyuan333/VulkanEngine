@@ -17,6 +17,7 @@ namespace VulkanEngine
 
 	void Material::BindGameObject(std::shared_ptr<GameObject> object)
 	{
-		m_RenderPass->BindGameObject(object);
+		auto& descriptorSet = m_RenderPass->BindGameObject(object);
+		object->GetDescriptorSets()[m_type] = descriptorSet;
 	}
 }

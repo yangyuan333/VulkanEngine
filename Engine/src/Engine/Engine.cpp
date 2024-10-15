@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "../Utility/Config.h"
 #include "../Render/RenderBackend.h"
+#include "../Render/DeferRenderer.h"
 
 namespace VulkanEngine
 {
@@ -24,6 +25,7 @@ namespace VulkanEngine
 		RenderBackend::Init();
 		// 相机运动控制在哪里初始化设置；
 		// 创建渲染器
+		m_Renderer = std::make_shared<DeferredRenderer>();
 		return;
     }
 

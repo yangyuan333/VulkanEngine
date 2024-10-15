@@ -83,15 +83,7 @@ namespace VulkanEngine
 	{
 		// 这里要根据material的类型---获取descritorsetlayout，并生成descriptorset，并绑定数据
 		m_materials[material->GetMaterialType()] = material;
-		// 生成 descriptor set，并且 bind 渲染资源；关键是放到哪里做呢？ 放到 Pipeline 中做，加个 BindObject 方法；
-		// 这里只生成，不绑定，绑定还是放到 RenderPass 里面做；
-		auto& pipelines = material->GetPipelines();
-		std::vector<std::vector<VkDescriptorSet>> pipelinesDescriptorSets; pipelinesDescriptorSets.reserve(pipelines.size());
-		for (auto& pipeline : pipelines)
-		{
-			std::vector<VkDescriptorSet> pipelineDescriptorSets;
-			
-		}
+		material->BindGameObject(std::shared_ptr<GameObject>(this));
 	}
 
 	void GameObject::UpdateTransform(TransformComponent const& transform)

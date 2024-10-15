@@ -19,6 +19,8 @@ namespace VulkanEngine
 		void AddPointLight(PointLightComponent pointLight);
 		void AddDirectionalLight(DirectionalLightComponent directionalLight);
 		void UpdateLightBuffer(int frameIdx = -1);
+		void LoadGLTFScene(std::string const& filePath);
+		void InitScene();
 	protected:
 		Scene();
 		~Scene();

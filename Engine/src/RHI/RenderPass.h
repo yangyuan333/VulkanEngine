@@ -30,7 +30,7 @@ namespace VulkanEngine
 		virtual void Build() = 0;
 		virtual const std::unordered_map<std::string, TextureDesc>& GetPassTextureDescs() = 0;
 		virtual void UpdatePassTextureDescsWidthHeight(uint32_t width, uint32_t height) const = 0;
-		virtual void BindGameObject(std::shared_ptr<GameObject> object) = 0;
+		virtual std::vector<std::map<int, VkDescriptorSet>>& BindGameObject(std::shared_ptr<GameObject> object) = 0;
 		inline VkRenderPass GetRenderPassHandle() const { return m_RenderPass; }
 		inline std::vector<VkAttachmentDescription> GetAttachmentList() const { return m_AttachmentDescriptions; }
 		inline std::map<std::string, VkAttachmentDescription> GetAttachmentMap() const { return m_name2AttachmentDescription; }
@@ -58,7 +58,7 @@ namespace VulkanEngine
 	protected:
 		std::string m_PassName;
 
-		VkRenderPass m_RenderPass;
+		VkRenderPass m_RenderPass = VK_NULL_HANDLE;
 		std::vector<std::shared_ptr<Pipeline>> m_pipelines; // subpass 目前只针对 opaque 物体进行渲染，创建一套即可
 		std::shared_ptr<FrameBuffer> m_frameBuffer;
 

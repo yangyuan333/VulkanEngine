@@ -705,7 +705,7 @@ private:
 			// VkImageView attachments[] = {
 			// 	swapChainImageViews[i], depthImageView
 			// };
-
+			
 			VkFramebufferCreateInfo framebufferInfo = {};
 			framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
 			framebufferInfo.renderPass = renderPass;
