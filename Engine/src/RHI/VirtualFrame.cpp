@@ -97,7 +97,6 @@ namespace VulkanEngine
 		if (result == VK_ERROR_OUT_OF_DATE_KHR)
 		{
 			RenderBackend::GetInstance().RecreateSwapChain();
-			return;
 		}
 		else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
 		{

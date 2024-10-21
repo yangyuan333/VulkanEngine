@@ -19,6 +19,7 @@ namespace VulkanEngine
 		inline GLFWwindow* GetWindowHandle() { return m_window; }
 		inline uint32_t GetWidth() { return m_width; }
 		inline uint32_t GetHeight() { return m_height; }
+		void UpdateSize(int width, int height);
 	public:
 		void OnUpdate(float fs);
 	private:

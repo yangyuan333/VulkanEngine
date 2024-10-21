@@ -35,7 +35,7 @@ namespace VulkanEngine
 		void Destroy();
 	private:
 		std::reference_wrapper<const RenderPass> m_renderPass;
-		VkFramebuffer m_frameBuffer;
+		VkFramebuffer m_frameBuffer = VK_NULL_HANDLE;
 		std::vector<VkImageView> m_attachmentImage; 
 		uint32_t m_width;
 		uint32_t m_height;

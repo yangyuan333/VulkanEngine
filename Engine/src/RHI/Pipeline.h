@@ -103,8 +103,9 @@ namespace VulkanEngine
 		// void UpdateBinds();
 
 	public:
-		VkPipeline GetPipelineHandle() const { return m_pipeline; }
-		auto& GetDescriptorSetLayout() { return m_descriptorSetLayouts; }
+		inline VkPipeline GetPipelineHandle() const { return m_pipeline; }
+		inline auto& GetDescriptorSetLayout() { return m_descriptorSetLayouts; }
+		inline auto& GetPipelineLayout() { return m_pipelineLayout; }
 	private:
 		void CreateShader(std::string const& vert_spir_path, std::string const& frag_spir_path);
 		void GenerateVulkanDescriptorSetLayout();

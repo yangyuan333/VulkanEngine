@@ -3,6 +3,7 @@
 #include "../RHI/RenderPass.h"
 #include "../Utility/Config.h"
 #include <string>
+#include <vector>
 
 namespace VulkanEngine
 {
@@ -18,7 +19,13 @@ namespace VulkanEngine
 		virtual void UpdatePassTextureDescsWidthHeight(uint32_t width, uint32_t height) const;
 		virtual void Build() override;
 		virtual std::vector<std::map<int, VkDescriptorSet>>& BindGameObject(std::shared_ptr<GameObject> object) override;
-
+	public:
+		void BeginRenderPass(FrameBuffer& frameBuffer) override;
+		void EndRenderPass() override;
+		void BindInputDescriptorSet(VkPipelineLayout pipelineLayout, int setIndex) override;
+		virtual std::vector<VkDescriptorSet>& GetInputAttachmentDescriptorSet() { return m_inputAttachmentSets; }
+	protected:
+		std::vector<VkDescriptorSet> m_inputAttachmentSets;
 	protected:
 		mutable std::unordered_map<std::string, TextureDesc> m_pbrDeferredPassTextureDescs = {
 			{"SceneColor", TextureDesc{

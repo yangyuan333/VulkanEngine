@@ -21,9 +21,13 @@ namespace VulkanEngine
 		void UpdateLightBuffer(int frameIdx = -1);
 		void LoadGLTFScene(std::string const& filePath);
 		void InitScene();
+		inline auto& GetCamera() { return m_camera; }
+		~Scene();
+	public:
+		inline auto& GetGameObject() { return m_gameObjects; }
+		void BindLightsDescriptorSet(VkPipelineLayout pipelineLayout, int setIndex);
 	protected:
 		Scene();
-		~Scene();
 		Scene(Scene const& other) = delete;
 		Scene& operator=(Scene const& other) = delete;
 	private:

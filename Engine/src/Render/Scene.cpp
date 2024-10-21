@@ -184,4 +184,11 @@ namespace VulkanEngine
 		// Camera…Ë÷√
 		SetupCamera(std::make_shared<EditorCamera>(Config::VerticalFOV, Config::NearClip, Config::FarClip));
 	}
+
+	void Scene::BindLightsDescriptorSet(VkPipelineLayout pipelineLayout, int setIndex)
+	{
+		vkCmdBindDescriptorSets(
+			RenderBackend::GetInstance().GetCurrentFrame().Commands.GetCommandBufferHandle(), VK_PIPELINE_BIND_POINT_GRAPHICS,
+			pipelineLayout, setIndex, 1, &m_lightDescriptorSet[RenderBackend::GetInstance().GetCurrentFrameIndex()], 0, nullptr);
+	}
 }

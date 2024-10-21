@@ -33,6 +33,8 @@ namespace VulkanEngine
 		virtual bool OnUpdate(float ts) = 0;
 		virtual void OnResize(uint32_t width, uint32_t height) = 0;
 
+		void BindDescriptorSet(VkPipelineLayout pipelineLayout, int setIndex);
+
 	protected:
 		glm::mat4 projection{ 1.0f };
 		glm::mat4 view{ 1.0f };

@@ -26,12 +26,14 @@ namespace VulkanEngine
 		Renderer& operator=(Renderer const& other) = delete;
 
 		virtual void Render(Scene& scene) = 0;
+		virtual void CreateFrameBuffer() = 0;
+		virtual void RecreateFrameBuffer() = 0;
 
 	protected:
 		virtual void Init() = 0; // 不同Renderer自定义，添加RenderPass，每一个RenderPass还得负责创建自己FrameBuffer需要用到的Texture
 		void AddRenderPass(RenderPassEnum renderPass);
 	protected:
 		std::map<RenderPassEnum, std::shared_ptr<RenderPass>> m_renderPasses;
-		std::map<RenderPassEnum, std::vector<std::shared_ptr<FrameBuffer>>> m_frameBuffers;
+		std::map<RenderPassEnum, std::vector<std::shared_ptr<FrameBuffer>>> m_frameBuffers; // 这里得确保只有这里用到了framebuffer，否则可能会影响到recreate销毁
 	};
 }

@@ -40,6 +40,12 @@ namespace VulkanEngine
 		void BindFrameBuffer(std::shared_ptr<FrameBuffer> frameBuffer);
 		void UnBindFrameBuffer() { m_frameBuffer  = nullptr; }
 		std::vector<std::shared_ptr<Pipeline>>& GetPipelines() { return m_pipelines; }
+		virtual std::vector<VkDescriptorSet>& GetInputAttachmentDescriptorSet() = 0;
+	public:
+		virtual void BeginRenderPass(FrameBuffer& frameBuffer) = 0;
+		virtual void EndRenderPass() = 0;
+		virtual void BindPipeline(int subpass);
+		virtual void BindInputDescriptorSet(VkPipelineLayout pipelineLayout, int setIndex) = 0;
 	protected:
 		void DeclareColorAttachment(
 			const std::string& name, const TextureDesc& textureDesc,

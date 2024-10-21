@@ -18,7 +18,13 @@ namespace VulkanEngine
 		glfwDestroyWindow(m_window);
 	}
 
-	void Window::OnUpdate(float fs)
+    void Window::UpdateSize(int width, int height)
+    {
+		m_width = width;
+		m_height = height;
+    }
+
+    void Window::OnUpdate(float fs)
 	{
 		glfwPollEvents();
 	}

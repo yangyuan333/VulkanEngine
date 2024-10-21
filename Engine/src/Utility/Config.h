@@ -77,5 +77,7 @@ namespace VulkanEngine
 		static constexpr float VerticalFOV = 45.0f;
 		static constexpr float NearClip = 0.1f;
 		static constexpr float FarClip = 1000.0f;
+
+		const std::string SceneFile = "../../Assets/Scene/Sponza/glTF/Sponza.gltf";
 	};
 }

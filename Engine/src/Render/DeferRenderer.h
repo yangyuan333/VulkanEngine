@@ -25,12 +25,14 @@ namespace VulkanEngine
 		void CreatePassImageViews();
 
 		virtual void Render(Scene& scene) override;
+		virtual void CreateFrameBuffer() override;
+		virtual void RecreateFrameBuffer() override;
 
 	protected:
 		virtual void Init() override;
 
 	protected:
-		std::map<ImageEnum, std::shared_ptr<Image>> m_images;;
+		std::map<ImageEnum, std::shared_ptr<Image>> m_images;
 	};
 
 }

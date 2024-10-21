@@ -14,6 +14,12 @@ namespace VulkanEngine
 	{
 		m_frameBuffer = frameBuffer;
 	}
+	void RenderPass::BindPipeline(int subpass)
+	{
+		vkCmdBindPipeline(
+			RenderBackend::GetInstance().GetCurrentFrame().Commands.GetCommandBufferHandle(),
+			VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipelines[subpass]->GetPipelineHandle());
+	}
 	void RenderPass::DeclareColorAttachment(const std::string& name, const TextureDesc& textureDesc, const TextureOps& ops, VkImageLayout initialLayout, VkImageLayout finalLayout, ClearColor clearColor)
 	{
 		VkAttachmentDescription colorAttachment = {};

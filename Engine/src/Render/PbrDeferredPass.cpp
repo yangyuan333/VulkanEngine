@@ -8,6 +8,11 @@ namespace VulkanEngine
 	PbrDeferredPass::PbrDeferredPass()
 	{
 		Build();
+		m_inputAttachmentSets.resize(Config::MAX_FRAMES_IN_FLIGHT);
+		for (int frameIndex = 0; frameIndex < Config::MAX_FRAMES_IN_FLIGHT; ++frameIndex)
+		{
+			m_inputAttachmentSets[frameIndex] = RenderBackend::GetInstance().GetDescriptorAllocator()->Allocate(m_pipelines[1]->GetDescriptorSetLayout()[2]);
+		}
 	}
 	PbrDeferredPass::~PbrDeferredPass()
 	{
@@ -39,7 +44,6 @@ namespace VulkanEngine
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE
 			},
 			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_UNDEFINED);
-		
 		// G-Buffer-B£ºnormal
 		DeclareColorAttachment(
 			"GBufferB",
@@ -106,6 +110,16 @@ namespace VulkanEngine
 		subpass2_colorAttachmentRef.attachment = 5;
 		subpass2_colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
+		std::array<VkAttachmentReference, 4> subpass2_inputAttachmentRefs;
+		subpass2_inputAttachmentRefs[0].attachment = 0,
+		subpass2_inputAttachmentRefs[0].layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+		subpass2_inputAttachmentRefs[1].attachment = 1,
+		subpass2_inputAttachmentRefs[1].layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+		subpass2_inputAttachmentRefs[2].attachment = 2,
+		subpass2_inputAttachmentRefs[2].layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+		subpass2_inputAttachmentRefs[3].attachment = 3,
+		subpass2_inputAttachmentRefs[3].layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
 		std::vector<VkSubpassDescription> subpasses; subpasses.resize(2);
 		subpasses[0].pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 		subpasses[0].colorAttachmentCount = 4;
@@ -150,6 +164,7 @@ namespace VulkanEngine
 				RenderBackend::GetInstance().GetMsaaSampleBit(), Config::GetInstance().opaqueScenePipelineConfig, 
 				m_RenderPass, 0));
 	}
+
 	std::vector<std::map<int, VkDescriptorSet>>& PbrDeferredPass::BindGameObject(std::shared_ptr<GameObject> object)
     {
 		if (object->GetDescriptorSets().count(MaterialType::DeferredPassMaterial) > 0)
@@ -230,5 +245,30 @@ namespace VulkanEngine
 			}
 			return descriptorSet;
 		}
+	}
+
+	void PbrDeferredPass::BeginRenderPass(FrameBuffer& frameBuffer)
+	{
+		VkRenderPassBeginInfo renderPassInfo = {};
+		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+		renderPassInfo.renderPass = m_RenderPass;
+		renderPassInfo.framebuffer = frameBuffer.GetFrameBufferHandle();
+		renderPassInfo.renderArea.offset = { 0, 0 };
+		renderPassInfo.renderArea.extent = RenderBackend::GetInstance().GetSwapChainExtent();
+		renderPassInfo.clearValueCount = m_AttachmentClearValue.size();
+		renderPassInfo.pClearValues = m_AttachmentClearValue.data();
+		vkCmdBeginRenderPass(
+			RenderBackend::GetInstance().GetCurrentFrame().Commands.GetCommandBufferHandle(), 
+			&renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+	}
+	void PbrDeferredPass::EndRenderPass()
+	{
+		vkCmdEndRenderPass(RenderBackend::GetInstance().GetCurrentFrame().Commands.GetCommandBufferHandle());
+	}
+	void PbrDeferredPass::BindInputDescriptorSet(VkPipelineLayout pipelineLayout, int setIndex)
+	{
+		vkCmdBindDescriptorSets(
+			RenderBackend::GetInstance().GetCurrentFrame().Commands.GetCommandBufferHandle(), VK_PIPELINE_BIND_POINT_GRAPHICS,
+			pipelineLayout, setIndex, 1, &m_inputAttachmentSets[RenderBackend::GetInstance().GetCurrentFrameIndex()], 0, nullptr);
 	}
 }

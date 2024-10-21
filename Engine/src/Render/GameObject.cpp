@@ -46,10 +46,16 @@ namespace VulkanEngine
     void GameObject::SetupTransform(TransformComponent const& transform)
     {
 		m_transform = transform;
-		ComputeModelMatrix();
+		m_modelMatrix = ComputeModelMatrix();
+		ModelComponent modelComponent;
+		modelComponent.modelMatrix = m_modelMatrix;
+		modelComponent.modelMatrix_it = glm::inverse(m_modelMatrix);
+		m_buffers[RenderBackend::GetInstance().GetCurrentFrameIndex()]->WriteDataWithFlush((uint8_t*)&modelComponent, sizeof(modelComponent));
+
 		for (int frameIdx = 0; frameIdx < Config::MAX_FRAMES_IN_FLIGHT; ++frameIdx)
 		{
-			m_buffers[frameIdx]->WriteDataWithFlush((uint8_t*)&m_modelMatrix, sizeof(m_modelMatrix));
+			m_buffers[frameIdx]->WriteDataWithFlush((uint8_t*)&modelComponent, sizeof(modelComponent));
+			// m_buffers[frameIdx]->WriteDataWithFlush((uint8_t*)&m_modelMatrix, sizeof(m_modelMatrix));
 		}
     }
 	/*
@@ -89,7 +95,7 @@ namespace VulkanEngine
 	void GameObject::UpdateTransform(TransformComponent const& transform)
 	{
 		m_transform = transform;
-		ComputeModelMatrix();
+		m_modelMatrix = ComputeModelMatrix();
 		ModelComponent modelComponent;
 		modelComponent.modelMatrix = m_modelMatrix;
 		modelComponent.modelMatrix_it = glm::inverse(m_modelMatrix);
@@ -109,10 +115,29 @@ namespace VulkanEngine
 		m_buffers[RenderBackend::GetInstance().GetCurrentFrameIndex()]->WriteDataWithFlush((uint8_t*)&m_directionalLight, sizeof(m_directionalLight));
 	}
 	*/
-	void GameObject::BindPipeline()
+
+	void GameObject::BindVertex()
 	{
-		
+		m_mesh->BindVertex();
 	}
+
+	void GameObject::BindIndex()
+	{
+		m_mesh->BindIndex();
+	}
+
+    void GameObject::BindDescriptorSet(MaterialType type, int subpass)
+    {
+		auto renderpass = m_materials[type]->GetRenderpass();
+		for (auto set : m_descriptorSets[type][RenderBackend::GetInstance().GetCurrentFrameIndex()])
+		{
+			vkCmdBindDescriptorSets(
+				RenderBackend::GetInstance().GetCurrentFrame().Commands.GetCommandBufferHandle(), VK_PIPELINE_BIND_POINT_GRAPHICS,
+				renderpass->GetPipelines()[subpass]->GetPipelineLayout(),
+				set.first, 1,
+				&set.second, 0, nullptr);
+		}
+    }
 
 	glm::mat4 GameObject::ComputeModelMatrix()
 	{
@@ -123,6 +148,31 @@ namespace VulkanEngine
 		glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), m_transform.scale);
 		glm::mat4 modelMatrix = translationMatrix * rotationMatrix * scaleMatrix;
 		return modelMatrix;
+	}
+
+	void MeshComponent::BindVertex()
+	{
+		VkBuffer buffer = m_vertexBuffer->GetBufferHandle();
+		VkDeviceSize offsets[] = { 0 };
+		vkCmdBindVertexBuffers(
+			RenderBackend::GetInstance().GetCurrentFrame().Commands.GetCommandBufferHandle(),
+			0, 1,
+			&buffer, offsets);
+	}
+
+	void MeshComponent::BindIndex()
+	{
+		VkBuffer buffer = m_indexBuffer->GetBufferHandle();
+		vkCmdBindIndexBuffer(
+			RenderBackend::GetInstance().GetCurrentFrame().Commands.GetCommandBufferHandle(),
+			buffer, 0, VK_INDEX_TYPE_UINT32);
+	}
+
+	void GameObject::Draw()
+	{
+		vkCmdDrawIndexed(
+			RenderBackend::GetInstance().GetCurrentFrame().Commands.GetCommandBufferHandle(),
+			static_cast<uint32_t>(m_mesh->GetIndexCnt()), 1, 0, 0, 0);
 	}
 
 	void MeshComponent::CreateMaterialTexture(std::shared_ptr<ModelData::Material> material)

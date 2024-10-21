@@ -22,6 +22,7 @@ namespace VulkanEngine
 		CreateCommandPool();
 		CreateDescriptorCacheAndAllocator();
 		CreateSwapChain();
+		m_sampler = std::make_shared<Sampler>(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_REPEAT, VK_SAMPLER_MIPMAP_MODE_LINEAR);
 	}
 
 	void RenderBackend::Init()
@@ -40,9 +41,39 @@ namespace VulkanEngine
 		if (func != nullptr) func(instance, callback, pAllocator);
 	}
 
-	RenderBackend::~RenderBackend()
+    void RenderBackend::StartFrame()
+    {
+		m_virtualFrames.StartFrame();
+    }
+
+    void RenderBackend::EndFrame()
+    {
+		m_virtualFrames.EndFrame();
+    }
+
+	void RenderBackend::SetDynamicViewportScissor()
 	{
-		m_virtualFrames.Destroy();
+		VkViewport viewport{};
+		viewport.x = 0.0f;
+		viewport.y = 0.0f;
+		viewport.width = static_cast<float>(m_swapChainExtent.width);
+		viewport.height = static_cast<float>(m_swapChainExtent.height);
+		viewport.minDepth = 0.0f;
+		viewport.maxDepth = 1.0f;
+		vkCmdSetViewport(
+			m_virtualFrames.GetCurrentFrame().Commands.GetCommandBufferHandle(), 
+			0, 1, &viewport);
+		VkRect2D scissor{};
+		scissor.offset = { 0, 0 };
+		scissor.extent = m_swapChainExtent;
+		vkCmdSetScissor(
+			m_virtualFrames.GetCurrentFrame().Commands.GetCommandBufferHandle(), 
+			0, 1, &scissor);
+	}
+
+    RenderBackend::~RenderBackend()
+	{
+		m_virtualFrames.Destroy(); // 最好是自定义析构解决，但目前这个对象不会对外公开，无所谓
 		vkDestroyCommandPool(m_device, m_commandPool, nullptr);
 		cleanupSwapChain();
 		m_descriptorAllocator->CleanUp(); // 清理 pool
@@ -414,11 +445,11 @@ namespace VulkanEngine
 
 		cleanupSwapChain();
 
-		CreateSwapChain(); // FrameBuffer想想该放到哪里
-		// createImageViews();
-		// createColorResources();
-		// createDepthResources();
-		// createFramebuffers();
+		CreateSwapChain();
+
+		// 这里得通知renderpass那边要进行清理了；
+		// Renderer那边要进行FrameBuffer的重新创建了；
+		Engine::GetInstance().GetRenderer()->RecreateFrameBuffer();
     }
 	CommandBuffer RenderBackend::BeginSingleTimeCommand()
 	{
@@ -534,7 +565,7 @@ namespace VulkanEngine
 		vkGetSwapchainImagesKHR(m_device, m_swapChain, &imageCount, swapChainImages.data());
 		m_swapChainImageFormat = surfaceFormat.format;
 		m_swapChainExtent = extent;
-
+		Engine::GetInstance().UpdateWindowSize(m_swapChainExtent.width, m_swapChainExtent.width);
 		m_swapChainImages.clear();
 		m_swapChainImages.reserve(imageCount);
 

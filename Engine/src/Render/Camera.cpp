@@ -60,6 +60,13 @@ namespace VulkanEngine
 		}
 	}
 
+	void Camera::BindDescriptorSet(VkPipelineLayout pipelineLayout, int setIndex)
+	{
+		vkCmdBindDescriptorSets(
+			RenderBackend::GetInstance().GetCurrentFrame().Commands.GetCommandBufferHandle(), VK_PIPELINE_BIND_POINT_GRAPHICS,
+			pipelineLayout, setIndex, 1, &m_cameraDescriptorSet[RenderBackend::GetInstance().GetCurrentFrameIndex()], 0, nullptr);
+	}
+
 	EditorCamera::EditorCamera(float verticalFOV, float nearClip, float farClip)
 		:Camera()
 	{

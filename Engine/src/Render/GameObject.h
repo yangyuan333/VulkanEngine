@@ -47,6 +47,9 @@ namespace VulkanEngine
 	public:
 		std::shared_ptr<Image> GetTetxure(std::string textureName) { return m_MaterialResource[textureName]; }
 		std::shared_ptr<Sampler> GetSampler() { return m_sampler; }
+		void BindVertex();
+		void BindIndex();
+		uint32_t GetIndexCnt() { return m_indexCnt; }
 	private:
 		void CreateMaterialTexture(std::shared_ptr<ModelData::Material> material);
 	private:
@@ -77,7 +80,6 @@ namespace VulkanEngine
 		// void UpdatePointLight(PointLightComponent const& pointLight);
 		// void UpdateDirectionalLight(DirectionalLightComponent const& directioanlLight);
 		auto& GetDescriptorSets() { return m_descriptorSets; }
-		void BindPipeline();
 		auto& GetModelBuffers() { return m_buffers; }
 		auto GetMeshTexture(std::string textureName) { return m_mesh->GetTetxure(textureName); }
 		std::shared_ptr<Sampler> GetSampler() { return m_mesh->GetSampler(); }
@@ -85,6 +87,11 @@ namespace VulkanEngine
 		GameObjectKind GetGameObjectKind() const { return m_objectKind; }
 		glm::mat4 GetMofelMatrix() const { return m_modelMatrix; }
 		glm::mat4 GetMofelMatrix() { return m_modelMatrix; }
+	public:
+		void BindVertex();
+		void BindIndex();
+		void BindDescriptorSet(MaterialType type, int subpass);
+		void Draw();
 	private:
 		glm::mat4 ComputeModelMatrix();
 	private:

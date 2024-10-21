@@ -21,6 +21,7 @@ namespace VulkanEngine
 		MaterialType GetMaterialType() { return m_type; }
 		std::vector<std::shared_ptr<Pipeline>>& GetPipelines() { return m_RenderPass->GetPipelines(); }
 		void BindGameObject(std::shared_ptr<GameObject> object);
+		inline auto GetRenderpass() { return m_RenderPass; }
 	private:
 		std::shared_ptr<RenderPass> m_RenderPass;
 		MaterialType m_type;

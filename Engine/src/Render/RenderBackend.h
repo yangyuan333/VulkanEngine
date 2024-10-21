@@ -71,6 +71,12 @@ namespace VulkanEngine
 		inline auto& GetStagingBuffer() { return m_virtualFrames.GetCurrentFrame().stagingBuffer; }
 		inline auto GetCurrentFrameIndex() { return m_virtualFrames.GetCurrentFrameIndex(); }
 		inline auto& GetSwapChainImages() { return m_swapChainImages; }
+		inline auto& GetSwapChainExtent() { return m_swapChainExtent; }
+		inline auto& GetCurrentFrame() { return m_virtualFrames.GetCurrentFrame(); }
+		inline auto& GetSampler() { return m_sampler; }
+		void StartFrame();
+		void EndFrame();
+		void SetDynamicViewportScissor();
 	public:
 		~RenderBackend();
 	private:
@@ -95,8 +101,7 @@ namespace VulkanEngine
 		VkSwapchainKHR m_swapChain;
 		VkFormat m_swapChainImageFormat;
 		VkExtent2D m_swapChainExtent;
-		// std::vector<VkImage> m_swapChainImages; // VkImage 得干掉，RHI 封装的 Image
-		// std::vector<VkImageView> m_swapChainImageViews; // VkImage 得干掉，RHI 封装的 Image
+
 		std::vector<std::shared_ptr<Image>> m_swapChainImages;
 
 		VirtualFrameProvider m_virtualFrames;
@@ -104,5 +109,7 @@ namespace VulkanEngine
 		std::shared_ptr<DescriptorAllocator> m_descriptorAllocator;
 
 		VkSampleCountFlagBits m_msaaSamples = VK_SAMPLE_COUNT_1_BIT;
+
+		std::shared_ptr<Sampler> m_sampler;
 	};
 }
