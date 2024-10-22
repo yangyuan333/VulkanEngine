@@ -21,12 +21,11 @@ namespace VulkanEngine
 		CreateLogicalDevice();
 		CreateCommandPool();
 		CreateDescriptorCacheAndAllocator();
-		CreateSwapChain();
-		m_sampler = std::make_shared<Sampler>(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_REPEAT, VK_SAMPLER_MIPMAP_MODE_LINEAR);
 	}
 
 	void RenderBackend::Init()
 	{
+		RenderBackend::GetInstance().CreateSwapChain();
 		RenderBackend::GetInstance().CreateVirtualFrame();
 	}
 
@@ -516,6 +515,7 @@ namespace VulkanEngine
 		SwapChainSupportDetails swapChainSupport = querySwapChainSupport(m_physicalDevice);
 
 		VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
+		Config::GetInstance().SceneColorFormat = surfaceFormat.format;
 		VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
 		VkExtent2D extent = chooseSwapExtent(swapChainSupport.capabilities, Engine::GetInstance().GetWindowHandle());
 
@@ -574,6 +574,8 @@ namespace VulkanEngine
 				swapChainImages[i], extent.width, extent.height, surfaceFormat.format);
 			m_swapChainImages.push_back(image);
 		}
+
+		m_sampler = std::make_shared<Sampler>(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_REPEAT, VK_SAMPLER_MIPMAP_MODE_LINEAR);
 	}
 
 	void RenderBackend::cleanupSwapChain()

@@ -200,7 +200,7 @@
       <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="src\Render\RenderResource.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

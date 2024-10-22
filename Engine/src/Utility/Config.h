@@ -10,6 +10,7 @@ namespace VulkanEngine
 {
 	class Config : public Singleton<Config>
 	{
+	friend class Singleton<Config>;
 	public:
 		// Windows Config
 		static constexpr int WIDTH = 800;
@@ -20,7 +21,7 @@ namespace VulkanEngine
 		static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
 		static constexpr size_t MAX_STAGINGBUFFER_SIZE = 64 * 1024 * 1024;
 		static constexpr size_t MAX_PointLight_Num = 64;
-		static constexpr VkFormat SceneColorFormat = VK_FORMAT_R16G16B16A16_SFLOAT;
+		VkFormat SceneColorFormat;//  = VK_FORMAT_R16G16B16A16_SFLOAT; // 这个得和swapchain格式保持一致
 		static constexpr bool Enable_Anisotropy = VK_TRUE;
 #if _DEBUG
 		static constexpr bool EnableValidationLayers = true;

@@ -43,7 +43,7 @@ namespace VulkanEngine
 				VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE, // 之后来试试，这里应该不需要 store
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE
 			},
-			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_UNDEFINED);
+			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 		// G-Buffer-B：normal
 		DeclareColorAttachment(
 			"GBufferB",
@@ -52,7 +52,7 @@ namespace VulkanEngine
 				VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE, // 之后来试试，这里应该不需要 store
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE
 			},
-			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_UNDEFINED);
+			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 		// G-Buffer-C：albedo
 		DeclareColorAttachment(
 			"GBufferC",
@@ -61,7 +61,7 @@ namespace VulkanEngine
 				VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE, // 之后来试试，这里应该不需要 store
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE
 			},
-			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_UNDEFINED);
+			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 		// G-Buffer-D：metallicRoughness
 		DeclareColorAttachment(
 			"GBufferD",
@@ -70,7 +70,7 @@ namespace VulkanEngine
 				VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE, // 之后来试试，这里应该不需要 store
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE
 			},
-			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_UNDEFINED);
+			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
 		// GeometryDepth: 这个深度是得保留的
 		DeclareDepthAttachment(
@@ -92,7 +92,7 @@ namespace VulkanEngine
 				VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE, // 之后来试试，这里应该不需要 store
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE
 			},
-			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_UNDEFINED);
+			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
 
 		std::array<VkAttachmentReference, 4> subpass1_colorAttachmentRefs;
 		subpass1_colorAttachmentRefs[0].attachment = 0,
@@ -130,7 +130,7 @@ namespace VulkanEngine
 		subpasses[1].colorAttachmentCount = 1;
 		subpasses[1].pColorAttachments = &subpass2_colorAttachmentRef;
 		subpasses[1].inputAttachmentCount = 4;
-		subpasses[1].pInputAttachments = subpass1_colorAttachmentRefs.data();
+		subpasses[1].pInputAttachments = subpass2_inputAttachmentRefs.data();
 
 		std::vector<VkSubpassDependency> dependency; dependency.resize(2);// 这里可能得检查一下
 		dependency[0].srcSubpass = VK_SUBPASS_EXTERNAL;
@@ -145,7 +145,7 @@ namespace VulkanEngine
 		dependency[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 		dependency[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 		dependency[1].dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-		dependency[1].dstAccessMask = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+		dependency[1].dstAccessMask = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
 
 		// std::vector<VkAttachmentDescription> attachments{ m_colorAttachmentDescriptions };
 		// attachments.push_back(m_depthAttachmentDescription);

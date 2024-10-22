@@ -83,6 +83,10 @@ namespace VulkanEngine
 		renderPassInfo.pSubpasses = subpasses.data();
 		renderPassInfo.dependencyCount = dependency.size();
 		renderPassInfo.pDependencies = dependency.data();
+
+		if (vkCreateRenderPass(RenderBackend::GetInstance().GetDevice(), &renderPassInfo, nullptr, &m_RenderPass) != VK_SUCCESS) {
+			throw std::runtime_error("failed to create render pass!");
+		}
 	}
 
     RenderPass::~RenderPass()

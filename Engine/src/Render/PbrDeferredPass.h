@@ -29,11 +29,11 @@ namespace VulkanEngine
 	protected:
 		mutable std::unordered_map<std::string, TextureDesc> m_pbrDeferredPassTextureDescs = {
 			{"SceneColor", TextureDesc{
-				Config::SceneColorFormat,
+				Config::GetInstance().SceneColorFormat,
 				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 				VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT}},
 			{"SceneDepth", TextureDesc{
-				VK_FORMAT_R8G8B8A8_UNORM ,
+				VK_FORMAT_D32_SFLOAT ,
 				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 				VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT}},
 			{"GBufferA", TextureDesc{

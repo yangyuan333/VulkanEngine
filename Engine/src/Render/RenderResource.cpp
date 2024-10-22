@@ -15,7 +15,7 @@ namespace VulkanEngine
 
 	std::vector<VkVertexInputAttributeDescription> VulkanEngine::Vertex::GetVertexInputAttributeDescriptions()
 	{
-		std::vector<VkVertexInputAttributeDescription> attributeDescriptions{};
+		std::vector<VkVertexInputAttributeDescription> attributeDescriptions(5);
 
 		attributeDescriptions[0].binding = 0;
 		attributeDescriptions[0].location = 0;
