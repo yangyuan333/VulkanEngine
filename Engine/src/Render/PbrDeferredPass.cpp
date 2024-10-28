@@ -11,7 +11,10 @@ namespace VulkanEngine
 		m_inputAttachmentSets.resize(Config::MAX_FRAMES_IN_FLIGHT);
 		for (int frameIndex = 0; frameIndex < Config::MAX_FRAMES_IN_FLIGHT; ++frameIndex)
 		{
-			m_inputAttachmentSets[frameIndex] = RenderBackend::GetInstance().GetDescriptorAllocator()->Allocate(m_pipelines[1]->GetDescriptorSetLayout()[2]);
+			auto allocator = RenderBackend::GetInstance().GetDescriptorAllocator();
+			auto layout = m_pipelines[1]->GetDescriptorSetLayout();
+			m_inputAttachmentSets[frameIndex] = allocator->Allocate(layout[2]);
+			// m_inputAttachmentSets[frameIndex] = RenderBackend::GetInstance().GetDescriptorAllocator()->Allocate(m_pipelines[1]->GetDescriptorSetLayout()[2]);
 		}
 	}
 	PbrDeferredPass::~PbrDeferredPass()
@@ -155,14 +158,14 @@ namespace VulkanEngine
 		// Pipeline 也得 build; 最好是得有名字
 		m_pipelines.push_back(
 			std::make_shared<Pipeline>(
-				lighting_vert_spir_path, lighting_frag_spir_path,
-				RenderBackend::GetInstance().GetMsaaSampleBit(), Config::GetInstance().fullScreenPipelineConfig,
-				m_RenderPass, 1));
-		m_pipelines.push_back(
-			std::make_shared<Pipeline>(
 				geometry_vert_spir_path, geometry_frag_spir_path, 
 				RenderBackend::GetInstance().GetMsaaSampleBit(), Config::GetInstance().opaqueScenePipelineConfig, 
 				m_RenderPass, 0));
+		m_pipelines.push_back(
+			std::make_shared<Pipeline>(
+				lighting_vert_spir_path, lighting_frag_spir_path,
+				RenderBackend::GetInstance().GetMsaaSampleBit(), Config::GetInstance().fullScreenPipelineConfig,
+				m_RenderPass, 1));
 	}
 
 	std::vector<std::map<int, VkDescriptorSet>>& PbrDeferredPass::BindGameObject(std::shared_ptr<GameObject> object)

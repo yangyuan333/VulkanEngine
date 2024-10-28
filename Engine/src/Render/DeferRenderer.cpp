@@ -51,6 +51,8 @@ namespace VulkanEngine
 	}
 	void DeferredRenderer::CreateFrameBuffer()
 	{
+		auto extent = RenderBackend::GetInstance().GetSwapChainExtent();
+		m_renderPasses[RenderPassEnum::PbrDeferredPass]->UpdatePassTextureDescsWidthHeight(extent.width, extent.height);
 		CreatePassImageViews();
 		std::vector<std::shared_ptr<FrameBuffer>> pbrFrameBuffer;
 		for (auto swapChainImage : RenderBackend::GetInstance().GetSwapChainImages())

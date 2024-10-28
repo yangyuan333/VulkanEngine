@@ -62,7 +62,7 @@ namespace VulkanEngine
 		inline VkCommandPool& GetCommandPool() { return m_commandPool; }
 		inline VkDevice& GetDevice() { return m_device; }
 		inline VkPhysicalDevice& GetPhyDevice() { return m_physicalDevice; }
-		inline std::shared_ptr<DescriptorAllocator> GetDescriptorAllocator() { return m_descriptorAllocator; }
+		inline std::shared_ptr<DescriptorAllocator>& GetDescriptorAllocator() { return m_descriptorAllocator; }
 		inline VkSampleCountFlagBits GetMsaaSampleBit() const { return m_msaaSamples; }
 		inline VkSampleCountFlagBits GetMsaaSampleBit() { return m_msaaSamples; }
 		inline VkSwapchainKHR& GetSwapChain() { return m_swapChain; }

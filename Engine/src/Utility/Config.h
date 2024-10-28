@@ -34,11 +34,11 @@ namespace VulkanEngine
 	public:
 		const PoolSizes defaultPoolSize = PoolSizes{{
 				{VkDescriptorType::VK_DESCRIPTOR_TYPE_SAMPLER, 1},
-				{VkDescriptorType::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 4},
-				{VkDescriptorType::VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 2},
-				{VkDescriptorType::VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 2},
-				{VkDescriptorType::VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 2},
-				{VkDescriptorType::VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1},
+				{VkDescriptorType::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 6},
+				{VkDescriptorType::VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 10},
+				{VkDescriptorType::VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1},
+				{VkDescriptorType::VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 4},
+				{VkDescriptorType::VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 8},
 				{VkDescriptorType::VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1},
 				{VkDescriptorType::VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1}
 			}};
