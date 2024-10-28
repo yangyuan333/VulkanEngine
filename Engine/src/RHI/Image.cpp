@@ -89,6 +89,12 @@ namespace VulkanEngine
 
 	void Image::Init(uint32_t width, uint32_t height, VkFormat format, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryUsage, ImageOptions::Value options)
 	{
+		m_extent = VkExtent2D{ width , height };
+		m_format = format;
+		m_usage = usage;
+		m_memoryUsage = memoryUsage;
+		m_options = options;
+
 		m_mipLevelCount = 1;
 		if (options & ImageOptions::MIPMAPS)
 		{

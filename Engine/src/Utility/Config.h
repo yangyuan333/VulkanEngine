@@ -43,7 +43,7 @@ namespace VulkanEngine
 				{VkDescriptorType::VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1}
 			}};
 		
-		const uint32_t defaultMaxSets = 2;
+		const uint32_t defaultMaxSets = 5;
 		
 		static constexpr ColorAttachmentBlendConfig opaqueColorAttachmentBlendConfig = {
 			VK_FALSE
@@ -79,6 +79,6 @@ namespace VulkanEngine
 		static constexpr float NearClip = 0.1f;
 		static constexpr float FarClip = 1000.0f;
 
-		const std::string SceneFile = "../../Assets/Scene/Sponza/glTF/Sponza.gltf";
+		const std::string SceneFile = "D:/GraphicsLearning/Code/VulkanEngine/Engine/Assets/Scene/Sponza/glTF/Sponza.gltf";
 	};
 }

@@ -9,7 +9,7 @@ namespace VulkanEngine
 	Scene::Scene()
 	{
 		// Light
-		m_LightsBuffers.resize(Config::MAX_FRAMES_IN_FLIGHT);
+		m_LightsBuffers.reserve(Config::MAX_FRAMES_IN_FLIGHT);
 		size_t bufferSize = sizeof(DirectionalLightComponent) + Config::MAX_PointLight_Num * sizeof(PointLightComponent);
 		for (int frameIdx = 0; frameIdx < Config::MAX_FRAMES_IN_FLIGHT; ++frameIdx)
 		{
@@ -168,7 +168,7 @@ namespace VulkanEngine
 
 		glm::vec3 startPos = glm::vec3(200, 200, 200);
 		float offset = 200;
-		int iter = 5;
+		int iter = 2;
 		for (int i = -iter; i < iter; ++i) {
 			for (int j = -iter; j < iter; ++j) {
 				for (int k = -iter; k < iter; ++k) {

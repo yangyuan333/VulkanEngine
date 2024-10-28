@@ -219,6 +219,12 @@ namespace VulkanEngine
 			stageMask.srcStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
 			stageMask.desStage = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
 		}
+		else if (oldLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL && newLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL) {
+			stageMask.srcMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+			stageMask.desMask = VK_ACCESS_TRANSFER_READ_BIT;
+			stageMask.srcStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+			stageMask.desStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+		}
 		else {
 			throw std::invalid_argument("unsupported layout transition!");
 		}

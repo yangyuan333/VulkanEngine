@@ -12,7 +12,7 @@ namespace VulkanEngine
 {
 	Camera::Camera()
 	{
-		m_cameraBuffers.resize(Config::MAX_FRAMES_IN_FLIGHT);
+		m_cameraBuffers.reserve(Config::MAX_FRAMES_IN_FLIGHT);
 		size_t bufferSize = sizeof(CameraComponent);
 		for (int frameIdx = 0; frameIdx < Config::MAX_FRAMES_IN_FLIGHT; ++frameIdx)
 		{
