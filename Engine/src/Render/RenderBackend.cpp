@@ -450,11 +450,13 @@ namespace VulkanEngine
 		// Renderer那边要进行FrameBuffer的重新创建了；
 		Engine::GetInstance().GetRenderer()->RecreateFrameBuffer();
     }
-	CommandBuffer RenderBackend::BeginSingleTimeCommand()
+	std::shared_ptr<CommandBuffer> RenderBackend::BeginSingleTimeCommand()
 	{
 		vkResetCommandBuffer(m_immediateCmdBuffer, 0);
-		CommandBuffer commandBuffer(m_immediateCmdBuffer);
-		commandBuffer.Begin(CommandBeginFlag::OneTime);
+		auto commandBuffer = std::make_shared<CommandBuffer>(m_immediateCmdBuffer);
+		// CommandBuffer commandBuffer(m_immediateCmdBuffer);
+		commandBuffer->Begin(CommandBeginFlag::OneTime);
+		// commandBuffer.Begin(CommandBeginFlag::OneTime);
 		return commandBuffer;
 	}
 	void RenderBackend::SubmitSingleTimeCommand(VkCommandBuffer cmdBuffer)

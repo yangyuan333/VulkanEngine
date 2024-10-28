@@ -50,7 +50,7 @@ namespace VulkanEngine
 	public:
 		void RecreateSwapChain();
 	public:
-		CommandBuffer BeginSingleTimeCommand();
+		std::shared_ptr<CommandBuffer> BeginSingleTimeCommand();
 		void SubmitSingleTimeCommand(VkCommandBuffer cmdBuffer);
 	public:
 		bool isDeviceSuitable(VkPhysicalDevice device);

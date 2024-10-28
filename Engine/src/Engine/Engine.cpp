@@ -15,7 +15,7 @@ namespace VulkanEngine
 	void Engine::RenderTick(float ts)
 	{
 		RenderBackend::GetInstance().StartFrame();
-		m_Renderer->Render(*m_Scene);
+		m_Renderer->Render(Scene::GetInstance());
 		RenderBackend::GetInstance().EndFrame();
 	}
 	void Engine::LogicTick(float fs)

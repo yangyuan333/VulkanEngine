@@ -30,7 +30,7 @@ namespace VulkanEngine
 		virtual void Build() = 0;
 		virtual const std::unordered_map<std::string, TextureDesc>& GetPassTextureDescs() = 0;
 		virtual void UpdatePassTextureDescsWidthHeight(uint32_t width, uint32_t height) const = 0;
-		virtual std::vector<std::map<int, VkDescriptorSet>>& BindGameObject(std::shared_ptr<GameObject> object) = 0;
+		virtual void BindGameObject(GameObject& object) = 0;
 		inline VkRenderPass GetRenderPassHandle() const { return m_RenderPass; }
 		inline std::vector<VkAttachmentDescription> GetAttachmentList() const { return m_AttachmentDescriptions; }
 		inline std::map<std::string, VkAttachmentDescription> GetAttachmentMap() const { return m_name2AttachmentDescription; }

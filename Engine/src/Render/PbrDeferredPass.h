@@ -18,7 +18,7 @@ namespace VulkanEngine
 		virtual const std::unordered_map<std::string, TextureDesc>& GetPassTextureDescs();
 		virtual void UpdatePassTextureDescsWidthHeight(uint32_t width, uint32_t height) const;
 		virtual void Build() override;
-		virtual std::vector<std::map<int, VkDescriptorSet>>& BindGameObject(std::shared_ptr<GameObject> object) override;
+		virtual void BindGameObject(GameObject& object) override;
 	public:
 		void BeginRenderPass(FrameBuffer& frameBuffer) override;
 		void EndRenderPass() override;

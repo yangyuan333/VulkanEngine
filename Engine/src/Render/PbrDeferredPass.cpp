@@ -84,7 +84,7 @@ namespace VulkanEngine
 					VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE
 			},
 			// 查一下，看看他们怎么用的，有后处理的才会考虑这里；
-			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL // 后面可以尝试下VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL这种布局，配合 inputattachment使用;
+			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL // 后面可以尝试下VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL这种布局，配合 inputattachment使用;
 		);
 
 		// Subpass-2: Lighting --- 全屏后处理
@@ -168,12 +168,14 @@ namespace VulkanEngine
 				m_RenderPass, 1));
 	}
 
-	std::vector<std::map<int, VkDescriptorSet>>& PbrDeferredPass::BindGameObject(std::shared_ptr<GameObject> object)
+	void PbrDeferredPass::BindGameObject(GameObject& object)
     {
-		if (object->GetDescriptorSets().count(MaterialType::DeferredPassMaterial) > 0)
+		if (object.GetDescriptorSets().count(MaterialType::DeferredPassMaterial) > 0)
 			throw std::runtime_error("GameObject DescritorSet Create Already!");
-		std::vector<std::map<int, VkDescriptorSet>> descriptorSet;
-		if (object->GetGameObjectKind() == GameObjectKind::Opaque || object->GetGameObjectKind() == GameObjectKind::Transparent)
+		// std::vector<std::map<int, VkDescriptorSet>> descriptorSet; descriptorSet.resize(Config::MAX_FRAMES_IN_FLIGHT);
+		auto& descriptorSet = object.GetDescriptorSets()[MaterialType::DeferredPassMaterial];
+		descriptorSet.resize(Config::MAX_FRAMES_IN_FLIGHT);
+		if (object.GetGameObjectKind() == GameObjectKind::Opaque || object.GetGameObjectKind() == GameObjectKind::Transparent)
 		{
 			// 先手动绑吧，自动绑有点麻烦
 			// subpass-1: set0 ModelBuffer, albedoTextureSampler, normalTextureSampler, metallicRoughnessTextureSampler
@@ -184,24 +186,24 @@ namespace VulkanEngine
 				descriptorSet[frameIdex][0] = (RenderBackend::GetInstance().GetDescriptorAllocator()->Allocate(descriptorLayouts[0]));
 
 				VkDescriptorBufferInfo bufferInfo{};
-				bufferInfo.buffer = object->GetModelBuffers()[frameIdex]->GetBufferHandle();
+				bufferInfo.buffer = object.GetModelBuffers()[frameIdex]->GetBufferHandle();
 				bufferInfo.offset = 0;
 				bufferInfo.range = sizeof(ModelComponent);
 
 				VkDescriptorImageInfo albedoimageInfo{};
 				albedoimageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-				albedoimageInfo.imageView = object->GetMeshTexture("albedo")->GetImageView();
-				albedoimageInfo.sampler = object->GetSampler()->GetSamplerHandle();
+				albedoimageInfo.imageView = object.GetMeshTexture("albedo")->GetImageView();
+				albedoimageInfo.sampler = object.GetSampler()->GetSamplerHandle();
 
 				VkDescriptorImageInfo normalimageInfo{};
 				normalimageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-				normalimageInfo.imageView = object->GetMeshTexture("normal")->GetImageView();
-				normalimageInfo.sampler = object->GetSampler()->GetSamplerHandle();
+				normalimageInfo.imageView = object.GetMeshTexture("normal")->GetImageView();
+				normalimageInfo.sampler = object.GetSampler()->GetSamplerHandle();
 
 				VkDescriptorImageInfo roughnessMetallicimageInfo{};
 				roughnessMetallicimageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-				roughnessMetallicimageInfo.imageView = object->GetMeshTexture("metallicRoughness")->GetImageView();
-				roughnessMetallicimageInfo.sampler = object->GetSampler()->GetSamplerHandle();
+				roughnessMetallicimageInfo.imageView = object.GetMeshTexture("metallicRoughness")->GetImageView();
+				roughnessMetallicimageInfo.sampler = object.GetSampler()->GetSamplerHandle();
 
 				std::array<VkWriteDescriptorSet, 4> descriptorWrites{};
 				descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -246,7 +248,6 @@ namespace VulkanEngine
 
 				vkUpdateDescriptorSets(RenderBackend::GetInstance().GetDevice(), descriptorWrites.size(), descriptorWrites.data(), 0, nullptr);
 			}
-			return descriptorSet;
 		}
 	}
 

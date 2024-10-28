@@ -34,8 +34,8 @@ namespace VulkanEngine
 	public:
 		const PoolSizes defaultPoolSize = PoolSizes{{
 				{VkDescriptorType::VK_DESCRIPTOR_TYPE_SAMPLER, 1},
-				{VkDescriptorType::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 6},
-				{VkDescriptorType::VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 10},
+				{VkDescriptorType::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 700},
+				{VkDescriptorType::VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 300},
 				{VkDescriptorType::VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1},
 				{VkDescriptorType::VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 4},
 				{VkDescriptorType::VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 8},
@@ -43,7 +43,7 @@ namespace VulkanEngine
 				{VkDescriptorType::VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1}
 			}};
 		
-		const uint32_t defaultMaxSets = 5;
+		const uint32_t defaultMaxSets = 300;
 		
 		static constexpr ColorAttachmentBlendConfig opaqueColorAttachmentBlendConfig = {
 			VK_FALSE

@@ -38,7 +38,7 @@ namespace VulkanEngine
 	private:
 		Window m_window;
 		std::shared_ptr<Renderer> m_Renderer; // now there is only one renderer---defered renderer
-		std::shared_ptr<Scene> m_Scene;
+		// std::shared_ptr<Scene> m_Scene;
 		std::chrono::steady_clock::time_point m_lastTickTimePoint{ std::chrono::steady_clock::now() };
 	};
 }

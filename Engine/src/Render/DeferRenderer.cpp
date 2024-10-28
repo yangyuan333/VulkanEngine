@@ -29,7 +29,8 @@ namespace VulkanEngine
 		pbrPass->BindPipeline(0);
 		RenderBackend::GetInstance().SetDynamicViewportScissor();
 		// 相机、灯光 descriptorset 绑定；
-		scene.GetCamera()->BindDescriptorSet(pbrPass->GetPipelines()[0]->GetPipelineLayout(), 1);
+		auto& camera = scene.GetCamera();
+		camera->BindDescriptorSet(pbrPass->GetPipelines()[0]->GetPipelineLayout(), 1);
 		for (auto& gameObject : gameObjects)
 		{
 			gameObject->BindVertex();

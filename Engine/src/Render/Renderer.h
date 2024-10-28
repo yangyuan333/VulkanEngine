@@ -29,6 +29,8 @@ namespace VulkanEngine
 		virtual void CreateFrameBuffer() = 0;
 		virtual void RecreateFrameBuffer() = 0;
 
+		inline auto& GetRenderPass(RenderPassEnum passEnum) { return m_renderPasses[passEnum]; }
+
 	protected:
 		virtual void Init() = 0; // 不同Renderer自定义，添加RenderPass，每一个RenderPass还得负责创建自己FrameBuffer需要用到的Texture
 		void AddRenderPass(RenderPassEnum renderPass);

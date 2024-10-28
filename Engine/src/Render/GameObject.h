@@ -40,7 +40,7 @@ namespace VulkanEngine
 	class MeshComponent
 	{
 	public:
-		MeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::shared_ptr<ModelData::Material> material);
+		MeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices, ModelData::Material& material);
 		MeshComponent(MeshComponent const& other) = delete;
 		MeshComponent& operator=(MeshComponent const& other) = delete;
 		~MeshComponent() = default;
@@ -51,7 +51,7 @@ namespace VulkanEngine
 		void BindIndex();
 		uint32_t GetIndexCnt() { return m_indexCnt; }
 	private:
-		void CreateMaterialTexture(std::shared_ptr<ModelData::Material> material);
+		void CreateMaterialTexture(ModelData::Material& material);
 	private:
 		std::shared_ptr<Buffer> m_vertexBuffer{nullptr};
 		std::shared_ptr<Buffer> m_indexBuffer{nullptr};
@@ -70,7 +70,7 @@ namespace VulkanEngine
 		GameObject(GameObject const& other) = delete;
 		GameObject& operator=(GameObject const& other) = delete;
 	public:
-		void SetupMeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::shared_ptr<ModelData::Material> material);
+		void SetupMeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices, ModelData::Material& material);
 		void SetupMeshComponent(std::shared_ptr<MeshComponent> meshComponent);
 		void SetupTransform(TransformComponent const& transform); // 这里先这样，后续如果涉及到动态物体再说；
 		// void SetupPointLight(PointLightComponent const& pointLight);

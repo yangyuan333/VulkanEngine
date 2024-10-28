@@ -3,6 +3,7 @@
 #include "RenderBackend.h"
 #include "Material.h"
 #include "PbrDeferredPass.h"
+#include "../Engine/Engine.h"
 
 namespace VulkanEngine
 {
@@ -147,10 +148,10 @@ namespace VulkanEngine
 		for (auto& object : SceneData.Shapes)
 		{
 			std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(GameObjectKind::Opaque);
-			gameObject->SetupMeshComponent(object.Vertices, object.Indices, std::shared_ptr<ModelData::Material>(&SceneData.Materials[object.MaterialIndex]));
+			gameObject->SetupMeshComponent(object.Vertices, object.Indices, SceneData.Materials[object.MaterialIndex]);
 			gameObject->SetupTransform(TransformComponent{ {0,0,0},{0,0,0},{1,1,1} });
 			// 构建 Material，后续多个 renderpass，需要把对应的material都给加上
-			std::shared_ptr<Material> pbr_material = std::make_shared<Material>(MaterialType::DeferredPassMaterial, std::make_shared<PbrDeferredPass>());
+			std::shared_ptr<Material> pbr_material = std::make_shared<Material>(MaterialType::DeferredPassMaterial, Engine::GetInstance().GetRenderer()->GetRenderPass(RenderPassEnum::PbrDeferredPass));
 			gameObject->SetMaterial(pbr_material);
 			m_gameObjects.push_back(gameObject);
 			// TODO:这里其实还要统计descriptorset的数量，用来构建descriptorpool；
@@ -182,7 +183,8 @@ namespace VulkanEngine
 		}
 		UpdateLightBuffer(); // 这个可以放到后面的 Update 中去做；目前先放这里，当成静态光照环境；
 		// Camera设置
-		SetupCamera(std::make_shared<EditorCamera>(Config::VerticalFOV, Config::NearClip, Config::FarClip));
+		auto camera = std::make_shared<EditorCamera>(Config::VerticalFOV, Config::NearClip, Config::FarClip);
+		SetupCamera(camera);
 	}
 
 	void Scene::BindLightsDescriptorSet(VkPipelineLayout pipelineLayout, int setIndex)

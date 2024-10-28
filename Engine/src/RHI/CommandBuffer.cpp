@@ -86,7 +86,7 @@ namespace VulkanEngine
 	}
 	CommandBuffer::~CommandBuffer()
 	{
-		Destroy();
+		// Destroy();
 	}
 	void CommandBuffer::Begin(CommandBeginFlag commandFlag)
 	{

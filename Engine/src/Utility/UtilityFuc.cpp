@@ -256,26 +256,26 @@ namespace VulkanEngine
 		auto commandBuffer = backend.BeginSingleTimeCommand();
 		auto& stageBuffer = RenderBackend::GetInstance().GetStagingBuffer();
 		image.Init(imageData.Width, imageData.Height, FormatTable[int(imageData.ImageFormat)], usage, memoryUsage, options);
-		commandBuffer.TransferLayout(image, image.GetImageMipLayout(0), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0, image.GetMipLevelCount(), 0, 1);
+		commandBuffer->TransferLayout(image, image.GetImageMipLayout(0), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0, image.GetMipLevelCount(), 0, 1);
 		
 		// imagedata --> stagingbuffer --> image
 
 		auto allocation = stageBuffer.Submit(imageData.ByteData.data(), imageData.ByteData.size() * sizeof(uint8_t));
 		stageBuffer.Flush();
-		commandBuffer.CopyBufferToImage(
+		commandBuffer->CopyBufferToImage(
 			stageBuffer.GetBuffer(), allocation.Offset,
 			image, 0, 0);
 
 		if (options & ImageOptions::MIPMAPS)
 		{
-			commandBuffer.GenerateImageMipmap(image, VkFilter::VK_FILTER_LINEAR);
+			commandBuffer->GenerateImageMipmap(image, VkFilter::VK_FILTER_LINEAR);
 		}
 		else
 		{
-			commandBuffer.TransferLayout(image, image.GetImageMipLayout(0), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+			commandBuffer->TransferLayout(image, image.GetImageMipLayout(0), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 		}
 
-		RenderBackend::GetInstance().SubmitSingleTimeCommand(commandBuffer.GetCommandBufferHandle());
+		RenderBackend::GetInstance().SubmitSingleTimeCommand(commandBuffer->GetCommandBufferHandle());
 
 		stageBuffer.Reset();
 	}

@@ -27,7 +27,7 @@ namespace VulkanEngine
 		// TODO
 	}
 
-	void GameObject::SetupMeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::shared_ptr<ModelData::Material> material)
+	void GameObject::SetupMeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices, ModelData::Material& material)
 	{
 		if (m_objectKind == GameObjectKind::Opaque || m_objectKind == GameObjectKind::Transparent)
 			m_mesh = std::make_shared<MeshComponent>(vertices, indices, material);
@@ -89,7 +89,7 @@ namespace VulkanEngine
 	{
 		// 这里要根据material的类型---获取descritorsetlayout，并生成descriptorset，并绑定数据
 		m_materials[material->GetMaterialType()] = material;
-		material->BindGameObject(std::shared_ptr<GameObject>(this));
+		material->BindGameObject(*this);
 	}
 
 	void GameObject::UpdateTransform(TransformComponent const& transform)
@@ -175,32 +175,32 @@ namespace VulkanEngine
 			static_cast<uint32_t>(m_mesh->GetIndexCnt()), 1, 0, 0, 0);
 	}
 
-	void MeshComponent::CreateMaterialTexture(std::shared_ptr<ModelData::Material> material)
+	void MeshComponent::CreateMaterialTexture(ModelData::Material& material)
 	{
 		// Albedo
 		std::shared_ptr<Image> albedoTexture = std::make_shared<Image>();
 		FillImage(
-			*albedoTexture, material->AlbedoTexture, 
+			*albedoTexture, material.AlbedoTexture, 
 			VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, ImageOptions::MIPMAPS);
 		m_MaterialResource["albedo"] = albedoTexture;
 		// Normal
 		std::shared_ptr<Image> normalTexture = std::make_shared<Image>();
 		FillImage(
-			*normalTexture, material->NormalTexture,
+			*normalTexture, material.NormalTexture,
 			VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, ImageOptions::MIPMAPS);
 		m_MaterialResource["normal"] = normalTexture;
 		// MetallicRoughness
 		std::shared_ptr<Image> metallicRoughnessTexture = std::make_shared<Image>();
 		FillImage(
-			*metallicRoughnessTexture, material->MetallicRoughness,
+			*metallicRoughnessTexture, material.MetallicRoughness,
 			VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, ImageOptions::MIPMAPS);
 		m_MaterialResource["metallicRoughness"] = metallicRoughnessTexture;
 	}
 
-	MeshComponent::MeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::shared_ptr<ModelData::Material> material)
+	MeshComponent::MeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices, ModelData::Material& material)
 		: m_vertexCnt(vertices.size()), m_indexCnt(indices.size()) 
 	{
 		VkDeviceSize vertexBufferSize = sizeof(vertices[0]) * m_vertexCnt;
@@ -213,17 +213,17 @@ namespace VulkanEngine
 			indexBufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-		CommandBuffer cmdBuffer = RenderBackend::GetInstance().BeginSingleTimeCommand();
+		auto cmdBuffer = RenderBackend::GetInstance().BeginSingleTimeCommand();
 		// 这里后续得优化
 		auto& stagingBuffer = RenderBackend::GetInstance().GetStagingBuffer();
 		StagingBuffer::Allocation allocationVertex = stagingBuffer.Submit((uint8_t*)vertices.data(), vertexBufferSize);
 		StagingBuffer::Allocation allocationIndex = stagingBuffer.Submit((uint8_t*)indices.data(), indexBufferSize);
 		stagingBuffer.Flush();
 
-		cmdBuffer.CopyBuffer(stagingBuffer.GetBuffer(), allocationVertex.Offset, *m_vertexBuffer, 0, allocationVertex.Size);
-		cmdBuffer.CopyBuffer(stagingBuffer.GetBuffer(), allocationIndex.Offset, *m_vertexBuffer, 0, allocationIndex.Size);
+		cmdBuffer->CopyBuffer(stagingBuffer.GetBuffer(), allocationVertex.Offset, *m_vertexBuffer, 0, allocationVertex.Size);
+		cmdBuffer->CopyBuffer(stagingBuffer.GetBuffer(), allocationIndex.Offset, *m_vertexBuffer, 0, allocationIndex.Size);
 
-		RenderBackend::GetInstance().SubmitSingleTimeCommand(cmdBuffer.GetCommandBufferHandle());
+		RenderBackend::GetInstance().SubmitSingleTimeCommand(cmdBuffer->GetCommandBufferHandle());
 		stagingBuffer.Reset();
 
 		// ImageTexture
