@@ -41,6 +41,7 @@ namespace VulkanEngine
 			gameObject->Draw();
 		}
 
+		pbrPass->NextSubpass();
 		pbrPass->BindPipeline(1);
 		scene.BindLightsDescriptorSet(pbrPass->GetPipelines()[1]->GetPipelineLayout(), 0);
 		scene.GetCamera()->BindDescriptorSet(pbrPass->GetPipelines()[1]->GetPipelineLayout(), 1);

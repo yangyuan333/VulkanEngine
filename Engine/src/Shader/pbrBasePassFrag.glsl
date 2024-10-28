@@ -26,6 +26,13 @@ layout(set = 0, binding = 1) uniform sampler2D albedoTextureSampler;
 layout(set = 0, binding = 2) uniform sampler2D normalTextureSampler;
 layout(set = 0, binding = 3) uniform sampler2D metallicRoughnessTextureSampler;
 
+layout(set = 1, binding = 0) uniform CameraBuffer {   
+    mat4 view;
+    mat4 proj;
+	mat4 viewproj;
+	vec3 viewPos;
+} cameraData;
+
 // layout(set = 0, binding = 4) uniform MaterialBuffer {
 //     Material material;
 // };

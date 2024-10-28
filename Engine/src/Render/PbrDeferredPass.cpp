@@ -228,7 +228,7 @@ namespace VulkanEngine
 
 				descriptorWrites[2].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 				descriptorWrites[2].dstSet = descriptorSet[frameIdex][0];
-				descriptorWrites[2].dstBinding = 1;
+				descriptorWrites[2].dstBinding = 2;
 				descriptorWrites[2].dstArrayElement = 0;
 				descriptorWrites[2].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 				descriptorWrites[2].descriptorCount = 1;
@@ -238,7 +238,7 @@ namespace VulkanEngine
 
 				descriptorWrites[3].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 				descriptorWrites[3].dstSet = descriptorSet[frameIdex][0];
-				descriptorWrites[3].dstBinding = 1;
+				descriptorWrites[3].dstBinding = 3;
 				descriptorWrites[3].dstArrayElement = 0;
 				descriptorWrites[3].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 				descriptorWrites[3].descriptorCount = 1;

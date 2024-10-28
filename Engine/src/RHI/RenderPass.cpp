@@ -14,6 +14,10 @@ namespace VulkanEngine
 	{
 		m_frameBuffer = frameBuffer;
 	}
+	void RenderPass::NextSubpass()
+	{
+		vkCmdNextSubpass(RenderBackend::GetInstance().GetCurrentFrame().Commands.GetCommandBufferHandle(), VK_SUBPASS_CONTENTS_INLINE);
+	}
 	void RenderPass::BindPipeline(int subpass)
 	{
 		vkCmdBindPipeline(

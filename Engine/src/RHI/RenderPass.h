@@ -9,6 +9,7 @@ namespace VulkanEngine
 {
 	class FrameBuffer;
 	class GameObject;
+	class CommandBuffer;
 
 	struct TextureOps {
 		VkAttachmentLoadOp  load = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -41,6 +42,7 @@ namespace VulkanEngine
 		void UnBindFrameBuffer() { m_frameBuffer  = nullptr; }
 		std::vector<std::shared_ptr<Pipeline>>& GetPipelines() { return m_pipelines; }
 		virtual std::vector<VkDescriptorSet>& GetInputAttachmentDescriptorSet() = 0;
+		void NextSubpass();
 	public:
 		virtual void BeginRenderPass(FrameBuffer& frameBuffer) = 0;
 		virtual void EndRenderPass() = 0;
