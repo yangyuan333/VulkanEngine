@@ -18,7 +18,7 @@ namespace VulkanEngine
 		static constexpr bool WINDOW_RESIZEABLE = false;
 		// Render Config
 		static constexpr bool ENABLE_MSAA = false;
-		static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
+		static constexpr int MAX_FRAMES_IN_FLIGHT = 1;
 		static constexpr size_t MAX_STAGINGBUFFER_SIZE = 64 * 1024 * 1024;
 		static constexpr size_t MAX_PointLight_Num = 64;
 		VkFormat SceneColorFormat;//  = VK_FORMAT_R16G16B16A16_SFLOAT; // 这个得和swapchain格式保持一致

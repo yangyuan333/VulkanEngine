@@ -25,7 +25,7 @@ namespace VulkanEngine
 	{
 	public:
 		CommandBuffer(CommandFlag commandFlag  = CommandFlag::Primary);
-		CommandBuffer(VkCommandBuffer commandBuffer) : m_commandBuffer(std::move(commandBuffer)) {}
+		CommandBuffer(VkCommandBuffer commandBuffer) : m_commandBuffer(commandBuffer) {}
 		~CommandBuffer();
 
 		const auto& GetCommandBufferHandle() const { return m_commandBuffer; }

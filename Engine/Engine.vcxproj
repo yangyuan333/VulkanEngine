@@ -71,11 +71,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>../3rdParty/tinygltf;../3rdParty/tinyddsloader;../3rdParty/stb;../3rdParty/tinyobjloader;../3rdParty/glm-1.0.1-light;../3rdParty/glfw-3.4.bin.WIN64/include;D:\Program\Vulkan\Include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files\RenderDoc;../3rdParty/tinygltf;../3rdParty/tinyddsloader;../3rdParty/stb;../3rdParty/tinyobjloader;../3rdParty/glm-1.0.1-light;../3rdParty/glfw-3.4.bin.WIN64/include;D:\Program\Vulkan\Include;$(IncludePath)</IncludePath>
     <LibraryPath>../3rdParty/glfw-3.4.bin.WIN64/lib-vc2022;D:\Program\Vulkan\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>../3rdParty/tinygltf;../3rdParty/tinyddsloader;../3rdParty/stb;../3rdParty/tinyobjloader;../3rdParty/glm-1.0.1-light;../3rdParty/glfw-3.4.bin.WIN64/include;D:\Program\Vulkan\Include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files\RenderDoc;../3rdParty/tinygltf;../3rdParty/tinyddsloader;../3rdParty/stb;../3rdParty/tinyobjloader;../3rdParty/glm-1.0.1-light;../3rdParty/glfw-3.4.bin.WIN64/include;D:\Program\Vulkan\Include;$(IncludePath)</IncludePath>
     <LibraryPath>../3rdParty/glfw-3.4.bin.WIN64/lib-vc2022;D:\Program\Vulkan\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

@@ -101,6 +101,13 @@ namespace VulkanEngine
 	void Scene::SetupCamera(std::shared_ptr<Camera> camera)
 	{
 		m_camera = camera;
+
+		CameraComponent cameraData;
+		cameraData.view = m_camera->GetView();
+		cameraData.proj = m_camera->GetProjection();
+		cameraData.viewproj = cameraData.proj * cameraData.view;
+		cameraData.viewPos = m_camera->GetPosition();
+		m_camera->UpdateUniformData(cameraData);
 	}
 
 	void Scene::AddPointLight(PointLightComponent pointLight)

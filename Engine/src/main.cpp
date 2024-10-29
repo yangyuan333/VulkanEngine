@@ -1,5 +1,9 @@
 #include "Engine/Engine.h"
 #include <memory>
+#include "renderdoc_app.h"
+#include <Windows.h>
+
+#define DEBUG_RENDERDOC 1
 
 /*
 void CheckModelLoader()
@@ -25,6 +29,32 @@ int main()
 	// rotationMatrix = glm::rotate(rotationMatrix, glm::radians(0.0f), glm::vec3(0, 0, 1));
 	// std::cout << rotationMatrix << std::endl;
 	// CheckPipelineShader();
+
+	// RENDERDOC_API_1_1_2* rdoc_api = nullptr;//API½Ó¿Ú
+	
+#if DEBUG_RENDERDOC
+	RENDERDOC_API_1_1_2* rdoc_api = VulkanEngine::Engine::GetInstance().rdoc_api;
+	if (HMODULE mod = LoadLibraryA("C:\\Program Files\\RenderDoc\\renderdoc.dll"))
+	{
+		pRENDERDOC_GetAPI RENDERDOC_GetAPI = (pRENDERDOC_GetAPI)GetProcAddress(mod, "RENDERDOC_GetAPI");
+		int ret = RENDERDOC_GetAPI(eRENDERDOC_API_Version_1_1_2, (void**)&rdoc_api);
+		assert(ret == 1);
+		rdoc_api->SetCaptureFilePathTemplate("D://GraphicsLearning//Code//VulkanEngine//rdc");
+	}
+	else
+	{
+		std::cout << "RenderDoc Lode Error: " << GetLastError() << std::endl;
+	}
+	rdoc_api->TriggerCapture();
+	if (rdoc_api->IsTargetControlConnected())
+	{
+		rdoc_api->ShowReplayUI();
+	}
+	else
+	{
+		rdoc_api->LaunchReplayUI(1, nullptr);
+	}
+#endif
 
 	VulkanEngine::Engine::GetInstance().Init();
 	VulkanEngine::Engine::GetInstance().Run();

@@ -57,10 +57,12 @@ namespace VulkanEngine
 		// 这里后续需要将 DescriptorAllocator.Init 放到这里来做；根据 Renderer 和 Scene 来决定申请多大的 Pool；
 		while (!glfwWindowShouldClose(m_window.GetWindowHandle()))
 		{
+			glfwPollEvents();
 			float fs = CalculateDeltaTime();
 			LogicTick(fs);
 			RenderTick(fs);
 		}
+		vkDeviceWaitIdle(RenderBackend::GetInstance().GetDevice());
 	}
 
     void Engine::Init()

@@ -67,15 +67,26 @@ namespace VulkanEngine
 			pipelineLayout, setIndex, 1, &m_cameraDescriptorSet[RenderBackend::GetInstance().GetCurrentFrameIndex()], 0, nullptr);
 	}
 
+	void Camera::UpdateUniformData(CameraComponent data)
+	{
+		m_cameraBuffers[RenderBackend::GetInstance().GetCurrentFrameIndex()]->WriteDataWithFlush((uint8_t*)&data, sizeof(data), 0);
+	}
+
 	EditorCamera::EditorCamera(float verticalFOV, float nearClip, float farClip)
 		:Camera()
 	{
-		nearClip = nearClip;
-		farClip = farClip;
-		verticalFOV = verticalFOV;
+		m_nearClip = nearClip;
+		m_farClip = farClip;
+		m_verticalFOV = verticalFOV;
 
 		m_forwardDirection = glm::vec3(0, 0, -1);
-		position = glm::vec3(0, 0, 6);
+		m_position = glm::vec3(0, 0, 6);
+
+		m_viewportWidth = RenderBackend::GetInstance().GetSwapChainExtent().width;
+		m_viewportHeight = RenderBackend::GetInstance().GetSwapChainExtent().height;
+
+		RecalculateView();
+		RecalculateProjection();
 	}
 
 	bool EditorCamera::OnUpdate(float ts)
@@ -83,8 +94,8 @@ namespace VulkanEngine
 		// 这里跑通后重写
 		static auto inputManger = InputManger::GetInstance();
 		glm::vec2 mousePos = inputManger->GetMousePosition();
-		glm::vec2 delta = (mousePos - lastMousePosition) * 0.002f;
-		lastMousePosition = mousePos;
+		glm::vec2 delta = (mousePos - m_lastMousePosition) * 0.002f;
+		m_lastMousePosition = mousePos;
 
 		if (!inputManger->IsMouseButtonDown(MouseButton::Right)) {
 			inputManger->SetCursorMode(CursorMode::Normal);
@@ -100,27 +111,27 @@ namespace VulkanEngine
 
 		// Movement
 		if (inputManger->IsKeyDown(KeyCode::W)) {
-			position += m_forwardDirection * m_translationSpeed * ts;
+			m_position += m_forwardDirection * m_translationSpeed * ts;
 			moved = true;
 		}
 		else if (inputManger->IsKeyDown(KeyCode::S)) {
-			position -= m_forwardDirection * m_translationSpeed * ts;
+			m_position -= m_forwardDirection * m_translationSpeed * ts;
 			moved = true;
 		}
 		if (inputManger->IsKeyDown(KeyCode::A)) {
-			position -= rightDirection * m_translationSpeed * ts;
+			m_position -= rightDirection * m_translationSpeed * ts;
 			moved = true;
 		}
 		else if (inputManger->IsKeyDown(KeyCode::D)) {
-			position += rightDirection * m_translationSpeed * ts;
+			m_position += rightDirection * m_translationSpeed * ts;
 			moved = true;
 		}
 		if (inputManger->IsKeyDown(KeyCode::Q)) {
-			position -= upDirection * m_translationSpeed * ts;
+			m_position -= upDirection * m_translationSpeed * ts;
 			moved = true;
 		}
 		else if (inputManger->IsKeyDown(KeyCode::E)) {
-			position += upDirection * m_translationSpeed * ts;
+			m_position += upDirection * m_translationSpeed * ts;
 			moved = true;
 		}
 
@@ -146,31 +157,31 @@ namespace VulkanEngine
 		cameraData.viewproj = cameraData.proj * cameraData.view;
 		cameraData.viewPos = GetPosition();
 
-		m_cameraBuffers[RenderBackend::GetInstance().GetCurrentFrameIndex()]->WriteDataWithFlush((uint8_t*)&cameraData, sizeof(cameraData), 0);
-
+		UpdateUniformData(cameraData);
+		// m_cameraBuffers[RenderBackend::GetInstance().GetCurrentFrameIndex()]->WriteDataWithFlush((uint8_t*)&cameraData, sizeof(cameraData), 0);
 		return moved;
 	}
 
 	void EditorCamera::OnResize(uint32_t width, uint32_t height)
 	{
-		if (width == viewportWidth && height == viewportHeight) return;
+		if (width == m_viewportWidth && height == m_viewportHeight) return;
 
-		viewportWidth = width;
-		viewportHeight = height;
+		m_viewportWidth = width;
+		m_viewportHeight = height;
 
 		RecalculateProjection();
 	}
 	
 	void EditorCamera::RecalculateProjection()
 	{
-		projection = glm::perspective(glm::radians(verticalFOV), (float)viewportWidth / (float)viewportHeight, nearClip, farClip);
-		projection[1][1] *= -1.0f;
-		inverseProjection = glm::inverse(projection);
+		m_projection = glm::perspective(glm::radians(m_verticalFOV), (float)m_viewportWidth / (float)m_viewportHeight, m_nearClip, m_farClip);
+		m_projection[1][1] *= -1.0f;
+		m_inverseProjection = glm::inverse(m_projection);
 	}
 
 	void EditorCamera::RecalculateView()
 	{
-		view = glm::lookAt(position, position + m_forwardDirection, glm::vec3(0, 1, 0));
-		inverseView = glm::inverse(view);
+		m_view = glm::lookAt(m_position, m_position + m_forwardDirection, glm::vec3(0, 1, 0));
+		m_inverseView = glm::inverse(m_view);
 	}
 }

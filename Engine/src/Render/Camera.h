@@ -24,31 +24,33 @@ namespace VulkanEngine
 	public:
 		Camera();
 	public:
-		const glm::mat4& GetProjection() { return projection; }
-		const glm::mat4& GetView() { return view; }
-		const glm::mat4& GetInverseProjection() const { return inverseProjection; }
-		const glm::mat4& GetInverseView() const { return inverseView; }
-		const glm::vec3& GetPosition() const { return position; }
+		const glm::mat4& GetProjection() { return m_projection; }
+		const glm::mat4& GetView() { return m_view; }
+		const glm::mat4& GetInverseProjection() const { return m_inverseProjection; }
+		const glm::mat4& GetInverseView() const { return m_inverseView; }
+		const glm::vec3& GetPosition() const { return m_position; }
 
 		virtual bool OnUpdate(float ts) = 0;
 		virtual void OnResize(uint32_t width, uint32_t height) = 0;
 
 		void BindDescriptorSet(VkPipelineLayout pipelineLayout, int setIndex);
 
+		void UpdateUniformData(CameraComponent data);
+
 	protected:
-		glm::mat4 projection{ 1.0f };
-		glm::mat4 view{ 1.0f };
-		glm::mat4 inverseProjection{ 1.0f };
-		glm::mat4 inverseView{ 1.0f };
-		glm::vec3 position{ 0.0f, 0.0f, 0.0f };
+		glm::mat4 m_projection{ 1.0f };
+		glm::mat4 m_view{ 1.0f };
+		glm::mat4 m_inverseProjection{ 1.0f };
+		glm::mat4 m_inverseView{ 1.0f };
+		glm::vec3 m_position{ 0.0f, 0.0f, 0.0f };
 
-		glm::vec2 lastMousePosition{ 0.0f, 0.0f };
+		glm::vec2 m_lastMousePosition{ 0.0f, 0.0f };
 
-		float verticalFOV;
-		float nearClip;
-		float farClip;
+		float m_verticalFOV;
+		float m_nearClip;
+		float m_farClip;
 
-		uint32_t viewportWidth = 0, viewportHeight = 0;
+		uint32_t m_viewportWidth = 0, m_viewportHeight = 0;
 
 		std::vector<std::shared_ptr<Buffer>> m_cameraBuffers;
 		std::vector<VkDescriptorSet> m_cameraDescriptorSet;

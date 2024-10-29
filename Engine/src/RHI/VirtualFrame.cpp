@@ -131,7 +131,7 @@ namespace VulkanEngine
 		if (vkQueueSubmit(RenderBackend::GetInstance().GetGraphicsQueue(), 1, &submitInfo, frame.CommandQueueFence) != VK_SUCCESS) {
 			throw std::runtime_error("failed to submit draw command buffer!");
 		}
-
+		// 很大概率是信号量的控制有问题；要不就是RenderPass绘制出问题了；
 		VkPresentInfoKHR presentInfo = {};
 		presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 		presentInfo.waitSemaphoreCount = 1;

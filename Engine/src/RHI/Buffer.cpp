@@ -4,12 +4,13 @@
 
 namespace VulkanEngine
 {
-
 	Buffer::Buffer(Buffer&& other) {
 		m_buffer = other.m_buffer;
 		m_byteSize = other.m_byteSize;
 		m_bufferMemory = other.m_bufferMemory;
 		m_mappedMemory = other.m_mappedMemory;
+		m_usage = other.m_usage;
+		m_memoryUsage = other.m_memoryUsage;
 
 		other.m_buffer = VK_NULL_HANDLE;
 		other.m_byteSize = 0;
@@ -24,6 +25,8 @@ namespace VulkanEngine
 		m_byteSize = other.m_byteSize;
 		m_bufferMemory = other.m_bufferMemory;
 		m_mappedMemory = other.m_mappedMemory;
+		m_usage = other.m_usage;
+		m_memoryUsage = other.m_memoryUsage;
 
 		other.m_buffer = VK_NULL_HANDLE;
 		other.m_byteSize = 0;

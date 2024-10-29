@@ -6,6 +6,8 @@
 #include <iostream>
 #include <memory>
 
+#include "renderdoc_app.h"
+
 namespace VulkanEngine
 {
 	class Scene;
@@ -40,5 +42,8 @@ namespace VulkanEngine
 		std::shared_ptr<Renderer> m_Renderer; // now there is only one renderer---defered renderer
 		// std::shared_ptr<Scene> m_Scene;
 		std::chrono::steady_clock::time_point m_lastTickTimePoint{ std::chrono::steady_clock::now() };
+
+	public:
+		RENDERDOC_API_1_1_2* rdoc_api = nullptr;
 	};
 }
