@@ -7,9 +7,9 @@ layout(location = 2) in vec3 normal;
 layout(location = 3) in vec3 tangent;
 layout(location = 4) in vec3 bitangent;
 
-layout(set = 0, binding = 0) uniform ModelBuffer {   
+layout(std140, set = 0, binding = 0) uniform ModelBuffer {   
     mat4 model;
-	mat3 model_it;
+	mat4 model_it;
 } modelData;
 
 layout(set = 1, binding = 0) uniform CameraBuffer {   
@@ -32,9 +32,9 @@ void main() {
 	gl_Position = cameraData.viewproj * world_position;
     vout.texcoord = texCoord;
 
-	vec3 world_tangent = modelData.model_it * tangent;
-	vec3 world_normal = modelData.model_it * normal;
-	vec3 world_bitangent = cross(world_normal, world_tangent);
+	vec3 world_tangent = mat3(modelData.model_it) * tangent;
+	vec3 world_normal = mat3(modelData.model_it) * normal;
 
+	vec3 world_bitangent = cross(world_normal, world_tangent);
     vout.tangentBasis = mat3(world_tangent, world_bitangent, world_normal);
 }

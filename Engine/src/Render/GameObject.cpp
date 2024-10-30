@@ -49,7 +49,8 @@ namespace VulkanEngine
 		m_modelMatrix = ComputeModelMatrix();
 		ModelComponent modelComponent;
 		modelComponent.modelMatrix = m_modelMatrix;
-		modelComponent.modelMatrix_it = glm::inverse(glm::mat3(m_modelMatrix));
+		// modelComponent.modelMatrix_it = glm::mat3(m_modelMatrix);
+		modelComponent.modelMatrix_it = glm::inverse(m_modelMatrix);
 		m_buffers[RenderBackend::GetInstance().GetCurrentFrameIndex()]->WriteDataWithFlush((uint8_t*)&modelComponent, sizeof(modelComponent));
 
 		for (int frameIdx = 0; frameIdx < Config::MAX_FRAMES_IN_FLIGHT; ++frameIdx)
@@ -98,6 +99,7 @@ namespace VulkanEngine
 		m_modelMatrix = ComputeModelMatrix();
 		ModelComponent modelComponent;
 		modelComponent.modelMatrix = m_modelMatrix;
+		// modelComponent.modelMatrix_it = glm::mat3(m_modelMatrix);
 		modelComponent.modelMatrix_it = glm::inverse(m_modelMatrix);
 		m_buffers[RenderBackend::GetInstance().GetCurrentFrameIndex()]->WriteDataWithFlush((uint8_t*)&modelComponent, sizeof(modelComponent));
 	}

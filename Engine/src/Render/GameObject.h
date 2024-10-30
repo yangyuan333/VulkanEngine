@@ -27,8 +27,8 @@ namespace VulkanEngine
 
 	struct ModelComponent
 	{
-		alignas(16) glm::mat4 modelMatrix;
-		alignas(16) glm::mat3 modelMatrix_it;
+		glm::mat4 modelMatrix_it;
+		glm::mat4 modelMatrix;
 	};
 
 	struct TransformComponent {

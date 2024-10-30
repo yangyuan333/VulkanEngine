@@ -1,2 +1,3 @@
 glslc -fshader-stage=vertex fullScreenVert.glsl -o fullScreenVert.glsl.spv
+glslc -fshader-stage=vertex pbrBasePassVert.glsl -o pbrBasePassVert.glsl.spv
 glslc -fshader-stage=fragment pbrBasePassFrag.glsl -o pbrBasePassFrag.glsl.spv
