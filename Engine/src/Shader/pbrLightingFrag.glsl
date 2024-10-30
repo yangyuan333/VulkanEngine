@@ -12,7 +12,7 @@ const float pointlightConst = 1.0;
 const float pointlightLinear = 0.09;
 const float pointlightQuat = 0.032;
 
-const int MAX_LIGHT = 4;
+const int MAX_LIGHT = 256;
 
 struct Material {
     vec3 position;

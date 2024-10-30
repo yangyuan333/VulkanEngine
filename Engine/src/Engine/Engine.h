@@ -8,7 +8,7 @@
 
 #include "renderdoc_app.h"
 
-#define DEBUG_RENDERDOC 0
+#define DEBUG_RENDERDOC 1
 
 namespace VulkanEngine
 {

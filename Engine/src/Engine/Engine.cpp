@@ -58,14 +58,17 @@ namespace VulkanEngine
 		while (!glfwWindowShouldClose(m_window.GetWindowHandle()))
 		{
 		#if DEBUG_RENDERDOC
-			rdoc_api->TriggerCapture();
-			if (rdoc_api->IsTargetControlConnected())
+			if (InputManger::GetInstance()->IsKeyDown(KeyCode::Z))
 			{
-				rdoc_api->ShowReplayUI();
-			}
-			else
-			{
-				rdoc_api->LaunchReplayUI(1, nullptr);
+				rdoc_api->TriggerCapture();
+				if (rdoc_api->IsTargetControlConnected())
+				{
+					rdoc_api->ShowReplayUI();
+				}
+				else
+				{
+					rdoc_api->LaunchReplayUI(1, nullptr);
+				}
 			}
 		#endif
 			glfwPollEvents();

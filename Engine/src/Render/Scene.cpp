@@ -11,7 +11,7 @@ namespace VulkanEngine
 	{
 		// Light
 		m_LightsBuffers.reserve(Config::MAX_FRAMES_IN_FLIGHT);
-		size_t bufferSize = sizeof(DirectionalLightComponent) + Config::MAX_PointLight_Num * sizeof(PointLightComponent);
+		size_t bufferSize = sizeof(DirectionalLightComponent) + sizeof(uint32_t)*4 + Config::MAX_PointLight_Num * sizeof(PointLightComponent);
 		for (int frameIdx = 0; frameIdx < Config::MAX_FRAMES_IN_FLIGHT; ++frameIdx)
 		{
 			m_LightsBuffers.push_back(std::make_shared<Buffer>(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
@@ -55,7 +55,7 @@ namespace VulkanEngine
 			VkDescriptorBufferInfo pointbufferInfo{};
 			pointbufferInfo.buffer = m_LightsBuffers[frameIdex]->GetBufferHandle();
 			pointbufferInfo.offset = sizeof(DirectionalLightComponent);
-			pointbufferInfo.range = sizeof(PointLightComponent) * Config::MAX_PointLight_Num;
+			pointbufferInfo.range = sizeof(uint32_t) * 4 + sizeof(PointLightComponent) * Config::MAX_PointLight_Num;
 
 			std::array<VkWriteDescriptorSet, 2> descriptorWrites{};
 			descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -131,6 +131,8 @@ namespace VulkanEngine
 			{
 				size_t offset = 0;
 				m_LightsBuffers[frameIdx]->WriteData((uint8_t*)(&m_directionalLight), sizeof(m_directionalLight), 0); offset+= sizeof(m_directionalLight);
+				uint32_t pointLightNum = m_pointLights.size();
+				m_LightsBuffers[frameIdx]->WriteData((uint8_t*)(&pointLightNum), sizeof(uint32_t)*4, offset); offset += (sizeof(uint32_t)*4);
 				for (int pointIdx = 0; pointIdx < m_pointLights.size(); ++pointIdx)
 				{
 					m_LightsBuffers[frameIdx]->WriteData((uint8_t*)(&m_pointLights[pointIdx]), sizeof(PointLightComponent), offset);
@@ -143,6 +145,8 @@ namespace VulkanEngine
 
 		size_t offset = 0;
 		m_LightsBuffers[frameIdx]->WriteData((uint8_t*)(&m_directionalLight), sizeof(m_directionalLight), 0); offset += sizeof(m_directionalLight);
+		uint32_t pointLightNum = m_pointLights.size();
+		m_LightsBuffers[frameIdx]->WriteData((uint8_t*)(&pointLightNum), sizeof(uint32_t)*4, offset); offset += (sizeof(uint32_t)*4);
 		for (int pointIdx = 0; pointIdx < m_pointLights.size(); ++pointIdx)
 		{
 			m_LightsBuffers[frameIdx]->WriteData((uint8_t*)(&m_pointLights[pointIdx]), sizeof(PointLightComponent), offset);
@@ -185,7 +189,7 @@ namespace VulkanEngine
 				for (int k = -iter; k < iter; ++k) {
 					glm::vec3 lightPos = glm::vec3(startPos.x + i * offset, startPos.y + j * offset, startPos.z + k * offset);
 					glm::vec3 intensity{ 10.0f };
-					glm::vec3 lightColor = glm::vec3(1, 1, 1);
+					glm::vec3 lightColor = glm::vec3(1, 1, 1) * glm::vec3(glm::linearRand(0.0f, 1.0f), glm::linearRand(0.0f, 1.0f), glm::linearRand(0.0f, 1.0f));
 					PointLightComponent light{ lightPos, intensity, lightColor };
 					AddPointLight(light);
 				}
