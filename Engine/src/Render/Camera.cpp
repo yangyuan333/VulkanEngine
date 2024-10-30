@@ -72,6 +72,11 @@ namespace VulkanEngine
 		m_cameraBuffers[RenderBackend::GetInstance().GetCurrentFrameIndex()]->WriteDataWithFlush((uint8_t*)&data, sizeof(data), 0);
 	}
 
+    void Camera::UpdateUniformData(CameraComponent data, int frameIndex)
+    {
+		m_cameraBuffers[frameIndex]->WriteDataWithFlush((uint8_t*)&data, sizeof(data), 0);
+    }
+
 	EditorCamera::EditorCamera(float verticalFOV, float nearClip, float farClip)
 		:Camera()
 	{

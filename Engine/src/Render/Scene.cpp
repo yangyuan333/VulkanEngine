@@ -107,7 +107,10 @@ namespace VulkanEngine
 		cameraData.proj = m_camera->GetProjection();
 		cameraData.viewproj = cameraData.proj * cameraData.view;
 		cameraData.viewPos = m_camera->GetPosition();
-		m_camera->UpdateUniformData(cameraData);
+		for (int index = 0; index < Config::MAX_FRAMES_IN_FLIGHT; ++index)
+		{
+			m_camera->UpdateUniformData(cameraData, index);
+		}
 	}
 
 	void Scene::AddPointLight(PointLightComponent pointLight)

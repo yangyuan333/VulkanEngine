@@ -36,6 +36,7 @@ namespace VulkanEngine
 		void BindDescriptorSet(VkPipelineLayout pipelineLayout, int setIndex);
 
 		void UpdateUniformData(CameraComponent data);
+		void UpdateUniformData(CameraComponent data, int frameIndex);
 
 	protected:
 		glm::mat4 m_projection{ 1.0f };
