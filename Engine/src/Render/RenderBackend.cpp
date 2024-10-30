@@ -519,6 +519,7 @@ namespace VulkanEngine
 		VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
 		Config::GetInstance().SceneColorFormat = surfaceFormat.format;
 		VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
+		// presentMode = VK_PRESENT_MODE_IMMEDIATE_KHR;
 		VkExtent2D extent = chooseSwapExtent(swapChainSupport.capabilities, Engine::GetInstance().GetWindowHandle());
 
 		uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;

@@ -3,8 +3,6 @@
 #include "renderdoc_app.h"
 #include <Windows.h>
 
-#define DEBUG_RENDERDOC 1
-
 /*
 void CheckModelLoader()
 {
@@ -33,7 +31,7 @@ int main()
 	// RENDERDOC_API_1_1_2* rdoc_api = nullptr;//API½Ó¿Ú
 	
 #if DEBUG_RENDERDOC
-	RENDERDOC_API_1_1_2* rdoc_api = VulkanEngine::Engine::GetInstance().rdoc_api;
+	RENDERDOC_API_1_1_2*& rdoc_api = VulkanEngine::Engine::GetInstance().rdoc_api;
 	if (HMODULE mod = LoadLibraryA("C:\\Program Files\\RenderDoc\\renderdoc.dll"))
 	{
 		pRENDERDOC_GetAPI RENDERDOC_GetAPI = (pRENDERDOC_GetAPI)GetProcAddress(mod, "RENDERDOC_GetAPI");
@@ -45,15 +43,15 @@ int main()
 	{
 		std::cout << "RenderDoc Lode Error: " << GetLastError() << std::endl;
 	}
-	rdoc_api->TriggerCapture();
-	if (rdoc_api->IsTargetControlConnected())
-	{
-		rdoc_api->ShowReplayUI();
-	}
-	else
-	{
-		rdoc_api->LaunchReplayUI(1, nullptr);
-	}
+	// rdoc_api->TriggerCapture();
+	// if (rdoc_api->IsTargetControlConnected())
+	// {
+	// 	rdoc_api->ShowReplayUI();
+	// }
+	// else
+	// {
+	// 	rdoc_api->LaunchReplayUI(1, nullptr);
+	// }
 #endif
 
 	VulkanEngine::Engine::GetInstance().Init();

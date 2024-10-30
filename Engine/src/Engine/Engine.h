@@ -8,6 +8,8 @@
 
 #include "renderdoc_app.h"
 
+#define DEBUG_RENDERDOC 0
+
 namespace VulkanEngine
 {
 	class Scene;

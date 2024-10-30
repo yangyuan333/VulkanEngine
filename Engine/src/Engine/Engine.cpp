@@ -57,6 +57,17 @@ namespace VulkanEngine
 		// 这里后续需要将 DescriptorAllocator.Init 放到这里来做；根据 Renderer 和 Scene 来决定申请多大的 Pool；
 		while (!glfwWindowShouldClose(m_window.GetWindowHandle()))
 		{
+		#if DEBUG_RENDERDOC
+			rdoc_api->TriggerCapture();
+			if (rdoc_api->IsTargetControlConnected())
+			{
+				rdoc_api->ShowReplayUI();
+			}
+			else
+			{
+				rdoc_api->LaunchReplayUI(1, nullptr);
+			}
+		#endif
 			glfwPollEvents();
 			float fs = CalculateDeltaTime();
 			LogicTick(fs);

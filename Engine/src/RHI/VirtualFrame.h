@@ -27,6 +27,7 @@ namespace VulkanEngine
 		uint32_t GetPresentImageIndex() const;
 		size_t GetFrameCount() const;
 		size_t GetCurrentFrameIndex() const { return m_currentFrame; }
+		size_t GetImageIndex() const { return m_presentImageIndex; }
 		void EndFrame();
 
 	private:

@@ -24,7 +24,7 @@ namespace VulkanEngine
 			throw std::runtime_error("there is not pbr deferredpass!");
 		}
 		auto pbrPass = m_renderPasses[RenderPassEnum::PbrDeferredPass];
-		pbrPass->BeginRenderPass(*m_frameBuffers[RenderPassEnum::PbrDeferredPass][RenderBackend::GetInstance().GetCurrentFrameIndex()]);
+		pbrPass->BeginRenderPass(*m_frameBuffers[RenderPassEnum::PbrDeferredPass][RenderBackend::GetInstance().GetImageIndex()]);
 
 		pbrPass->BindPipeline(0);
 		RenderBackend::GetInstance().SetDynamicViewportScissor();
