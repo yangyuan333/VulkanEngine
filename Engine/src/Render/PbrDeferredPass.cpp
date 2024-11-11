@@ -43,7 +43,7 @@ namespace VulkanEngine
 			"GBufferA",
 			m_pbrDeferredPassTextureDescs["GBufferA"],
 			TextureOps{
-				VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE, // 之后来试试，这里应该不需要 store
+				VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_DONT_CARE, // 之后来试试，这里应该不需要 store
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE
 			},
 			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
@@ -52,7 +52,7 @@ namespace VulkanEngine
 			"GBufferB",
 			m_pbrDeferredPassTextureDescs["GBufferB"],
 			TextureOps{
-				VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE, // 之后来试试，这里应该不需要 store
+				VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_DONT_CARE, // 之后来试试，这里应该不需要 store
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE
 			},
 			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
@@ -61,7 +61,7 @@ namespace VulkanEngine
 			"GBufferC",
 			m_pbrDeferredPassTextureDescs["GBufferC"],
 			TextureOps{
-				VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE, // 之后来试试，这里应该不需要 store
+				VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_DONT_CARE, // 之后来试试，这里应该不需要 store
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE
 			},
 			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
@@ -70,7 +70,7 @@ namespace VulkanEngine
 			"GBufferD",
 			m_pbrDeferredPassTextureDescs["GBufferD"],
 			TextureOps{
-				VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE, // 之后来试试，这里应该不需要 store
+				VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_DONT_CARE, // 之后来试试，这里应该不需要 store
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE
 			},
 			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
@@ -80,7 +80,7 @@ namespace VulkanEngine
 			"SceneDepth",
 			m_pbrDeferredPassTextureDescs["SceneDepth"],
 				TextureOps{
-					VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_DONT_CARE,
 					VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE
 			},
 			// 查一下，看看他们怎么用的，有后处理的才会考虑这里；
@@ -92,7 +92,7 @@ namespace VulkanEngine
 			"SceneColor",
 			m_pbrDeferredPassTextureDescs["SceneColor"],
 			TextureOps{
-				VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE, // 之后来试试，这里应该不需要 store
+				VK_ATTACHMENT_LOAD_OP_CLEAR, VK_ATTACHMENT_STORE_OP_STORE,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE, VK_ATTACHMENT_STORE_OP_DONT_CARE
 			},
 			VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
